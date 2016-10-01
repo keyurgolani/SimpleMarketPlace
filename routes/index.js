@@ -3,6 +3,9 @@ var router = express.Router();
 var dao = require('./dao.js');
 var logger = require("../utils/logger");
 
+var error_messages = [];
+var status_code = 200;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
@@ -18,17 +21,14 @@ router.get('/signup', function(req, res, next) {
 	var lastname = req.param('lastname');
 	var phone = req.param('phone');
 	var username_validator = new RegExp("^[a-z0-9_-]{3,16}$");
-	//Password Validator: /^[a-z0-9_-]{6,18}$/
+	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
 	var firstname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 	var lastname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 	var phone_validator = new RegExp(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/);
-	//Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask
-	//Continued: http://digitalbush.com/projects/masked-input-plugin/
-	//Continued: http://filamentgroup.github.io/politespace/demo/demo.html
-	
-	var error_messages = [];
-	var status_code = 200;
+	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask
+	// TODO: Continued: http://digitalbush.com/projects/masked-input-plugin/
+	// TODO: Continued: http://filamentgroup.github.io/politespace/demo/demo.html
 	
 	if(username.match(username_validator) === null) {
 		logger.log("info", "Invalid username: " + username);
@@ -71,7 +71,7 @@ router.get('/signup', function(req, res, next) {
 				"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
 			};
 		dao.insertData("user_account", insertParameters, function(rows) {
-			// Process Insert Status
+			// TODO: Process Insert Status
 		});
 	} else {
 		res.send({
@@ -82,12 +82,33 @@ router.get('/signup', function(req, res, next) {
 	
 });
 
+router.get('/forgotPassword', function(req, res, next) {
+	logger.log("info", "Forgot Password form");
+	var email = req.param('email'); 
+	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
+	if(email.match(email_validator) !== null) {
+		dao.fetchData("count(user_id) as matches", "user_account", {
+			"email"	:	email
+		}, function(rows) {
+			if(Number(rows[0].matches) > 0) {
+				// TODO: Send an email to 
+			} else {
+				error_messages.push("Email ID not found in our records.");
+				status_code = 400;
+			}
+		});
+	} else {
+		error_messages.push("Not valid Email ID");
+		status_code = 400;
+	}
+});
+
 router.get('/login', function(req, res, next) {
 	logger.log("info", "Inside login form");
 	dao.fetchData("*", "user_account", {
 		"user_id"	:	1
 	}, function(rows) {
-		// Process Fetched Data
+		// TODO: Process Fetched Data
 	});
 });
 
