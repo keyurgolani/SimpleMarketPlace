@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var dao = require('./dao.js');
+var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 
 var error_messages = [];
@@ -9,7 +9,7 @@ var status_code = 200;
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
-	res.render('index', { title: 'Express' });
+//	res.render('index', { title: 'Express' });
 });
 
 router.get('/signup', function(req, res, next) {

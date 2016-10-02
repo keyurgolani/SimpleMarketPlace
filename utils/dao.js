@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var logger = require("../utils/logger");
 
+// Manual Connection Pooling if needed : http://stackoverflow.com/questions/6731214/node-mysql-connection-pooling
+
 var pool = mysql.createPool({
 	connectionLimit :	100,
 	host			:	"localhost",
@@ -8,6 +10,8 @@ var pool = mysql.createPool({
 	password		:	"admin",
 	database		:	"simple_market_place"
 });
+
+
 
 module.exports = {
 		fetchData: function(selectFields, tableName, queryParameters, processResult) {
@@ -17,6 +21,7 @@ module.exports = {
 				}
 				var queryString = "SELECT " + selectFields + " FROM " + tableName + " WHERE ?";
 				var query = connection.query(queryString, queryParameters, function(error, rows) {
+					connection.release();
 					if(error) {
 						throw error;
 					} else {
@@ -36,6 +41,7 @@ module.exports = {
 				}
 				var queryString = "INSERT INTO " + tableName + " SET ?";
 				var query = connection.query(queryString, insertParameters, function(error, rows) {
+					connection.release();
 					if(error) {
 						throw error;
 					} else {
