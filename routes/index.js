@@ -9,7 +9,7 @@ var status_code = 200;
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
-//	res.render('index', { title: 'Express' });
+	res.render('index', {  });
 });
 
 router.get('/signup', function(req, res, next) {
