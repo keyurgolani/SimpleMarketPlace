@@ -22,7 +22,6 @@
     <script src="/angularjs/account.js"></script>
   </head>
 <body class="body full-body" ng-app="eBay" ng-controller="account">
-	
 	<div class="container-fluid">
 		<div class="row">
         <div class="col-md-4"></div>
@@ -50,9 +49,11 @@
 	      			<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" style="background-color:#faffbd">
 	   				</div>
 	                <button class="btn btn-primary signinbtn" ng-click="signin()">Sign in</button>
-	    			<div class="checkbox">
+	    			<div class="checkbox row">
+	    			<div class="col-md-12" style="margin-left: 4%;">
 	      			<label class="check"><input type="checkbox"> Stay signed in</label>
 	                <span class="forgotpassword" ng-click="changeToForgot()" style="cursor: pointer; color: #0654BA">Forgot your password?</span>
+	                </div>
 	    			</div> 
 	                <div>
 	                	<div class="signininfo"> Using a public or shared device? Uncheck to protect your account.

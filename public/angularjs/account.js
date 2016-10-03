@@ -1,20 +1,14 @@
-var eBay = angular.module('eBay', ['ngRoute']);
+var eBay = angular.module('eBay', []);
 
-//eBay.config([
-//    '$routeProvider',
-//    function($routeProvider) {
-//        $routeProvider.when('/', {
-//            templateUrl: '',
-//            controller: 'account'
-//        });
-//    }
-//]);
+eBay.config(['$locationProvider', function($locationProvider){
+    $locationProvider.html5Mode({
+    	  enabled: true,
+    	  requireBase: false
+    });
+}]);
 
-eBay.controller('account', function($scope, $http, $routeParams) {
+eBay.controller('account', function($scope, $http, $location) {
 	$scope.message = "";
-	$scope.isSignin = false;
-	$scope.isSignup = false;
-	$scope.isForgot = true;
 	
 	$scope.changeToSignin = function() {
 		$scope.isSignin = true;
@@ -33,6 +27,17 @@ eBay.controller('account', function($scope, $http, $routeParams) {
 		$scope.isSignup = false;
 		$scope.isForgot = true;
 	};
+	
+	if($location.search().view === "register") {
+		$scope.changeToRegister();
+	} else if($location.search().view === "signin") {
+		$scope.changeToSignin();
+	} else if($location.search().view === "forgot") {
+		$scope.changeToForgot();
+	} else {
+		$scope.changeToSignin();
+	}
+	
 });
 
 eBay.controller('signinController', function($scope, $http, $window) {

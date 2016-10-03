@@ -2,11 +2,11 @@ var eBay = angular.module('eBay', []);
 
 eBay.controller('homepage', function($scope, $http, $window) {
 	$scope.registerClicked = function() {
-		$window.location.href = "/account";
+		$window.location.href = "/account?view=register";
 	};
 	
 	$scope.signinClicked = function() {
-		$window.location.href = "/account";
+		$window.location.href = "/account?view=signin";
 	};
 	
 	$scope.homepageClicked = function() {

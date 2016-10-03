@@ -80,6 +80,7 @@ a {
 
 .forgotpassword {
 	padding-left: 28%;
+	padding-right: 5%;
 	font-size: 13px;
 	margin:auto;
 	color:#0654ba;
@@ -256,7 +257,7 @@ h4 {
 	text-align: center;
 	border-bottom: 0;
 	font-size: 13px;
-	bottom: 120px;
+	bottom: 105px;
 	position: absolute;
 }
 

@@ -16,7 +16,6 @@
     "nodemon": "*",
     "mysql": "*",
     "fecha": "*",
-    "winston": "~2.2.0",
-    "angular-route": "*"
+    "winston": "~2.2.0"
   }
 }
