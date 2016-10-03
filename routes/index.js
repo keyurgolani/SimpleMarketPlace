@@ -16,14 +16,14 @@ router.get('/account', function(req, res, next) {
 	res.render('account', {  });
 });
 
-router.get('/signup', function(req, res, next) {
+router.post('/register', function(req, res, next) {
 	logger.log("info", "Inside signup form");
 	var username = req.param('username');
 	var email = req.param('email');
-	var secret = req.param('secret');
-	var firstname = req.param('firstname');
-	var lastname = req.param('lastname');
-	var phone = req.param('phone');
+	var secret = req.param('password');
+	var firstname = req.param('fname');
+	var lastname = req.param('lname');
+	var phone = req.param('contact');
 	var username_validator = new RegExp("^[a-z0-9_-]{3,16}$");
 	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
@@ -107,12 +107,25 @@ router.get('/forgotPassword', function(req, res, next) {
 	}
 });
 
-router.get('/login', function(req, res, next) {
-	logger.log("info", "Inside login form");
-	dao.fetchData("*", "user_account", {
-		"user_id"	:	1
+router.post('/signin', function(req, res, next) {
+	var username = req.body.userID;
+	var password = req.body.password;
+	dao.fetchData("user_id as result", "user_account", {
+		"user_name"	:	username
 	}, function(rows) {
-		// TODO: Process Fetched Data
+		dao.fetchData("secret as result", "user_account", {
+			"user_id"	:	rows[0].result
+		}, function(rows) {
+			if(rows[0].result === password) {
+				res.send({
+					"valid"	:	true
+				});
+			} else {
+				res.send({
+					"valid"	:	false
+				});
+			}
+		});
 	});
 });
 
