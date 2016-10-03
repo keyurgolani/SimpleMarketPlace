@@ -12,6 +12,10 @@ router.get('/', function(req, res, next) {
 	res.render('index', {  });
 });
 
+router.get('/account', function(req, res, next) {
+	res.render('account', {  });
+});
+
 router.get('/signup', function(req, res, next) {
 	logger.log("info", "Inside signup form");
 	var username = req.param('username');

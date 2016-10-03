@@ -17,9 +17,10 @@
 	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/homepage.css' />
+    <script src="/angularjs/homepage.js"></script>
   </head>
-  <body>
+  <body ng-app="eBay" ng-controller="homepage">
 	<div class="container-fluid">
     	<div class="row">
         	<div class="col-md-12 full-body">
@@ -29,7 +30,7 @@
                         <div class="row">
                         	<div class="col-md-6 header-item-container">
                                 <div class="row">
-                                	<div class="header-item">Hi! Sign in or register</div>
+                                	<div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div>
                                     <div class="header-item">Daily Deals</div>
                                     <div class="header-item">Gift Cards</div>
                                     <div class="header-item">Sell</div>
@@ -54,18 +55,18 @@
                     	<div class="row search-row" style="display:flex;align-items:center;">
                         	<div class="col-md-2">
                             	<div class="row" align="center">
-                                	<div class="ebay-logo img-responsive">
+                                	<div class="ebay-logo img-responsive link" ng-click="homepageClicked()">
 	                                </div>
                                 </div>
                             </div>
                             <div class="col-md-8">
                             	<div class="row">
-                                	<input type="text" id="search-bar" class="form-control"/>
+                                	<input type="text" id="search-bar" class="form-control" ng-model="searchString"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
                             	<div class="row">
-                                	<button class="form-control btn btn-primary search-button">Search</button>
+                                	<button class="form-control btn btn-primary search-button" ng-click="search()">Search</button>
                                 </div>
                             </div>
                         </div>
