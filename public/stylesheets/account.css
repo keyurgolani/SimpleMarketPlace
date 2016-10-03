@@ -1,18 +1,20 @@
 .full-body {
-	background: url("https://securepics.ebaystatic.com/aw/pics/cmp/ds3/imgbg.jpg") repeat 0 0 #F8F8F8;
-	font-family: Helvetica neue,Helvetica,Arial,Sans-serif;
+	background:
+		url("https://securepics.ebaystatic.com/aw/pics/cmp/ds3/imgbg.jpg")
+		repeat 0 0 #F8F8F8;
+	font-family: Helvetica neue, Helvetica, Arial, Sans-serif;
 	font-size: 14px;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
 }
 
 .ebay-icon {
 	width: 120px;
 	height: 90px;
 	margin: auto;
-	display:inline-block;
+	display: inline-block;
 }
 
 .spacer {
@@ -22,18 +24,21 @@ a {
 .box {
 	display: block;
 	width: 90%;
-    margin: auto;
-    background: none repeat scroll 0 0 #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;	
+	margin: auto;
+	background: none repeat scroll 0 0 #fff;
+	border: 1px solid #ccc;
+	border-radius: 3px;
 	margin-top: 30px;
+	-webkit-box-shadow: 0 4px 4px 0px #DDDDDD;
+	-moz-box-shadow: 0 4px 4px 0px #DDDDDD;
+	box-shadow: 0 4px 4px 0px #DDDDDD;
 }
 
 .button {
 	padding: 0;
-    display: inline-block;
-    font-size: 18px;
-    width: 100%;
+	display: inline-block;
+	font-size: 18px;
+	width: 100%;
 }
 
 .sp {
@@ -43,10 +48,10 @@ a {
 }
 
 .text {
-    text-align: left;
-    padding-left: 10px;
-    padding-top: 60px;
-    vertical-align: middle;
+	text-align: left;
+	padding-left: 10px;
+	padding-top: 60px;
+	vertical-align: middle;
 }
 
 .emailbox {
@@ -66,37 +71,37 @@ a {
 	height: 45px;
 	font-weight: bold;
 	font-size: 16px;
-	margin:auto;
+	margin: auto;
 }
 
 .signinbtn:hover {
 	background: #00509d;
 }
 
-.check {	
-	margin:auto;	
+.check {
+	margin: auto;
 	padding: !important;
 }
 
 .forgotpassword {
 	padding-left: 28%;
-	padding-right: 5%;
+	padding-right: 5%; font-size : 13px;
+	margin: auto;
+	color: #0654ba;
 	font-size: 13px;
-	margin:auto;
-	color:#0654ba;
 }
 
 .signininfo {
-	font-size: 13px;	
-	margin:auto;
+	font-size: 13px;
+	margin: auto;
 	font-weight: 400;
 }
 
 .footbox {
 	display: block;
 	width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 3px;	
+	border: 1px solid #ccc;
+	border-radius: 3px;
 	margin-top: 180px;
 	background-color: white;
 	text-align: center;
@@ -113,31 +118,29 @@ a {
 	width: 47%;
 }
 
-
 .regshd {
 	position: absolute;
-    width: 3%;
-    background-color: #d7d7d7;
-    border: 1px solid #d7d7d7;
-    height: 43px;
-    margin: 5px 0 0 0;
-    display: inline-block;
+	width: 3%;
+	background-color: #d7d7d7;
+	border: 1px solid #d7d7d7;
+	height: 43px;
+	margin: 5px 0 0 0;
+	display: inline-block;
 }
 
 .signinshd {
 	position: absolute;
-    width: 3%;
-    background-color: #d7d7d7;
-    border: 1px solid #d7d7d7;
-    height: 43px;
-    margin: 5px 0 0 0;
-    display: inline-block;
+	width: 3%;
+	background-color: #d7d7d7;
+	border: 1px solid #d7d7d7;
+	height: 43px;
+	margin: 5px 0 0 0;
+	display: inline-block;
 }
 
 .radiobtn {
-	margin-left: 20px;	
+	margin-left: 20px;
 	margin-top: 20px;
-	
 }
 
 .radiobtn:hover {
@@ -148,7 +151,7 @@ a {
 	color: #0654ba;
 }
 
-.radiobtn2 {	
+.radiobtn2 {
 	padding-top: 18px;
 	padding-left: 110px;
 }
@@ -174,7 +177,7 @@ a {
 	margin-left: 20px;
 	margin-right: 20px;
 	width: 90%;
-	margin-bottom: 25px;	
+	margin-bottom: 25px;
 	height: 45px;
 	font-weight: bold;
 	font-size: 16px;
@@ -185,8 +188,8 @@ a {
 }
 
 .reginfo {
-	font-size: 13px;	
-	margin-left: 20px;	
+	font-size: 13px;
+	margin-left: 20px;
 	margin-top: 20px;
 	margin-bottom: 10px;
 	margin-right: 10px;
@@ -194,15 +197,15 @@ a {
 
 .firstname {
 	margin-left: auto;
-    margin-right: auto;
-    width: 45%;
-    display: inline-block;
+	margin-right: auto;
+	width: 45%;
+	display: inline-block;
 }
 
 .lastname {
 	width: 45%;
-    display: inline-block;
-    margin: auto;
+	display: inline-block;
+	margin: auto;
 	margin-left: 12px;
 }
 
@@ -211,9 +214,9 @@ a {
 }
 
 #checkbox {
-    position:relative;
-    top: -27px;
-    left: 300px;
+	position: relative;
+	top: -27px;
+	left: 300px;
 	color: #777;
 }
 
@@ -223,7 +226,7 @@ a {
 
 h4 {
 	margin-left: 20px;
-	font-weight:400;
+	font-weight: 400;
 }
 
 .resetemailbox {
@@ -236,10 +239,10 @@ h4 {
 	margin-left: 20px;
 	margin-right: 20px;
 	margin-bottom: 10px;
-	width: 90%;	
-	height: 45px;
+	width: 90%; height : 45px;
 	font-weight: bold;
 	font-size: 16px;
+	height: 45px;
 }
 
 .nextbtn:hover {
@@ -247,7 +250,7 @@ h4 {
 }
 
 .resetinfo {
-	font-size: 13px;	
+	font-size: 13px;
 	margin-left: 20px;
 	margin-bottom: 10px;
 	text-align: left;
