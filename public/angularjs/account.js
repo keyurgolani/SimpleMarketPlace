@@ -11,18 +11,21 @@ eBay.controller('account', function($scope, $http, $location) {
 	$scope.message = "";
 	
 	$scope.changeToSignin = function() {
+		$location.url("/account?view=signin");
 		$scope.isSignin = true;
 		$scope.isSignup = false;
 		$scope.isForgot = false;
 	};
 	
 	$scope.changeToRegister = function() {
+		$location.url("/account?view=register");
 		$scope.isSignin = false;
 		$scope.isSignup = true;
 		$scope.isForgot = false;
 	};
 	
 	$scope.changeToForgot = function() {
+		$location.url("/account?view=forgot");
 		$scope.isSignin = false;
 		$scope.isSignup = false;
 		$scope.isForgot = true;

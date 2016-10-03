@@ -23,12 +23,11 @@ a {
 
 .box {
 	display: block;
-	width: 90%;
 	margin: auto;
 	background: none repeat scroll 0 0 #fff;
 	border: 1px solid #ccc;
 	border-radius: 3px;
-	margin-top: 30px;
+	margin-top: 	;
 	-webkit-box-shadow: 0 4px 4px 0px #DDDDDD;
 	-moz-box-shadow: 0 4px 4px 0px #DDDDDD;
 	box-shadow: 0 4px 4px 0px #DDDDDD;
@@ -138,26 +137,8 @@ a {
 	display: inline-block;
 }
 
-.radiobtn {
-	margin-left: 20px;
-	margin-top: 20px;
-}
-
-.radiobtn:hover {
-	color: #0654ba;
-}
-
-.radiobtn2:hover {
-	color: #0654ba;
-}
-
-.radiobtn2 {
-	padding-top: 18px;
-	padding-left: 110px;
-}
-
 .regemailbox {
-	margin-top: 15px;
+	margin-top: 25px;
 	margin-left: 20px;
 	margin-right: 20px;
 }
@@ -166,7 +147,6 @@ a {
 	margin-top: 15px;
 	margin-left: 20px;
 	margin-right: 20px;
-	margin-bottom: auto;
 }
 
 .agreementtext {
@@ -189,28 +169,24 @@ a {
 
 .reginfo {
 	font-size: 13px;
-	margin-left: 20px;
 	margin-top: 20px;
 	margin-bottom: 10px;
 	margin-right: 10px;
+	margin: info;
 }
 
 .firstname {
 	margin-left: auto;
 	margin-right: auto;
-	width: 45%;
+	width: 43%;
 	display: inline-block;
 }
 
 .lastname {
-	width: 45%;
+	width: 43%;
 	display: inline-block;
 	margin: auto;
 	margin-left: 12px;
-}
-
-.name {
-	margin-left: 20px;
 }
 
 #checkbox {
