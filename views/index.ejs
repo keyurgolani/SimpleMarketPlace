@@ -34,7 +34,8 @@
                                 	<span ng-show="user_fname"><div class="header-item usernameDisplay">Hi <span ng-click="userNameClicked()"><strong>{{user_fname}}!&nbsp;&#9207;</strong></span></div></span>
                                     <div class="header-item">Daily Deals</div>
                                     <div class="header-item">Gift Cards</div>
-                                    <div class="header-item">Sell</div>
+                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
+                                    <span ng-show="user_fname"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
                                     <div class="header-item extreme-right">Help &amp; Content</div>
                                 </div>
                             </div>

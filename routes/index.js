@@ -12,6 +12,11 @@ router.get('/', function(req, res, next) {
 	res.render('index', {  });
 });
 
+router.get('/sell', function(req, res, next) {
+	logger.log("info", "Inside home directory");
+	res.render('sell', {  });
+});
+
 router.post('/loggedInUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		res.send({

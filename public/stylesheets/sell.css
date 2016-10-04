@@ -1,0 +1,123 @@
+.top-row {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.my-div {
+	padding-top: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.ebay-logo {
+	display: inline-block;
+	width: 150px;
+	height: auto;
+	min-height: 74px;
+	max-height: 74px;
+	display:flex;
+}
+
+.helpButton {
+	min-height: 74px;
+	max-height: 74px;
+	display:flex;
+	float: right;
+	right: 32px;
+}
+
+.helpText {
+	display:flex;
+	align-items:center;
+	margin: auto;
+	font-size: 120%;
+}
+
+.link {
+	color: #0654BA;
+}
+
+.link:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.image {
+	background-image: url("http://p.ebaystatic.com/aw/sell/lnd/hero_card_background.png");
+	min-height: 600px;
+    height: auto !important;
+    height: 600px;
+    background-size: 180%;
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+.announcement {
+	margin: 4% auto 0px auto;
+	font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
+	line-height: 1.25;
+    display: block;
+    font-size: 350%;
+    font-weight: lighter;
+    text-align: center;
+}
+
+.second-line {
+	margin: 0px auto;
+}
+
+.emptyRow {
+	height: 5%;
+}
+
+.left-align {
+	text-align: left;
+	font-size: 200%;
+}
+
+.search-bar {
+	font-family: "Helvetica Neue Light","Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif!important;
+	font-size: 150%!important;
+	height: 56px;
+	font-weight: lighter;
+	width: 80%;
+	float: left;
+	color: #999!important;
+	border-bottom-right-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.search-button {
+	height: 56px;
+	font-size: 16px;
+	width: 12%;
+	border-bottom-left-radius: 0px;
+	border-top-left-radius: 0px;
+	background: #0654BA;
+}
+
+.search-button:hover {
+	background: #0654BA;
+	opacity: .9!important;
+}
+
+.search-row {
+	margin: 10px 0px 0px 0px;
+}
+
+.cancel-button {
+	float: right;
+	width: 8%;
+	padding: 0px 0px 0px 10px;
+	margin: 0px;
+	font-weight: 100;
+	height: 56px;
+}
+
+.example {
+	font-size: 105%;
+	margin: 5px 0px 0px 15px;
+	font-weight: lighter;
+}
