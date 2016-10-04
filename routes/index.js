@@ -12,6 +12,18 @@ router.get('/', function(req, res, next) {
 	res.render('index', {  });
 });
 
+router.post('/loggedInUser', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		res.send({
+			"userBO"	:	req.session.loggedInUser
+		});
+	} else {
+		res.send({
+			"userBO"	:	{}
+		});
+	}
+});
+
 router.get('/account', function(req, res, next) {
 	res.render('account', {  });
 });
@@ -110,13 +122,14 @@ router.get('/forgotPassword', function(req, res, next) {
 router.post('/signin', function(req, res, next) {
 	var username = req.body.userID;
 	var password = req.body.password;
-	dao.fetchData("user_id as result", "user_account", {
+	dao.fetchData("user_id", "user_account", {
 		"user_name"	:	username
 	}, function(rows) {
-		dao.fetchData("secret as result", "user_account", {
-			"user_id"	:	rows[0].result
+		dao.fetchData("*", "user_account", {
+			"user_id"	:	rows[0].user_id
 		}, function(rows) {
-			if(rows[0].result === password) {
+			if(rows[0].secret === password) {
+				req.session.loggedInUser = rows[0];
 				res.send({
 					"valid"	:	true
 				});

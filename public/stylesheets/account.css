@@ -186,7 +186,7 @@ a {
 	width: 43%;
 	display: inline-block;
 	margin: auto;
-	margin-left: 12px;
+	margin-left: auto;
 }
 
 #checkbox {

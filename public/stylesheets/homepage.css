@@ -81,3 +81,8 @@
 	text-decoration: underline;
 	cursor: pointer;
 }
+
+.usernameDisplay:hover {
+	cursor: pointer;
+	color: #0654BA;
+}

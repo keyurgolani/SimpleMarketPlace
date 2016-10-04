@@ -16,6 +16,7 @@
     "nodemon": "*",
     "mysql": "*",
     "fecha": "*",
-    "winston": "~2.2.0"
+    "winston": "~2.2.0",
+    "express-session": "*"
   }
 }
