@@ -30,8 +30,17 @@
                         	<div class="col-md-6 header-item-container">
                                 <div class="row">
                                 	<div class="col-md-12">
-                                		<span ng-hide="user_fname"><div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div></span>
-	                                	<span ng-show="user_fname"><div class="header-item usernameDisplay">Hi <span ng-click="userNameClicked()"><strong>{{user_fname}}!&nbsp;&#9207;</strong></span></div></span>
+                                		<span ng-hide="user_fname">
+                                			<div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div>
+                                		</span>
+	                                	<span ng-show="user_fname">
+	                                		<div class="header-item usernameDisplay">Hi <span ng-mouseover="show_user_profile_menu = true"><strong>{{user_fname}}!&nbsp;</strong><span class="glyphicon glyphicon-menu-down"></span></span></div>
+	                                		<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
+	                                			<a href="#">Link 1</a>
+	                                			<a href="#">Link 2</a>
+	                                			<a href="#">Link 3</a>
+	                                		</div>
+	                                	</span>
 	                                    <div class="header-item">Daily Deals</div>
 	                                    <div class="header-item">Gift Cards</div>
 	                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
@@ -107,6 +116,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+					<div class="col-md-12 cover-screen-width">
+						<div class="bottom-footbox">
+							<p>Copyright &copy; 1995-2016 eBay Inc. All Rights Reserved. User Agreement, Privacy, Cookies and AdChoice</p>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
     </div>

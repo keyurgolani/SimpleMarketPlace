@@ -1,4 +1,4 @@
-var eBay = angular.module('eBay', []);
+var eBay = angular.module('eBay', ['internationalPhoneNumber']);
 
 eBay.config(['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode({
@@ -7,7 +7,7 @@ eBay.config(['$locationProvider', function($locationProvider){
     });
 }]);
 
-eBay.controller('account', function($scope, $http, $location) {
+eBay.controller('account', function($scope, $http, $location, $window) {
 	$scope.message = "";
 	$scope.show_more = true;
 	
@@ -30,6 +30,10 @@ eBay.controller('account', function($scope, $http, $location) {
 		$scope.isSignin = false;
 		$scope.isSignup = false;
 		$scope.isForgot = true;
+	};
+	
+	$scope.homepage = function() {
+		$window.location.href = "/";
 	};
 	
 	if($location.search().view === "register") {

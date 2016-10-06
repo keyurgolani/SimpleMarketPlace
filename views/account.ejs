@@ -18,6 +18,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+<script src="/js/intlTelInput.js"></script>
+<link rel='stylesheet' href='/stylesheets/intlTelInput.css' />
+<script src="/js/utils.js"></script>
+<script src="/js/international-phone-number.js"></script>
 <link rel='stylesheet' href='/stylesheets/account.css' />
 <script src="/angularjs/account.js"></script>
 </head>
@@ -25,7 +29,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12" align="center">
-				<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" class="ebay-icon spacer">
+				<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" ng-click="homepage()" class="ebay-icon spacer">
 				<div ng-repeat="message in messages">
 					<div ng-class="{'200':'alert alert-success', '500':'alert alert-danger'}[status_code]">{{message}}</div>
 				</div>
@@ -107,7 +111,7 @@
 								<input type="text" class="form-control name-fields" id="lastname" ng-model="lname" placeholder="Last name">
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" id="user" ng-model="contact" placeholder="Mobile phone">
+								<input type="text" class="form-control" style="width: 100%;" id="user" ng-model="contact" international-phone-number placeholder="Mobile phone">
 							</div>
 							<div>
 								<p class="account-info">By <strong>Registering</strong>, you agree that you've read and accepted our <span class="text-primary link-cursor-underline">User Agreement</span>, you're at least 18 years old, and you consent to our <span class="text-primary link-cursor-underline">Privacy Notice</span> and receiving marketing communications from us.</p>

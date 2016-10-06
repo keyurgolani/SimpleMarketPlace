@@ -15,6 +15,7 @@ a {
 	height: 90px;
 	margin: auto;
 	display: inline-block;
+	cursor: pointer;
 }
 
 .spacer {
