@@ -9,6 +9,7 @@ eBay.config(['$locationProvider', function($locationProvider){
 
 eBay.controller('account', function($scope, $http, $location) {
 	$scope.message = "";
+	$scope.show_more = true;
 	
 	$scope.changeToSignin = function() {
 		$location.url("/account?view=signin");

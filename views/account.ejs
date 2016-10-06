@@ -66,7 +66,10 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="account-info">
-										Using a public or shared device? Uncheck to protect your account. <span class="link-cursor">Learn more </span>
+										Using a public or shared device? Uncheck to protect your account.
+										<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-show="show_more" data-target="#expand"> Learn more</span>
+										<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-hide="show_more" data-target="#expand"> Hide</span>
+										 <p id="expand" class="collapse clear-space">Using a public or shared device? Uncheck to protect your account. With this box checked, we'll keep you signed in, making it easier to bid and buy. You'll also be all set to pay if you've saved your payment info. You can always turn off this feature in My eBay. We may ask you to sign in again for some activities, such as making changes to your account.</p>
 									</div>
 								</div>
 							</div>
