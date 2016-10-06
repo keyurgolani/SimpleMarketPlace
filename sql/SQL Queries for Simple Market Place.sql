@@ -56,12 +56,24 @@ CREATE TABLE `simple_market_place`.`item_details` (
   `item_description` varchar(400) NOT NULL,
   PRIMARY KEY (`item_id`)
   );
+  
+-----------------------------------------------------------------
+
+CREATE TABLE `simple_market_place`.`item_conditions` (
+  `condition_id` INT NOT NULL,
+  `condition_name` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`condition_id`),
+  UNIQUE INDEX `condition_name_UNIQUE` (`condition_name` ASC)
+);
+
 -----------------------------------------------------------------
 CREATE TABLE `simple_market_place`.`sale_details` (
   `sale_id` int(11) NOT NULL AUTO_INCREMENT,
   `seller` int(11) DEFAULT NULL,
   `item` int(11) DEFAULT NULL,
-  `condition` varchar(50) NOT NULL,
+  `condition` int(11) DEFAULT NULL,
+  `sale_price` FLOAT NOT NULL,
+  `title` VARCHAR(50) NOT NULL,
   `desc` VARCHAR(400) NULL,
   `is_bid` TINYINT(1) NOT NULL,
   `sale_qty` INT NOT NULL,
@@ -69,7 +81,8 @@ CREATE TABLE `simple_market_place`.`sale_details` (
   KEY `seller` (`seller`),
   KEY `item` (`item`),
   CONSTRAINT `fk_sale_seller` FOREIGN KEY (`seller`) REFERENCES `user_account` (`user_id`),
-  CONSTRAINT `fk_sale_item` FOREIGN KEY (`item`) REFERENCES `item_details` (`item_id`)
+  CONSTRAINT `fk_sale_item` FOREIGN KEY (`item`) REFERENCES `item_details` (`item_id`),
+  CONSTRAINT `fk_item_condition` FOREIGN KEY (`condition`) REFERENCES `item_conditions` (`condition_id`)
 );
 -----------------------------------------------------------------
 CREATE TABLE `simple_market_place`.`bid_details` (
@@ -110,3 +123,26 @@ CREATE TABLE `simple_market_place`.`cart_details` (
   CONSTRAINT `fk_cart_owner` FOREIGN KEY (`user`) REFERENCES `user_account` (`user_id`),
   CONSTRAINT `fk_cart_sale_item` FOREIGN KEY (`sale_item`) REFERENCES `sale_details` (`sale_id`)
 );
+
+----------------------------------------------------------------------
+
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('1', 'Mobile Phone', 'A wireless handheld device that allows users to make calls and send text messages, among other features.');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('2', 'Laptop Computer', 'Often called a notebook or notebook computer, is a small, portable personal computer with a clamshell form factor, an alphanumeric keyboard on the lower part of the clamshell and a thin LCD or LED computer screen on the upper portion, which is opened up to use the computer.');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('3', 'Book', 'A book is a literature verbalized in a collection of pages sharing ideas about a topic or collection of topics.');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('4', 'Jewelry', 'Jewelry');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('5', 'Televison', 'Televison');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('6', 'Game', 'Game');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('7', 'Tools', 'Tools');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('8', 'Beauty Products', 'Beauty Products');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('9', 'Toys', 'Toys');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('10', 'Clothes', 'Clothes');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('11', 'Shoes', 'Shoes');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('12', 'Sports', 'Sports');
+INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('13', 'Industrial', 'Industrial');
+
+
+INSERT INTO `simple_market_place`.`item_conditions` (`condition_id`, `condition_name`) VALUES ('1', 'New');
+INSERT INTO `simple_market_place`.`item_conditions` (`condition_id`, `condition_name`) VALUES ('2', 'Good as New');
+INSERT INTO `simple_market_place`.`item_conditions` (`condition_id`, `condition_name`) VALUES ('3', 'Used');
+INSERT INTO `simple_market_place`.`item_conditions` (`condition_id`, `condition_name`) VALUES ('4', 'Refurbished');
+INSERT INTO `simple_market_place`.`item_conditions` (`condition_id`, `condition_name`) VALUES ('5', 'Defective');

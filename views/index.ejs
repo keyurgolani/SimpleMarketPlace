@@ -25,8 +25,7 @@
     	<div class="row">
         	<div class="col-md-12 full-body">
                 <div class="row top-row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10">
+                    <div class="col-md-12 width-10">
                         <div class="row">
                         	<div class="col-md-6 header-item-container">
                                 <div class="row">
@@ -49,12 +48,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
                 <div class="row middle-body">
-                	<div class="col-md-1"></div>
-                    <div class="col-md-10">
-                    	<div class="row search-row" style="display:flex;align-items:center;">
+                    <div class="col-md-10 width-10">
+                    	<div class="row search-row" style="">
                         	<div class="col-md-2">
                             	<div class="row" align="center">
                                 	<div class="ebay-logo img-responsive link" ng-click="homepageClicked()">
@@ -72,8 +69,41 @@
                                 </div>
                             </div>
                         </div>
+                        <hr class="separator"/>
+                        <div class="row">
+                        	<div class="col-md-12">
+                        		<div class="row products-grid">
+                        			<div ng-repeat="sale in sales">
+                        				<div class="col-md-6 product-bound">
+                        					<div class="row">
+                        						<div class="col-md-12 image-bound">
+                        							<img src="/images/products/laptop.jpg" class="image-display">
+                        						</div>
+                        					</div>
+                        					<div class="row text-bound">
+                        						<div class="col-md-12">
+                        							<div class="row title">
+                        								{{sale.title}}
+                        							</div>
+                        							<div class="row other-details">
+                        								<div class="detail-division">
+                        									{{sale.sale_qty}} items
+                        								</div>
+                        								<div class="detail-division">
+                        									by {{sale.user_name}}
+                        								</div>
+                        								<div class="detail-division shop-now link">
+                        									<span ng-click="shop(sale.sale_id)">Shop now</span>
+                        								</div>
+                        							</div>
+                        						</div>
+                        					</div>
+                        				</div>
+                        			</div>
+                        		</div>
+                        	</div>
+                        </div>
                     </div>
-                    <div class="col-md-1"></div>
                 </div>
             </div>
         </div>

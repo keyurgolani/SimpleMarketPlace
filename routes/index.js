@@ -3,9 +3,6 @@ var router = express.Router();
 var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 
-var error_messages = [];
-var status_code = 200;
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
@@ -29,11 +26,46 @@ router.post('/loggedInUser', function(req, res, next) {
 	}
 });
 
+router.post('/fetchSales', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND seller <> ?", [req.session.loggedInUser.user_id], function(saleDetails) {
+			res.send({
+				"saleDetails"	:	saleDetails
+			});
+		});
+	} else {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id", [], function(saleDetails) {
+			res.send({
+				"saleDetails"	:	saleDetails
+			});
+		});
+	}
+});
+
+router.post('/fetchItems', function(req, res, next) {
+	dao.fetchData("*", "item_details", null, function(rows) {
+		res.send({
+			"result"	:	rows
+		});
+	});
+});
+
+router.post('/fetchConditions', function(req, res, next) {
+	dao.fetchData("*", "item_conditions", null, function(rows) {
+		res.send({
+			"result"	:	rows
+		});
+	});
+});
+
 router.get('/account', function(req, res, next) {
 	res.render('account', {  });
 });
 
 router.post('/register', function(req, res, next) {
+	var error_messages = [];
+	var status_code = 200;
+	var success_messages = [];
 	logger.log("info", "Inside signup form");
 	var username = req.param('username');
 	var email = req.param('email');
@@ -80,7 +112,6 @@ router.post('/register', function(req, res, next) {
 		error_messages.push("'" + phone + "' is not a valid phone.");
 		status_code = 400;
 	}
-	
 	if(status_code === 200) {
 		logger.log("info", "Valid parameters");
 		var insertParameters = {
@@ -92,7 +123,19 @@ router.post('/register', function(req, res, next) {
 				"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
 			};
 		dao.insertData("user_account", insertParameters, function(rows) {
-			// TODO: Process Insert Status
+			if(rows.affectedRows === 1) {
+				success_messages.push("User " + firstname + " created successfully !");
+				res.send({
+					"status_code"	:	status_code,
+					"messages"		:	success_messages
+				});
+			} else {
+				error_messages.push("Internal error. Please try again..!!");
+				res.send({
+					"status_code"	:	status_code,
+					"messages"		:	error_messages
+				});
+			}
 		});
 	} else {
 		res.send({
@@ -103,7 +146,40 @@ router.post('/register', function(req, res, next) {
 	
 });
 
+router.post('/publishSale', function(req, res, next) {
+	var title = req.body.advertise_title;
+	var item = req.body.advertise_item;
+	var condition = req.body.advertise_condition;
+	var is_bid = req.body.advertise_is_bid;
+	var price = req.body.advertise_price;
+	var quantity = req.body.advertise_quantity;
+	var desc = req.body.advertise_desc;
+	dao.insertData("sale_details", {
+		"seller"	:	req.session.loggedInUser.user_id,
+		"item"		:	item,
+		"condition"	:	condition.condition_id,
+		"sale_price":	price,
+		"title"		:	title,
+		"desc"		:	desc,
+		"is_bid"	:	(is_bid ? 1 : 0),
+		"sale_qty"	:	quantity
+	}, function(rows) {
+		if(rows.affectedRows === 1) {
+			res.send({
+				"status_code"	:	"200"
+			});
+		} else {
+			res.send({
+				"status_code"	:	"500"
+			});
+		}
+	});
+});
+
 router.get('/forgotPassword', function(req, res, next) {
+	var error_messages = [];
+	var status_code = 200;
+	var success_messages = [];
 	logger.log("info", "Forgot Password form");
 	var email = req.param('email'); 
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");

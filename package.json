@@ -17,6 +17,7 @@
     "mysql": "*",
     "fecha": "*",
     "winston": "~2.2.0",
-    "express-session": "*"
+    "express-session": "*",
+    "angular-bootstrap-switch" : "*"
   }
 }

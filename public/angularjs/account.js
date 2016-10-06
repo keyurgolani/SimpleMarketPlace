@@ -56,7 +56,7 @@ eBay.controller('signinController', function($scope, $http, $window) {
 			if(Boolean(data.valid)) {
 				$window.location.href = "/";
 			} else {
-				$scope.message = "Oops, that's not a match.";
+				$scope.error_message = "Oops, that's not a match.";
 			}
 		}).error(function(error) {
 			// TODO: Handle Error
@@ -64,8 +64,9 @@ eBay.controller('signinController', function($scope, $http, $window) {
 	};
 });
 
-eBay.controller('registerController', function($scope, $http, $window) {
+eBay.controller('registerController', function($scope, $http, $location) {
 	$scope.register = function() {
+		$scope.$parent.messages = [];
 		$http({
 			method	:	"POST",
 			url		:	"/register",
@@ -78,7 +79,20 @@ eBay.controller('registerController', function($scope, $http, $window) {
 				"contact"	:	$scope.contact
 			}
 		}).success(function(data) {
-			$window.location.href = "/account";
+			$scope.$parent.status_code = data.status_code;
+			if(data.status_code === 200) {
+				$location.url("/account?view=signin");
+				$scope.$parent.isSignin = true;
+				$scope.$parent.isSignup = false;
+				$scope.$parent.isForgot = false;
+				$scope.$parent.messages = data.messages;
+			} else {
+				$location.url("/account?view=register");
+				$scope.$parent.messages = data.messages;
+				$scope.$parent.isSignin = false;
+				$scope.$parent.isSignup = true;
+				$scope.$parent.isForgot = false;
+			}
 		}).error(function(error) {
 			// TODO: Handle Error
 		});

@@ -56,7 +56,10 @@ var connectionPool = initializeConnectionPool();
 module.exports = {
 	fetchData	:	function(selectFields, tableName, queryParameters, processResult) {
 		connectionPool.get(function(connectionNumber, connection) {
-			var queryString = "SELECT " + selectFields + " FROM " + tableName + " WHERE ?";
+			var queryString = "SELECT " + selectFields + " FROM " + tableName;
+			if(queryParameters !== null) {
+				queryString = "SELECT " + selectFields + " FROM " + tableName + " WHERE ?";
+			}
 			var query = connection.query(queryString, queryParameters, function(error, rows) {
 				connectionPool.release(connectionNumber, connection);
 				if (error) {
@@ -66,6 +69,21 @@ module.exports = {
 				}
 			});
 			logger.log("debug", "Fetch Executed: " + query.sql);
+
+		});
+	},
+	
+	executeQuery:	function(sqlQuery, parameters, processResult) {
+		connectionPool.get(function(connectionNumber, connection) {
+			var query = connection.query(sqlQuery, parameters, function(error, rows) {
+				connectionPool.release(connectionNumber, connection);
+				if (error) {
+					throw error;
+				} else {
+					processResult(rows);
+				}
+			});
+			logger.log("debug", "Query Executed: " + query.sql);
 
 		});
 	},

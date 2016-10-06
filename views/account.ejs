@@ -28,7 +28,16 @@
 		<div class="col-md-4 col-lg-4 col-sm-6 col-xs-10" align="center">
    
     		<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" class="ebay-icon spacer">
-            
+            <div ng-if="status_code!='200'">
+            	<div ng-repeat="message in messages">
+            		<div class="alert alert-danger">{{message}}</div>
+            	</div>
+            </div>
+            <div ng-if="status_code=='200'">
+            	<div ng-repeat="message in messages">
+            		<div class="alert alert-success">{{message}}</div>
+            	</div>
+            </div>
       		<div ng-show="isSignin" ng-controller="signinController">
       			<div class="box">
 	         		<div class="button">
@@ -38,9 +47,6 @@
 	        			<li class="inactive" ng-click="changeToRegister()" style="cursor: pointer"><span class="regshd"></span>
 	                    <img src="https://image.freepik.com/free-icon/plus-addition-sign-circle_318-86082.png" class="sp"><span class="text" style="color:#0654ba;">Register</span></li>
 	    				</ul>
-	                </div>
-	                <div ng-if="message">
-	                	<span class="error">{{message}}</span>
 	                </div>
 	    			<div class="form-group emailbox">
 	     			<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" style="background-color:#faffbd">

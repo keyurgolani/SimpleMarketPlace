@@ -3,7 +3,6 @@ var eBay = angular.module('eBay', []);
 eBay.controller('homepage', function($scope, $http, $window) {
 	
 	$scope.sellAnItem = function() {
-		console.log("here");
 		$window.location.href = "/sell";
 	};
 	
@@ -38,6 +37,15 @@ eBay.controller('homepage', function($scope, $http, $window) {
 		} else {
 			
 		}
+	}).error(function(error) {
+		// TODO: Handle Error
+	});
+	
+	$http({
+		method	:	"POST",
+		url		:	"/fetchSales"
+	}).success(function(data) {
+		$scope.sales = data.saleDetails;
 	}).error(function(error) {
 		// TODO: Handle Error
 	});
