@@ -22,94 +22,97 @@ a {
 }
 
 .box {
+	width: 400px;
 	display: block;
-	margin: auto;
-	background: none repeat scroll 0 0 #fff;
+	background: #fff;
 	border: 1px solid #ccc;
 	border-radius: 3px;
-	margin-top: 	;
+	margin: 30px 0px 100px 0px;
 	-webkit-box-shadow: 0 4px 4px 0px #DDDDDD;
 	-moz-box-shadow: 0 4px 4px 0px #DDDDDD;
 	box-shadow: 0 4px 4px 0px #DDDDDD;
 }
 
-.button {
-	padding: 0;
-	display: inline-block;
+.is-forgot-box {
+	margin-bottom: 300px;
+}
+
+.tabs {
+	height: 46px;
 	font-size: 18px;
-	width: 100%;
 }
 
-.sp {
-	height: 30px;
-	width: 30px;
-	float: left;
+.tabs-row {
+	height: 46px;
 }
 
-.text {
+.single-tab {
+	height: 46px;
+	line-height: 46px;
 	text-align: left;
-	padding-left: 10px;
-	padding-top: 60px;
-	vertical-align: middle;
 }
 
-.emailbox {
-	margin-top: 25px;
-	margin-left: 20px;
-	margin-right: 20px;
+.tab-icons {
+	line-height: 46px;
+	padding: 0px 10px 0px 20px;
+	color: #BBB; 
 }
 
-.passbox {
-	margin-top: 20px;
-	margin-left: 20px;
-	margin-right: 20px;
+.tab-texts {
+	line-height: 46px;
 }
 
-.signinbtn {
-	width: 90%;
-	height: 45px;
-	font-weight: bold;
-	font-size: 16px;
-	margin: auto;
+.stay-signed-in {
+	float: left;
+	text-align: left;
+	margin-left: 3px;
 }
 
-.signinbtn:hover {
-	background: #00509d;
+.stay-signed-in-checkbox {
+	transform: scale(1.5);
+	cursor: pointer;
 }
 
-.check {
-	margin: auto;
-	padding: !important;
-}
-
-.forgotpassword {
-	padding-left: 28%;
-	padding-right: 5%; font-size : 13px;
-	margin: auto;
-	color: #0654ba;
+.forgot-password {
+	color: #0654BA;
+	cursor: pointer;
 	font-size: 13px;
+	float: right;
 }
 
-.signininfo {
+.account-info {
 	font-size: 13px;
-	margin: auto;
 	font-weight: 400;
+	text-align: left;
+	color: #666;
+	margin-top: 5px;
 }
 
-.footbox {
+.bottom-footbox {
 	display: block;
 	width: 100%;
 	border: 1px solid #ccc;
-	border-radius: 3px;
-	margin-top: 180px;
 	background-color: white;
 	text-align: center;
 	height: 120px;
-	padding-top: 50px;
-	border-bottom: 0;
 	font-size: 10px;
 	color: #727272;
-	position: absolute;
+	bottom: 0;
+	padding-top: 50px;
+}
+
+.fixed-footbox {
+	display: block;
+	width: 100%;
+	border: 1px solid #ccc;
+	background-color: white;
+	text-align: center;
+	height: 120px;
+	font-size: 10px;
+	color: #727272;
+	bottom: 0;
+	padding-top: 50px;
+	position: fixed;
 }
 
 .inactive {
@@ -117,127 +120,76 @@ a {
 	width: 47%;
 }
 
-.regshd {
+.tab-shadow-right {
 	position: absolute;
-	width: 3%;
+	width: 6px;
 	background-color: #d7d7d7;
-	border: 1px solid #d7d7d7;
 	height: 43px;
-	margin: 5px 0 0 0;
-	display: inline-block;
+	margin-top: 5px;
 }
 
-.signinshd {
+.tab-shadow-left {
 	position: absolute;
-	width: 3%;
+	width: 6px;
 	background-color: #d7d7d7;
-	border: 1px solid #d7d7d7;
 	height: 43px;
-	margin: 5px 0 0 0;
-	display: inline-block;
+	margin-top: 5px;
+	left: -6px;
 }
 
-.regemailbox {
-	margin-top: 25px;
-	margin-left: 20px;
-	margin-right: 20px;
+.inactive-tab {
+	opacity: .9!important;
+	color: #0654BA;
+	cursor: pointer;
 }
 
-.regpassbox {
-	margin-top: 15px;
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-.agreementtext {
-	text-align: justify;
-}
-
-.regbtn {
-	margin-left: 20px;
-	margin-right: 20px;
+.account-form {
 	width: 90%;
-	margin-bottom: 25px;
-	height: 45px;
-	font-weight: bold;
-	font-size: 16px;
+	margin: 20px;
 }
 
-.regbtn:hover {
+.account-button {
+	font-weight: bold;
+	font-size: 16px;
+	height: 36px;
+	background: -webkit-gradient(linear,left top,left bottom,from(#0079bc),to(#00509d));
+}
+
+.account-button:hover {
 	background: #00509d;
 }
 
-.reginfo {
-	font-size: 13px;
-	margin-top: 20px;
-	margin-bottom: 10px;
-	margin-right: 10px;
-	margin: info;
+.account-button:active {
+	background: #00509d;
 }
 
-.firstname {
-	margin-left: auto;
-	margin-right: auto;
-	width: 43%;
+.account-button:focus {
+	background: -webkit-gradient(linear,left top,left bottom,from(#0079bc),to(#00509d));
+}
+
+.name-fields {
+	width: 177px;
 	display: inline-block;
 }
 
-.lastname {
-	width: 43%;
-	display: inline-block;
-	margin: auto;
-	margin-left: auto;
+.forgot-title {
+	float: left;
+	margin-bottom: .1em;
 }
 
-#checkbox {
-	position: relative;
-	top: -27px;
-	left: 300px;
-	color: #777;
-}
-
-#checkbox:hover {
-	color: #0654ba;
-}
-
-h4 {
-	margin-left: 20px;
+.forgot-email-label {
 	font-weight: 400;
-}
-
-.resetemailbox {
-	margin-top: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-.nextbtn {
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-bottom: 10px;
-	width: 90%; height : 45px;
-	font-weight: bold;
-	font-size: 16px;
-	height: 45px;
-}
-
-.nextbtn:hover {
-	background: #00509d;
-}
-
-.resetinfo {
-	font-size: 13px;
-	margin-left: 20px;
-	margin-bottom: 10px;
+	width: 100%;
 	text-align: left;
+	margin-bottom: 3px;
+	margin-top: 3px;
 }
 
-.resetfootbox {
+.reset-footbox {
 	text-align: center;
-	border-bottom: 0;
+	bottom: 120px;
 	font-size: 13px;
-	bottom: 105px;
-	position: absolute;
+	position: fixed;
 }
 
 .link {
@@ -249,12 +201,20 @@ h4 {
 	cursor: pointer;
 }
 
-.error {
-	display: block;
-	color: #DD1E31;
-	font-size: 12px;
-	font-weight: 500;
-	float: left;
-	margin-top: 5%;
-	margin-bottom: 3%;
+.link-cursor {
+	cursor: pointer;
+	color: #0654ba;
+}
+
+.link-cursor-underline {
+	cursor: pointer;
+	color: #0654ba;
+	text-decoration: underline;
+}
+
+.cover-screen-width {
+	padding-right: 0px;
+	padding-left: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
