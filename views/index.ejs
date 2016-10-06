@@ -29,19 +29,21 @@
                         <div class="row">
                         	<div class="col-md-6 header-item-container">
                                 <div class="row">
-                                	<span ng-hide="user_fname"><div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div></span>
-                                	<span ng-show="user_fname"><div class="header-item usernameDisplay">Hi <span ng-click="userNameClicked()"><strong>{{user_fname}}!&nbsp;&#9207;</strong></span></div></span>
-                                    <div class="header-item">Daily Deals</div>
-                                    <div class="header-item">Gift Cards</div>
-                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
-                                    <span ng-show="user_fname"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
-                                    <div class="header-item extreme-right">Help &amp; Content</div>
+                                	<div class="col-md-12">
+                                		<span ng-hide="user_fname"><div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div></span>
+	                                	<span ng-show="user_fname"><div class="header-item usernameDisplay">Hi <span ng-click="userNameClicked()"><strong>{{user_fname}}!&nbsp;&#9207;</strong></span></div></span>
+	                                    <div class="header-item">Daily Deals</div>
+	                                    <div class="header-item">Gift Cards</div>
+	                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
+	                                    <span ng-show="user_fname"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
+	                                    <div class="header-item extreme-right">Help &amp; Content</div>
+                                	</div>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <!-- Temporary Sale Image Goes here-->
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 pull-right right-panel">
                                 <div class="header-item extreme-right right-panel">My eBay</div>
                                 <div class="header-item extreme-right right-panel">Notifications</div>
                                 <div class="header-item extreme-right right-panel">Cart</div>
@@ -50,8 +52,8 @@
                     </div>
                 </div>
                 <div class="row middle-body">
-                    <div class="col-md-10 width-10">
-                    	<div class="row search-row" style="">
+                    <div class="col-md-12 width-10">
+                    	<div class="row search-row">
                         	<div class="col-md-2">
                             	<div class="row" align="center">
                                 	<div class="ebay-logo img-responsive link" ng-click="homepageClicked()">
@@ -65,7 +67,7 @@
                             </div>
                             <div class="col-md-2">
                             	<div class="row">
-                                	<button class="form-control btn btn-primary search-button" ng-click="search()">Search</button>
+                                	<div class="col-md-12"><button class="form-control btn btn-primary search-button" ng-click="search()">Search</button></div>
                                 </div>
                             </div>
                         </div>

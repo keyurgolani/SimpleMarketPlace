@@ -19,6 +19,7 @@
 
 .header-item-container {
 	height: 100%;
+	margin-left: 15px;
 }
 
 .header-item {
@@ -41,7 +42,6 @@
 
 .middle-body {
 	margin: auto;
-	display: block;
 }
 
 .search-row {
@@ -92,8 +92,6 @@
 
 .emptyRow {
 	height: 2%;
-	border-top: 1px solid;
-	border-bottom: 1px solid;
 }
 
 .separator {
