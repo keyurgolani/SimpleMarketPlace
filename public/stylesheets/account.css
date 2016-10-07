@@ -223,3 +223,24 @@ a {
 .clear-space {
 	margin-top: 15px;
 }
+
+.available {
+	color: #00FF00;
+	line-height: 34px;
+	text-align: left;
+	padding: 0px;
+}
+
+.unavailable {
+	color: #FF0000;
+	line-height: 34px;
+	text-align: left;
+	padding: 0px;
+}
+
+.availability {
+	padding: 0px;
+	margin: 0px;
+	float: left;
+	text-align: left;
+}

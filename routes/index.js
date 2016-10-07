@@ -14,6 +14,34 @@ router.get('/sell', function(req, res, next) {
 	res.render('sell', {  });
 });
 
+router.post('/emailIDAvailable', function(req, res, next) {
+	dao.executeQuery("SELECT COUNT(email) as count FROM user_account WHERE email like ?", [req.body.email], function(result) {
+		if(result[0].count === 0) {
+			res.send({
+				"available"	:	true
+			});
+		} else {
+			res.send({
+				"available"	:	false
+			});
+		}
+	});
+});
+
+router.post('/usernameAvailable', function(req, res, next) {
+	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [req.body.username], function(result) {
+		if(result[0].count === 0) {
+			res.send({
+				"available"	:	true
+			});
+		} else {
+			res.send({
+				"available"	:	false
+			});
+		}
+	});
+});
+
 router.post('/loggedInUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		res.send({

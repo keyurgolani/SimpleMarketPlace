@@ -1,5 +1,5 @@
 var eBay = angular.module('eBay', ['internationalPhoneNumber']);
-
+// Watching multiple fields with AngularJS: http://stackoverflow.com/questions/17872919/can-i-combine-watching-of-multiple-fields-into-one-watch-with-angularjs
 eBay.config(['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode({
     	  enabled: true,
@@ -102,6 +102,43 @@ eBay.controller('registerController', function($scope, $http, $location) {
 			// TODO: Handle Error
 		});
 	};
+	
+	$scope.$watch('email', function() {
+		$http({
+			method	:	"POST",
+			url		:	"/emailIDAvailable",
+			data	:	{
+				"email"	:	$scope.email
+			}
+		}).success(function(data) {
+			if(Boolean(data.available)) {
+				$scope.emailAvailable = true;
+			} else {
+				$scope.emailAvailable = false;
+			}
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	});
+	
+	$scope.$watch('username', function() {
+		$http({
+			method	:	"POST",
+			url		:	"/usernameAvailable",
+			data	:	{
+				"username"	:	$scope.username
+			}
+		}).success(function(data) {
+			if(Boolean(data.available)) {
+				$scope.userAvailable = true;
+			} else {
+				$scope.userAvailable = false;
+			}
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	});
+	
 });
 
 eBay.controller('forgotController', function($scope, $http) {
