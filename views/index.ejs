@@ -80,35 +80,65 @@
                                 </div>
                             </div>
                         </div>
+                        <div ng-hide="!suggestions.length">
+                        	<hr class="separator"/>
+	                        <span class="section-title">Suggestions</span>
+	                        <hr class="separator"/>
+	                        <div class="row suggestion-grid">
+	                        	<div ng-repeat="suggestion in suggestions">
+	                        		<div class="col-md-3 product-bound suggestion-bound">
+	                					<div class="row">
+	                						<div class="col-md-12 suggestion-image-bound">
+	                							<img src="/images/products/laptop.jpg" class="image-display">
+	                						</div>
+	                					</div>
+	                					<div class="row text-bound">
+	                						<div class="col-md-12">
+	                							<div class="row title">
+	                								{{suggestion.title}}
+	                							</div>
+	                						</div>
+	                					</div>
+	                				</div>
+	                        	</div>
+	                        </div>
+                        </div>
                         <hr class="separator"/>
                         <div class="row">
                         	<div class="col-md-12">
-                        		<div class="row products-grid">
-                        			<div ng-repeat="sale in sales">
-                        				<div class="col-md-6 product-bound">
-                        					<div class="row">
-                        						<div class="col-md-12 image-bound">
-                        							<img src="/images/products/laptop.jpg" class="image-display">
-                        						</div>
-                        					</div>
-                        					<div class="row text-bound">
-                        						<div class="col-md-12">
-                        							<div class="row title">
-                        								{{sale.title}}
-                        							</div>
-                        							<div class="row other-details">
-                        								<div class="detail-division">
-                        									{{sale.sale_qty}} items
-                        								</div>
-                        								<div class="detail-division">
-                        									by {{sale.user_name}}
-                        								</div>
-                        								<div class="detail-division shop-now link">
-                        									<span ng-click="shop(sale.sale_id)">Shop now</span>
-                        								</div>
-                        							</div>
-                        						</div>
-                        					</div>
+                        		<div class="row products-grid" id="products-grid">
+                        			<div ng-show="sales.length">
+                        				<div ng-repeat="sale in sales">
+	                        				<div class="col-md-6 product-bound">
+	                        					<div class="row">
+	                        						<div class="col-md-12 image-bound">
+	                        							<img src="/images/products/laptop.jpg" class="image-display">
+	                        						</div>
+	                        					</div>
+	                        					<div class="row text-bound">
+	                        						<div class="col-md-12">
+	                        							<div class="row title">
+	                        								{{sale.title}}
+	                        							</div>
+	                        							<div class="row other-details">
+	                        								<div class="detail-division">
+	                        									{{sale.sale_qty}} items
+	                        								</div>
+	                        								<div class="detail-division">
+	                        									by {{sale.user_name}}
+	                        								</div>
+	                        								<div class="detail-division shop-now link">
+	                        									<span ng-click="shop(sale.sale_id)">Shop now</span>
+	                        								</div>
+	                        							</div>
+	                        						</div>
+	                        					</div>
+	                        				</div>
+	                        			</div>
+                        			</div>
+                        			<div ng-hide="sales.length">
+                        				<div class="col-md-12 warning-message" align="center">
+                        					<span class="alert alert-warning">No results matching the search criteria</span>
                         				</div>
                         			</div>
                         		</div>

@@ -126,6 +126,19 @@ CREATE TABLE `simple_market_place`.`cart_details` (
 
 ----------------------------------------------------------------------
 
+CREATE TABLE `simple_market_place`.`suggestion_details` (
+  `suggestion_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) DEFAULT NULL,
+  `suggestion_item` int(11) DEFAULT NULL,
+  PRIMARY KEY (`suggestion_id`),
+  KEY `user` (`user`),
+  KEY `suggestion_item` (`suggestion_item`),
+  CONSTRAINT `fk_user_suggestion` FOREIGN KEY (`user`) REFERENCES `user_account` (`user_id`),
+  CONSTRAINT `fk_suggestion_item` FOREIGN KEY (`suggestion_item`) REFERENCES `sale_details` (`sale_id`)
+);
+
+----------------------------------------------------------------------
+
 INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('1', 'Mobile Phone', 'A wireless handheld device that allows users to make calls and send text messages, among other features.');
 INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('2', 'Laptop Computer', 'Often called a notebook or notebook computer, is a small, portable personal computer with a clamshell form factor, an alphanumeric keyboard on the lower part of the clamshell and a thin LCD or LED computer screen on the upper portion, which is opened up to use the computer.');
 INSERT INTO `simple_market_place`.`item_details` (`item_id`, `item_name`, `item_description`) VALUES ('3', 'Book', 'A book is a literature verbalized in a collection of pages sharing ideas about a topic or collection of topics.');

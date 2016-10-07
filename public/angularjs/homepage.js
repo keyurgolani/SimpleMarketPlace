@@ -1,6 +1,6 @@
 var eBay = angular.module('eBay', []);
 
-eBay.controller('homepage', function($scope, $http, $window) {
+eBay.controller('homepage', function($scope, $http, $window, $location, $anchorScroll) {
 	
 	$scope.sellAnItem = function() {
 		$window.location.href = "/sell";
@@ -20,6 +20,20 @@ eBay.controller('homepage', function($scope, $http, $window) {
 	
 	$scope.search = function() {
 		var searchString = $scope.searchString;
+		$http({
+			method	:	"POST",
+			url		:	"/searchSales",
+			data	:	{
+				"searchString"	:	searchString
+			}
+		}).success(function(data) {
+			$scope.sales = data.saleDetails;
+			$scope.suggestions = [];
+			$location.hash('products-grid');
+			$anchorScroll();
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
 	};
 	
 	$scope.userNameClicked = function() {
@@ -43,11 +57,21 @@ eBay.controller('homepage', function($scope, $http, $window) {
 	
 	$http({
 		method	:	"POST",
+		url		:	"/fetchSuggestions"
+	}).success(function(data) {
+		$scope.suggestions = data.suggestionDetails;
+	}).error(function(error) {
+		// TODO: Handle Error
+	});
+	
+	$http({
+		method	:	"POST",
 		url		:	"/fetchSales"
 	}).success(function(data) {
 		$scope.sales = data.saleDetails;
 	}).error(function(error) {
 		// TODO: Handle Error
 	});
+	
 	
 });

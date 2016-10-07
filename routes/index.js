@@ -42,6 +42,36 @@ router.post('/fetchSales', function(req, res, next) {
 	}
 });
 
+router.post('/searchSales', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND loggedInuser.user_id <> ? AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?))", [req.session.loggedInUser.user_id, '%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
+			res.send({
+				"saleDetails"	:	saleDetails
+			});
+		});
+	} else {
+		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?))", ['%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
+			res.send({
+				"saleDetails"	:	saleDetails
+			});
+		});
+	}
+});
+
+router.post('/fetchSuggestions', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale, suggestion_details as suggestions WHERE seller = user_id AND seller <> ? AND suggestions.user = ? AND suggestions.suggestion_item = sale.sale_id LIMIT 4", [req.session.loggedInUser.user_id, req.session.loggedInUser.user_id], function(suggestionDetails) {
+			res.send({
+				"suggestionDetails"	:	suggestionDetails
+			});
+		});
+	} else {
+		res.send({
+			"saleDetails"	:	[]
+		});
+	}
+});
+
 router.post('/fetchItems', function(req, res, next) {
 	dao.fetchData("*", "item_details", null, function(rows) {
 		res.send({

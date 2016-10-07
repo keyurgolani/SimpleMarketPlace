@@ -107,8 +107,13 @@
 	height: 500px;
 }
 
+.suggestion-grid {
+	height: 250px;
+	margin-bottom: 30px;
+}
+
 .product-bound {
-	padding: 50px;
+	padding: 20px 50px 20px 50px;
 }
 
 .image-display {
@@ -123,6 +128,17 @@
 
 .text-bound {
 	height: 100px;
+}
+
+.suggestion-bound {
+	padding: 25px;
+	height: 250px; 
+}
+
+.suggestion-image-bound {
+	height: 200px;
+	margin: 0 auto;
+	overflow: hidden;
 }
 
 .title {
@@ -214,4 +230,16 @@
 .show {
 	display: block;
 	z-index: 1;
+}
+
+.section-title {
+	line-height: 1em;
+    color: #555;
+    font-size: 1.625em;
+    font-family: "Helvetica neue",Helvetica,Arial,Sans-serif;
+    line-height: 40px;
+}
+
+.warning-message {
+	margin-top: 50px;
 }
