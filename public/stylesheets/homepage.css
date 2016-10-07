@@ -117,13 +117,26 @@
 }
 
 .image-display {
-	max-height: 100%;
+	max-width: 100%;
+	border-radius: 3px;
 }
 
 .image-bound {
 	height: 400px;
 	margin: 0 auto;
 	overflow: hidden;
+}
+
+.profile-image-bound {
+	height: 50px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.profile-image {
+	border-radius: 3px;
+	max-height: 100%;
+	
 }
 
 .text-bound {
@@ -242,4 +255,8 @@
 
 .warning-message {
 	margin-top: 50px;
+}
+
+.user-menu-row {
+	padding: 10px;
 }
