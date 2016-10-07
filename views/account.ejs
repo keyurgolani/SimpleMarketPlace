@@ -102,8 +102,8 @@
 									<input type="email" class="form-control" id="email" ng-model="email" placeholder="Email">
 								</div>
 								<div class="col-md-1 form-group availability">
-										<div class="glyphicon glyphicon-ok available" ng-show="emailAvailable && email.length"></div>
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="emailAvailable || !email.length"></div>
+										<abbr title="Email ID Available"><div class="glyphicon glyphicon-ok available" ng-show="emailAvailable && email.length"></div></abbr>
+										<abbr title="Email ID Already In Use"><div class="glyphicon glyphicon-remove unavailable" ng-hide="emailAvailable || !email.length"></div></abbr>
 								</div>
 							</div>
 							<div class="row">
@@ -111,8 +111,8 @@
 									<input type="text" class="form-control" id="username" ng-model="username" placeholder="Username">
 								</div>
 								<div class="col-md-1 form-group availability">
-										<div class="glyphicon glyphicon-ok available" ng-show="userAvailable && username.length"></div>
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="userAvailable || !username.length"></div>
+										<abbr title="User Name Available"><div class="glyphicon glyphicon-ok available" ng-show="userAvailable && username.length"></div></abbr>
+										<abbr title="User Name Already Taken"><div class="glyphicon glyphicon-remove unavailable" ng-hide="userAvailable || !username.length"></div></abbr>
 								</div>
 								
 							</div>
