@@ -13,10 +13,14 @@
 		
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/stylesheets/angular-notification-icons.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="/js/angular-animate.js"></script>
+	<script src="/js/focusIf.min.js"></script>
+	<script src="/js/angular-notification-icons.js"></script>
     <link rel='stylesheet' href='/stylesheets/homepage.css' />
     <script src="/angularjs/homepage.js"></script>
   </head>
@@ -36,15 +40,27 @@
 	                                	<span ng-show="user_fname">
 	                                		<div class="header-item usernameDisplay">Hi <span ng-mouseover="show_user_profile_menu = true"><strong>{{user_fname}}!&nbsp;</strong><span class="glyphicon glyphicon-menu-down"></span></span></div>
 	                                		<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
-	                                			<div class="row user-menu-row">
+	                                			<div class="row user-menu-row link" ng-click="userProfile()">
 	                                				<div class="col-md-5 profile-image-bound">
 			                							<img src="/images/products/laptop.jpg" class="profile-image">
 			                						</div>
-			                						<div class="col-md-7">
-			                							{{user_fname}}&nbsp;{{user_lname}}
+			                						<div class="col-md-7 profile-names">
+			                							<span>{{user_fname}}&nbsp;{{user_lname}}</span>
 			                							<hr class="separator"/>
-			                							{{user_name}}
+			                							<span>{{user_name}}</span>
 			                						</div>
+	                                			</div>
+	                                			<hr class="separator"/>
+	                                			<div class="row user-menu-row" ng-click="showAccount()">
+	                                				<div class="col-md-12 link">My Account</div>
+	                                			</div>
+	                                			<hr class="separator"/>
+	                                			<div class="row user-menu-row link" ng-click="showTransactions()">
+	                                				<div class="col-md-12 link">My Transactions</div>
+	                                			</div>
+	                                			<hr class="separator"/>
+	                                			<div class="row user-menu-row link" ng-click="signout()">
+	                                				<div class="col-md-12 link">Sign out</div>
 	                                			</div>
 	                                		</div>
 	                                	</span>
@@ -61,8 +77,12 @@
                             </div>
                             <div class="col-md-4 pull-right right-panel">
                                 <div class="header-item extreme-right right-panel">My eBay</div>
-                                <div class="header-item extreme-right right-panel glyphicon glyphicon-bell"></div>
-                                <div class="header-item extreme-right right-panel glyphicon glyphicon-shopping-cart"></div>
+                                <notification-icon count='notifications' animation='bounce' disappear-animation='fade'>
+                                	<div class="header-item extreme-right right-panel glyphicon glyphicon-bell"></div>
+                                </notification-icon>
+                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade'>
+                                	<div class="header-item extreme-right right-panel glyphicon glyphicon-shopping-cart"></div>
+                                </notification-icon>
                             </div>
                         </div>
                     </div>
@@ -78,7 +98,7 @@
                             </div>
                             <div class="col-md-8">
                             	<div class="row">
-                                	<input type="text" id="search-bar" class="form-control" ng-model="searchString"/>
+                                	<input type="text" id="search-bar" class="form-control" ng-model="searchString" focus-if ng-enter="search()"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -87,6 +107,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" ng-click="hideSignOutMessage()" ng-show="signout_success">
+					        <div class="col-md-1"></div>
+							<div class="col-md-10 sign-out-box">
+					        	<span class="glyphicon glyphicon-ok-sign img"></span>
+					            <span class="sign-out-text h3">You've signed out. See you again soon!</span>
+					        </div>          
+							<div class="col-md-1"></div>
+					    </div>
                         <div ng-hide="!suggestions.length">
                         	<hr class="separator"/>
 	                        <span class="section-title">Suggestions</span>

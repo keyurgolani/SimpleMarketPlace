@@ -23,9 +23,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Using HTTPS for server: http://blog.ayanray.com/2015/06/adding-https-ssl-to-express-4-x-applications/
+
 //Session Configurations
+// Random String generator place: http://textmechanic.com/text-tools/randomization-tools/random-string-generator/
 app.use(session({
-	secret: 'awkwqe83ikKJHFNUJhfnUR',
+	secret: 'r5XiEloJ0Vfb5R26285fQm5z6FeOrHuYYHk5nUcfuFa6aCvZKU',
 	resave: false,
 	saveUninitialized: true
 }));
@@ -38,6 +41,13 @@ app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
+});
+
+// Prevents caching for every page
+// Nice link that explains prevention of caching: http://stackoverflow.com/questions/6096492/node-js-and-express-session-handling-back-button-problem
+app.use(function(req, res, next) {
+	res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+	next();
 });
 
 // error handlers

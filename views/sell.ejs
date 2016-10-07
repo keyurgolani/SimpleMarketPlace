@@ -18,6 +18,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+	<script src="/js/focusIf.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/sell.css' />
     <script src="/angularjs/sell.js"></script>
   </head>
@@ -62,7 +63,7 @@
 								</div>
 								<div class="row search-row">
 									<span>
-									<input type="text" placeholder="Give your listing a descriptive title..." ng-model="adv_title" class="form-control search-bar" autofocus="autofocus"/>
+									<input type="text" placeholder="Give your listing a descriptive title..." ng-model="adv_title" class="form-control search-bar" focus-if="!showMore" ng-enter="sell()"/>
 									<span><button class="form-control btn btn-primary search-button" ng-click="sell()">Sell it</button></span>
 									<span class="helpText link cancel-button" ng-click="homepage()">Cancel</span>
 								</div>
@@ -71,7 +72,7 @@
 								</div>
 								<div ng-show="showMore" class="row show-more-div">
 									<div class="col-xs-12 adjust-right">
-										<select ng-model="adv_item" ng-options="item.item_name for item in items" class="form-control show-more item-select"><option value="" disabled selected>Select an Item to Sell...</option></select>
+										<select ng-model="adv_item" ng-options="item.item_name for item in items" class="form-control show-more item-select" focus-if="showMore"><option value="" disabled selected>Select an Item to Sell...</option></select>
 										<input type="text" placeholder="Qty" ng-model="adv_qty" class="form-control qty-box"/>
 									</div>
 								</div>

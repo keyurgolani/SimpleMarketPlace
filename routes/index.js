@@ -131,12 +131,13 @@ router.post('/register', function(req, res, next) {
 	var firstname = req.param('fname');
 	var lastname = req.param('lname');
 	var phone = req.param('contact');
+	console.log(phone);
 	var username_validator = new RegExp("^[a-z0-9_-]{3,16}$");
 	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
 	var firstname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 	var lastname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
-	var phone_validator = new RegExp(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/);
+	var phone_validator = new RegExp(/^(\d{11,12})$/);
 	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask
 	// TODO: Continued: http://digitalbush.com/projects/masked-input-plugin/
 	// TODO: Continued: http://filamentgroup.github.io/politespace/demo/demo.html
@@ -258,19 +259,43 @@ router.get('/forgotPassword', function(req, res, next) {
 	}
 });
 
+router.post('/signoutUser', function(req, res, next) {
+	if(req.session) {
+		req.session.destroy(function(err) {
+			if(err) {
+				res.send({
+					"status_code"	:	500
+				});
+			} else {
+				res.send({
+					"status_code"	:	200
+				});
+			}
+		});
+	}
+});
+
 router.post('/signin', function(req, res, next) {
 	var username = req.body.userID;
 	var password = req.body.password;
 	dao.fetchData("user_id", "user_account", {
 		"user_name"	:	username
-	}, function(rows) {
+	}, function(id_details) {
 		dao.fetchData("*", "user_account", {
-			"user_id"	:	rows[0].user_id
-		}, function(rows) {
-			if(rows[0].secret === password) {
-				req.session.loggedInUser = rows[0];
-				res.send({
-					"valid"	:	true
+			"user_id"	:	id_details[0].user_id
+		}, function(user_details) {
+			if(user_details[0].secret === password) {
+				req.session.loggedInUser = user_details[0];
+				dao.updateData("user_account", {
+					"last_login"	:	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
+				}, {
+					"user_id"		:	id_details[0].user_id
+				}, function(update_status) {
+					if(update_status.affectedRows === 1) {
+						res.send({
+							"valid"	:	true
+						});
+					}
 				});
 			} else {
 				res.send({

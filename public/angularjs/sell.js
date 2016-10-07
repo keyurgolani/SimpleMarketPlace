@@ -1,4 +1,4 @@
-var eBay = angular.module('eBay', ['ngAnimate']);
+var eBay = angular.module('eBay', ['ngAnimate', 'focus-if']);
 
 eBay.controller('sell', function($scope, $http, $window) {
 	
@@ -64,4 +64,17 @@ eBay.controller('sell', function($scope, $http, $window) {
 		$window.location.href = "/";
 	};
 	
+});
+
+eBay.directive('ngEnter', function() {
+	return function(scope, element, attrs) {
+		element.bind("keydown keypress", function(event) {
+			if (event.which === 13) {
+				scope.$apply(function() {
+					scope.$eval(attrs.ngEnter);
+				});
+				event.preventDefault();
+			}
+		});
+	};
 });

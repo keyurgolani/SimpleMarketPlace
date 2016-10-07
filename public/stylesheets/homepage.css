@@ -96,7 +96,7 @@
 	border: 0;
 	height: 1px;
 	margin-top: 0px;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
 	background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
 	background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
 	background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
@@ -122,7 +122,7 @@
 }
 
 .image-bound {
-	height: 400px;
+	height: 350px;
 	margin: 0 auto;
 	overflow: hidden;
 }
@@ -136,7 +136,6 @@
 .profile-image {
 	border-radius: 3px;
 	max-height: 100%;
-	
 }
 
 .text-bound {
@@ -149,7 +148,7 @@
 }
 
 .suggestion-image-bound {
-	height: 200px;
+	height: 170px;
 	margin: 0 auto;
 	overflow: hidden;
 }
@@ -226,18 +225,8 @@
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-.user_profile_menu_content a {
-	color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.user_profile_menu_content a:hover {
-	background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    padding: 10px;
 }
 
 .show {
@@ -258,5 +247,42 @@
 }
 
 .user-menu-row {
-	padding: 10px;
+	padding: 10px 0px 10px 0px;
+	margin-left: 0px;
+}
+
+.angular-notifications-icon.overlay {
+	zoom: 50%;
+	top: -2px;
+	font-weight: bolder;
+	font-size: 1.2em;
+}
+
+.sign-out-box {
+	height: 70px;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 4px 4px 0 #eee;
+    border: 1px solid #ddd;
+    border-top: 3px solid #5ba71b;
+    background: #fff;
+	display: flex;
+	cursor: pointer;
+	margin-bottom: 30px;
+}
+
+.img {
+   font-size: 40px;
+   color: #5ba71b;
+   padding-top: 12px;
+}
+
+.sign-out-text {
+	color: #5ba71b;
+    font-family: "Helvetica neue",Helvetica,Arial,Verdana,Sans-serif;
+    font-weight: 500;
+	padding-left: 15px;
+}
+
+.profile-names {
+	line-height: 25px;
 }

@@ -106,7 +106,7 @@ module.exports = {
 	
 	updateData	:	function(tableName, insertParameters, queryParameters, processUpdateStatus) {
 		connectionPool.get(function(connectionNumber, connection) {
-			var queryString = "UPDATE TABLE " + tableName + " SET ? WHERE ?";
+			var queryString = "UPDATE " + tableName + " SET ? WHERE ?";
 			var query = connection.query(queryString, [insertParameters, queryParameters], function(error, rows) {
 				connectionPool.release(connectionNumber, connection);
 				if (error) {
