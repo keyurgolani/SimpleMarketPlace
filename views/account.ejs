@@ -25,7 +25,7 @@
 <link rel='stylesheet' href='/stylesheets/account.css' />
 <script src="/angularjs/account.js"></script>
 </head>
-<body class="body full-body" ng-app="eBay" ng-controller="account">
+<body class="body full-body" ng-app="eBay" ng-controller="account" ng-cloak>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12" align="center">
@@ -101,7 +101,7 @@
 								<div class="col-md-11 form-group">
 									<input type="email" class="form-control" id="email" ng-model="email" placeholder="Email">
 								</div>
-								<div class="col-md-1 form-group availability">
+								<div class="col-md-1 form-group true-false">
 										<abbr title="Email ID Available"><div class="glyphicon glyphicon-ok available" ng-show="emailAvailable && email.length"></div></abbr>
 										<abbr title="Email ID Already In Use"><div class="glyphicon glyphicon-remove unavailable" ng-hide="emailAvailable || !email.length"></div></abbr>
 								</div>
@@ -110,14 +110,22 @@
 								<div class="col-md-11 form-group">
 									<input type="text" class="form-control" id="username" ng-model="username" placeholder="Username">
 								</div>
-								<div class="col-md-1 form-group availability">
+								<div class="col-md-1 form-group true-false">
 										<abbr title="User Name Available"><div class="glyphicon glyphicon-ok available" ng-show="userAvailable && username.length"></div></abbr>
 										<abbr title="User Name Already Taken"><div class="glyphicon glyphicon-remove unavailable" ng-hide="userAvailable || !username.length"></div></abbr>
 								</div>
 								
 							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password">
+							<div class="row">
+								<div class="col-md-11 form-group">
+									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password">
+								</div>
+								<div class="col-md-1 form-group true-false">
+										<abbr title="Password is valid"><div class="glyphicon glyphicon-ok available" ng-show="validPassword && password.length"></div></abbr>
+										<abbr title="Password should be a 6 to 18 digit alphanumeric with only _ and - special characters allowed.">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="validPassword || !password.length"></div>
+										</abbr>
+								</div>
 							</div>
 							<div class="form-group">
 								<input type="text" class="form-control name-fields" id="firstname" ng-model="fname" placeholder="First name">

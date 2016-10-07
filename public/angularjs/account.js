@@ -139,6 +139,15 @@ eBay.controller('registerController', function($scope, $http, $location) {
 		});
 	});
 	
+	$scope.$watch('password', function() {
+		var password_validator = new RegExp(/^[A-Za-z0-9_-]{6,18}$/);
+		if($scope.password.match(password_validator) !== null) {
+			$scope.validPassword = true;
+		} else {
+			$scope.validPassword = false;
+		}
+	});
+	
 });
 
 eBay.controller('forgotController', function($scope, $http) {

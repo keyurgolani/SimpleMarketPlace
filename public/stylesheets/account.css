@@ -45,14 +45,12 @@ a {
 
 .tabs-row {
 	height: 46px;
-	display: inline-table!important;
 }
 
 .single-tab {
 	height: 46px;
 	line-height: 46px;
 	text-align: left;
-	display: table-cell!important;
 }
 
 .tab-icons {
@@ -240,7 +238,7 @@ a {
 	padding: 0px;
 }
 
-.availability {
+.true-false {
 	padding: 0px;
 	margin: 0px;
 	float: left;
