@@ -38,8 +38,16 @@ eBay.controller('sell', function($scope, $http, $window) {
 			}
 		}).success(function(data) {
 			if(data.status_code === "200") {
-				$window.location.href = "/sell";
-			} else {
+					$scope.adv_title = "";
+					$scope.adv_item.item_id = "";
+					$scope.item_condition = "";
+					$scope.is_bid = false;
+					$scope.price = "";
+					$scope.adv_qty = "";
+					$scope.adv_desc = "";
+					$scope.showMore = false;
+					$scope.message = "Sale published successfully!";
+				} else {
 				$scope.message = "Internal Error. Please try again!";
 				$scope.showMore = false;
 			}
