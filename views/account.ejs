@@ -1,206 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign in or Register | eBay</title>
-
-<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Sign in or Register | eBay</title>
+		
+		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap-theme.min.css"/>
+		<link rel='stylesheet' href='modules/build/css/intlTelInput.css'/>
+		<link rel='stylesheet' href='css/account.css'/>
+		
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
-<script src="/js/intlTelInput.js"></script>
-<link rel='stylesheet' href='/stylesheets/intlTelInput.css' />
-<script src="/js/utils.js"></script>
-<script src="/js/focusIf.min.js"></script>
-<script src="/js/international-phone-number.js"></script>
-<link rel='stylesheet' href='/stylesheets/account.css' />
-<script src="/angularjs/account.js"></script>
-</head>
-<body class="body full-body" ng-app="eBay" ng-controller="account" ng-cloak>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12" align="center">
-				<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" ng-click="homepage()" class="ebay-icon spacer">
-				<div ng-repeat="message in messages">
-					<div ng-class="{'200':'alert alert-success', '500':'alert alert-danger'}[status_code]">{{message}}</div>
-				</div>
-				<div ng-show="isSignin" ng-controller="signinController">
-					<div class="box">
-						<div class="tabs">
-							<ul class="nav nav-tabs nav-justified tabs-row">
-								<li class="active single-tab" ng-click="changeToSignin()">
-									<span class="glyphicon glyphicon-circle-arrow-right tab-icons"></span>
-									<span class="tab-texts">Sign in</span>
-								</li>
-								<li class="inactive single-tab inactive-tab" ng-click="changeToRegister()">
-									<div class="tab-shadow-right"></div>
-									<span class="glyphicon glyphicon-plus-sign tab-icons"></span>
-									<span class="tab-texts">Register</span>
-								</li>
-							</ul>
-						</div>
-						<div class="account-form">
-							<div class="form-group">
-								<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
+		
+		<script src="modules/jquery/dist/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="modules/angular/angular.min.js"></script>
+		<script src="modules/angular-animate/angular-animate.js"></script>
+		<script src="modules/angular-route/angular-route.js"></script>
+		<script src="modules/ng-focus-if/focusIf.min.js"></script>
+		<script src="modules/intl-tel-input/build/js/intlTelInput.js"></script>
+		<script src="modules/intl-tel-input/build/js/utils.js"></script>
+		<script src="modules/international-phone-number/releases/international-phone-number.js"></script>
+		
+		<script src="ngjs/account.js"></script>
+	</head>
+	<body class="body full-body" ng-app="eBay" ng-controller="account" ng-cloak>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" ng-click="homepage()" class="ebay-icon spacer">
+					<div ng-repeat="message in messages">
+						<div ng-class="{'200':'alert alert-success', '500':'alert alert-danger'}[status_code]">{{message}}</div>
+					</div>
+					<div ng-show="isSignin" ng-controller="signinController">
+						<div class="box">
+							<div class="tabs">
+								<ul class="nav nav-tabs nav-justified tabs-row">
+									<li class="active single-tab" ng-click="changeToSignin()">
+										<span class="glyphicon glyphicon-circle-arrow-right tab-icons"></span>
+										<span class="tab-texts">Sign in</span>
+									</li>
+									<li class="inactive single-tab inactive-tab" ng-click="changeToRegister()">
+										<div class="tab-shadow-right"></div>
+										<span class="glyphicon glyphicon-plus-sign tab-icons"></span>
+										<span class="tab-texts">Register</span>
+									</li>
+								</ul>
 							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="signin()">
-							</div>
-							<button class="btn btn-primary form-control account-button" ng-click="signin()">Sign in</button>
-							<div class="row checkbox">
-								<div class="col-md-6">
-									<label for="stay-signed-in" class="stay-signed-in">
-										<input type="checkbox" id="stay-signed-in" class="stay-signed-in-checkbox" ng-enter="signin()">
-										Stay signed in
-									</label>
+							<div class="account-form">
+								<div class="form-group">
+									<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
 								</div>
-								<div class="col-md-6">
-									<span class="forgot-password" ng-click="changeToForgot()">Forgot your password?</span>
+								<div class="form-group">
+									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="signin()">
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<div class="account-info">
-										Using a public or shared device? Uncheck to protect your account.
-										<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-show="show_more" data-target="#expand"> Learn more</span>
-										<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-hide="show_more" data-target="#expand"> Hide</span>
-										 <p id="expand" class="collapse clear-space">Using a public or shared device? Uncheck to protect your account. With this box checked, we'll keep you signed in, making it easier to bid and buy. You'll also be all set to pay if you've saved your payment info. You can always turn off this feature in My eBay. We may ask you to sign in again for some activities, such as making changes to your account.</p>
+								<button class="btn btn-primary form-control account-button" ng-click="signin()">Sign in</button>
+								<div class="row checkbox">
+									<div class="col-md-6">
+										<label for="stay-signed-in" class="stay-signed-in">
+											<input type="checkbox" id="stay-signed-in" class="stay-signed-in-checkbox" ng-enter="signin()">
+											Stay signed in
+										</label>
+									</div>
+									<div class="col-md-6">
+										<span class="forgot-password" ng-click="changeToForgot()">Forgot your password?</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="account-info">
+											Using a public or shared device? Uncheck to protect your account.
+											<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-show="show_more" data-target="#expand"> Learn more</span>
+											<span class="link-cursor" ng-click="show_more = !show_more" data-toggle="collapse" ng-hide="show_more" data-target="#expand"> Hide</span>
+											<p id="expand" class="collapse clear-space">Using a public or shared device? Uncheck to protect your account. With this box checked, we'll keep you signed in, making it easier to bid and buy. You'll also be all set to pay if you've saved your payment info. You can always turn off this feature in My eBay. We may ask you to sign in again for some activities, such as making changes to your account.</p>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-
-				<div ng-show="isSignup" ng-controller="registerController">
-					<div class="box">
-						<div class="tabs">
-							<ul class="nav nav-tabs nav-justified tabs-row">
-								<li class="inactive single-tab inactive-tab" ng-click="changeToSignin()">
-									<span class="glyphicon glyphicon-circle-arrow-right tab-icons"></span>
-									<span class="tab-texts">Sign in</span>
-								</li>
-								<li class="active single-tab" ng-click="changeToRegister()">
-									<div class="tab-shadow-left"></div>
-									<span class="glyphicon glyphicon-plus-sign tab-icons">
-									</span> <span class="tab-texts">Register</span>
-								</li>
-							</ul>
-						</div>
-						<div class="account-form">
-							<div class="row">
-								<div class="col-md-11 form-group">
-									<input type="email" class="form-control" id="email" ng-model="email" placeholder="Email" focus-if="!isSignin && isSignup && !isForgot" ng-enter="register()">
-								</div>
-								<div class="col-md-1 form-group true-false">
-										<abbr title="Email ID Available"><div class="glyphicon glyphicon-ok available" ng-show="emailAvailable && email.length"></div></abbr>
+					<div ng-show="isSignup" ng-controller="registerController">
+						<div class="box">
+							<div class="tabs">
+								<ul class="nav nav-tabs nav-justified tabs-row">
+									<li class="inactive single-tab inactive-tab" ng-click="changeToSignin()">
+										<span class="glyphicon glyphicon-circle-arrow-right tab-icons"></span>
+										<span class="tab-texts">Sign in</span>
+									</li>
+									<li class="active single-tab" ng-click="changeToRegister()">
+										<div class="tab-shadow-left"></div>
+										<span class="glyphicon glyphicon-plus-sign tab-icons">
+										</span> <span class="tab-texts">Register</span>
+									</li>
+								</ul>
+							</div>
+							<div class="account-form">
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="email" class="form-control" id="email" ng-model="email" placeholder="Email" focus-if="!isSignin && isSignup && !isForgot" ng-enter="register()">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="Email ID Available">
+											<div class="glyphicon glyphicon-ok available" ng-show="emailAvailable && email.length"></div>
+										</abbr>
 										<abbr title="Email ID Already In Use">
 											<div class="glyphicon glyphicon-remove unavailable" ng-hide="emailAvailable || !email.length"></div>
 										</abbr>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11 form-group">
-									<input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" ng-enter="register()">
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" ng-enter="register()">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="User Name Available">
+											<div class="glyphicon glyphicon-ok available" ng-show="userAvailable && username.length"></div>
+										</abbr>
+										<abbr title="User Name Already Taken">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="userAvailable || !username.length"></div>
+										</abbr>
+									</div>
 								</div>
-								<div class="col-md-1 form-group true-false">
-									<abbr title="User Name Available"><div class="glyphicon glyphicon-ok available" ng-show="userAvailable && username.length"></div></abbr>
-									<abbr title="User Name Already Taken">
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="userAvailable || !username.length"></div>
-									</abbr>
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="register()">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="Password is valid">
+											<div class="glyphicon glyphicon-ok available" ng-show="validPassword && password.length"></div>
+										</abbr>
+										<abbr title="Password should be a 6 to 18 digit alphanumeric with only _ and - special characters allowed.">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="validPassword || !password.length"></div>
+										</abbr>
+									</div>
 								</div>
-								
-							</div>
-							<div class="row">
-								<div class="col-md-11 form-group">
-									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="register()">
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="text" class="form-control name-fields" id="firstname" ng-model="fname" placeholder="First name" ng-enter="register()">
+										<input type="text" class="form-control name-fields" id="lastname" ng-model="lname" placeholder="Last name" ng-enter="register()">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="First and Last Names are Valid">
+											<div class="glyphicon glyphicon-ok available" ng-show="validNames && fname.length && lname.length"></div>
+										</abbr>
+										<abbr title="First and Last Names can only be alphabets with one of space( ), comma(,), dot(.), apostrophe(') and hyphen(-) special characters">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="validNames || !fname.length || !lname.length"></div>
+										</abbr>
+									</div>
 								</div>
-								<div class="col-md-1 form-group true-false">
-									<abbr title="Password is valid"><div class="glyphicon glyphicon-ok available" ng-show="validPassword && password.length"></div></abbr>
-									<abbr title="Password should be a 6 to 18 digit alphanumeric with only _ and - special characters allowed.">
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="validPassword || !password.length"></div>
-									</abbr>
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="text" class="form-control" style="width: 100%;" id="user" ng-model="contact" international-phone-number placeholder="Mobile phone" ng-enter="register()">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="Phone number is valid">
+											<div class="glyphicon glyphicon-ok available" ng-show="validContact && contact.length"></div>
+										</abbr>
+										<abbr title="Phone number should contain 10 digit number along with a 1 or 2 digit country code">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="validContact || !contact.length"></div>
+										</abbr>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11 form-group">
-									<input type="text" class="form-control name-fields" id="firstname" ng-model="fname" placeholder="First name" ng-enter="register()">
-									<input type="text" class="form-control name-fields" id="lastname" ng-model="lname" placeholder="Last name" ng-enter="register()">
+								<div>
+									<p class="account-info">By <strong>Registering</strong>, you agree that you've read and accepted our <span class="text-primary link-cursor-underline">User Agreement</span>, you're at least 18 years old, and you consent to our <span class="text-primary link-cursor-underline">Privacy Notice</span> and receiving marketing communications from us.</p>
 								</div>
-								<div class="col-md-1 form-group true-false">
-									<abbr title="First and Last Names are Valid"><div class="glyphicon glyphicon-ok available" ng-show="validNames && fname.length && lname.length"></div></abbr>
-									<abbr title="First and Last Names can only be alphabets with one of space( ), comma(,), dot(.), apostrophe(') and hyphen(-) special characters">
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="validNames || !fname.length || !lname.length"></div>
-									</abbr>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11 form-group">
-									<input type="text" class="form-control" style="width: 100%;" id="user" ng-model="contact" international-phone-number placeholder="Mobile phone" ng-enter="register()">
-								</div>
-								<div class="col-md-1 form-group true-false">
-									<abbr title="Phone number is valid"><div class="glyphicon glyphicon-ok available" ng-show="validContact && contact.length"></div></abbr>
-									<abbr title="Phone number should contain 10 digit number along with a 1 or 2 digit country code">
-										<div class="glyphicon glyphicon-remove unavailable" ng-hide="validContact || !contact.length"></div>
-									</abbr>
-								</div>
-							</div>
-							<div>
-								<p class="account-info">By <strong>Registering</strong>, you agree that you've read and accepted our <span class="text-primary link-cursor-underline">User Agreement</span>, you're at least 18 years old, and you consent to our <span class="text-primary link-cursor-underline">Privacy Notice</span> and receiving marketing communications from us.</p>
-							</div>
-							<button type="submit" class="btn btn-primary form-control account-button" ng-click="register()">Register</button>
-						</div>
-					</div>
-				</div>
-				<div ng-show="isForgot" ng-controller="forgotController">
-					<div class="box">
-						<div class="account-form">
-							<div class="h4"><span class="forgot-title">Reset your password</span></div>
-							<div class="form-group">
-								<label class="forgot-email-label">
-									Enter your email or username
-								</label>
-								<input type="email" class="form-control" id="email" focus-if="!isSignin && !isSignup && isForgot">
-							</div>
-							<button type="submit" class="form-control btn btn-primary account-button">Next</button>
-							<div>
-								<p class="account-info">
-									Or <span class="link-cursor">use your PayPal login info to change your eBay password</span>
-								</p>
+								<button type="submit" class="btn btn-primary form-control account-button" ng-click="register()">Register</button>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div ng-show="isForgot">
+					<div ng-show="isForgot" ng-controller="forgotController">
+						<div class="box">
+							<div class="account-form">
+								<div class="h4"><span class="forgot-title">Reset your password</span></div>
+								<div class="form-group">
+									<label class="forgot-email-label">
+										Enter your email or username
+									</label>
+									<input type="email" class="form-control" id="email" focus-if="!isSignin && !isSignup && isForgot">
+								</div>
+								<button type="submit" class="form-control btn btn-primary account-button">Next</button>
+								<div>
+									<p class="account-info">
+										Or <span class="link-cursor">use your PayPal login info to change your eBay password</span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-show="isForgot">
+						<div class="row">
+							<div class="col-md-12 reset-footbox">
+								<div>Can't reset your password?</div>
+								<div>
+									<span ng-click="changeToRegister()" class="link"> Register for a new account </span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="row">
-						<div class="col-md-12 reset-footbox">
-							<div>Can't reset your password?</div>
-							<div>
-								<span ng-click="changeToRegister()" class="link"> Register for a new account </span>
+						<div class="col-md-12 cover-screen-width">
+							<div ng-class="{true:'fixed-footbox', false:'bottom-footbox'}[isForgot]">
+								<p>Copyright &copy; 1995-2016 eBay Inc. All Rights Reserved. User Agreement, Privacy, Cookies and AdChoice</p>
 							</div>
-						</div>
-					</div>
-				</div>
-	
-				<div class="row">
-					<div class="col-md-12 cover-screen-width">
-						<div ng-class="{true:'fixed-footbox', false:'bottom-footbox'}[isForgot]">
-							<p>Copyright &copy; 1995-2016 eBay Inc. All Rights Reserved. User Agreement, Privacy, Cookies and AdChoice</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
+	</body>
 </html>

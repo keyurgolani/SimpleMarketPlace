@@ -1,4 +1,4 @@
-var eBay = angular.module('eBay', ['internationalPhoneNumber', 'focus-if']);
+var eBay = angular.module('eBay', ['internationalPhoneNumber', 'ngAnimate', 'focus-if']);
 // Watching multiple fields with AngularJS: http://stackoverflow.com/questions/17872919/can-i-combine-watching-of-multiple-fields-into-one-watch-with-angularjs
 eBay.config(['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode({

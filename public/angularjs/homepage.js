@@ -15,7 +15,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	if ($location.search().signout === 'true') {
 		$scope.signout_success = true;
 	}
+	
+	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
 
+	$scope.items_loaded = false;
 	$scope.notifications = 100;
 	$scope.cartItemCount = 10;
 
@@ -39,9 +42,14 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		$scope.signout_success = false;
 		$location.url("/");
 	};
+	
+	$scope.shop = function(item_id) {
+		$window.location.href = "/viewItem?itemid=" + item_id;
+	};
 
 	$scope.search = function() {
 		var searchString = $scope.searchString;
+		$scope.items_loaded = false;
 		$http({
 			method : "POST",
 			url : "/searchSales",
@@ -51,6 +59,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		}).success(function(data) {
 			$scope.sales = data.saleDetails;
 			$scope.suggestions = [];
+			$scope.items_loaded = true;
 			$location.hash('products-grid');
 			$anchorScroll();
 		}).error(function(error) {
@@ -98,6 +107,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		url : "/fetchSales"
 	}).success(function(data) {
 		$scope.sales = data.saleDetails;
+		$scope.items_loaded = true;
 	}).error(function(error) {
 		// TODO: Handle Error
 	});

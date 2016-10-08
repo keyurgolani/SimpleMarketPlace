@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -21,7 +20,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+// Nice findings about static paths: http://stackoverflow.com/questions/27464168/how-to-include-scripts-located-inside-the-node-modules-folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
+app.use('/css', express.static(path.join(__dirname, 'public/stylesheets')));
+app.use('/js', express.static(path.join(__dirname, 'public/stylesheets')));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/ngjs', express.static(path.join(__dirname, 'public/angularjs')));
 
 // Using HTTPS for server: http://blog.ayanray.com/2015/06/adding-https-ssl-to-express-4-x-applications/
 
@@ -34,7 +39,6 @@ app.use(session({
 }));
 
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
