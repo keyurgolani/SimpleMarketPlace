@@ -60,8 +60,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			$scope.sales = data.saleDetails;
 			$scope.suggestions = [];
 			$scope.items_loaded = true;
-			$location.hash('products-grid');
-			$anchorScroll();
+			if($scope.sales.length > 0) {
+				$location.hash('search-results');
+				$anchorScroll();
+			}
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
