@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Product Title | eBay</title>
+		
+		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap-theme.min.css">
+		<link rel='stylesheet' href='css/viewItem.css' />
+		
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		
+		<script src="modules/jquery/dist/jquery.min.js"></script>
+		<script src="js/jquery-ui.js"></script>
+		<script src="modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="modules/angular/angular.min.js"></script>
+		<script src="modules/angular-animate/angular-animate.js"></script>
+		<script src="modules/ng-focus-if/focusIf.min.js"></script>
+		
+		<script src="ngjs/viewItem.js"></script>
+	</head>
+	<body ng-app="eBay" ng-controller="viewItem" ng-cloak>
+		<div class="container-fluid">
+	    	<div class="row">
+	        	<div class="col-md-12 full-body">
+	                <div class="row top-row">
+	                    <div class="col-md-12">
+	                        <div class="row">
+	                        	<div class="col-md-6 header-item-container">
+	                                <div class="row">
+	                                	<div class="col-md-12">
+	                                		<span ng-hide="user_fname">
+	                                			<div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div>
+	                                		</span>
+		                                	<span ng-show="user_fname">
+		                                		<div class="header-item usernameDisplay">Hi <span ng-mouseover="show_user_profile_menu = true"><strong>{{user_fname}}!&nbsp;</strong><span class="glyphicon glyphicon-menu-down"></span></span></div>
+		                                		<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
+		                                			<div class="row user-menu-row link" ng-click="userProfile()">
+		                                				<div class="col-md-5 profile-image-bound">
+				                							<img src="/images/products/laptop.jpg" class="profile-image">
+				                						</div>
+				                						<div class="col-md-7 profile-names">
+				                							<span>{{user_fname}}&nbsp;{{user_lname}}</span>
+				                							<hr class="separator"/>
+				                							<span>{{user_name}}</span>
+				                						</div>
+		                                			</div>
+		                                			<hr class="separator"/>
+		                                			<div class="row user-menu-row" ng-click="showAccount()">
+		                                				<div class="col-md-12 link">My Account</div>
+		                                			</div>
+		                                			<hr class="separator"/>
+		                                			<div class="row user-menu-row link" ng-click="showTransactions()">
+		                                				<div class="col-md-12 link">My Transactions</div>
+		                                			</div>
+		                                			<hr class="separator"/>
+		                                			<div class="row user-menu-row link" ng-click="signout()">
+		                                				<div class="col-md-12 link">Sign out</div>
+		                                			</div>
+		                                		</div>
+		                                	</span>
+		                                    <div class="header-item">Daily Deals</div>
+		                                    <div class="header-item">Gift Cards</div>
+		                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
+		                                    <span ng-show="user_fname"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
+		                                    <div class="header-item extreme-right">Help &amp; Content</div>
+	                                	</div>
+	                                </div>
+	                            </div>
+	                            <div class="col-md-2">
+	                                <!-- Temporary Sale Image Goes here-->
+	                            </div>
+	                            <div class="col-md-4 pull-right right-panel">
+	                                <div class="header-item right-panel">My eBay</div>
+	                                <notification-icon count='notifications' animation='bounce' disappear-animation='fade'>
+	                                	<div class="header-item right-panel glyphicon glyphicon-bell"></div>
+	                                </notification-icon>
+	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade'>
+	                                	<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
+	                                </notification-icon>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="row middle-body">
+	                    <div class="col-md-12">
+	                    	<div class="row search-row">
+	                        	<div class="col-md-2">
+	                            	<div class="row" align="center">
+	                                	<div class="ebay-logo img-responsive link" ng-click="homepageClicked()">
+		                                </div>
+	                                </div>
+	                            </div>
+	                            <div class="col-md-8">
+	                            	<div class="row">
+	                                	<input type="text" class="form-control search-bar" ng-model="searchString" focus-if ng-enter="search()"/>
+	                                </div>
+	                            </div>
+	                            <div class="col-md-2">
+	                            	<div class="row">
+	                                	<div class="col-md-12"><button class="form-control btn btn-primary search-button" ng-click="search()">Search</button></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <hr class="separator"/>
+	                        <div class="row">
+	                        	<div class="col-md-7">
+	                        		<div class="row">
+                						<div class="col-md-12 sale-image-bound">
+                							<img src="/images/products/laptop.jpg" class="image-display">
+                						</div>
+                					</div>
+	                        	</div>
+	                        	<div class="col-md-5 sale-details-text-bound">
+	                        		<span class="sale-title">Goose Down Alternative Luxurious Reversible Comforter Full Queen and King</span>
+	                        	</div>
+	                        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

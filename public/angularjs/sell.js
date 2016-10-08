@@ -2,6 +2,21 @@ var eBay = angular.module('eBay', ['ngAnimate', 'focus-if']);
 
 eBay.controller('sell', function($scope, $http, $window) {
 	
+	$scope.isLoggedIn = false;
+	
+	$http({
+		method : "POST",
+		url : "/loggedInUser"
+	}).success(function(data) {
+		if (angular.equals({}, data.userBO)) {
+			$window.location.href = "/account?view=signin";
+		} else {
+			$scope.isLoggedIn = true;
+		}
+	}).error(function(error) {
+		// TODO: Handle Error
+	});
+	
 	$scope.message = "";
 	
 	$http({

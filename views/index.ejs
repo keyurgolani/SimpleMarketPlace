@@ -18,7 +18,7 @@
 		<![endif]-->
 		
 		<script src="modules/jquery/dist/jquery.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="js/jquery-ui.js"></script>
 		<script src="modules/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="modules/angular/angular.min.js"></script>
 		<script src="modules/angular-animate/angular-animate.js"></script>
@@ -32,7 +32,7 @@
 	    	<div class="row">
 	        	<div class="col-md-12 full-body">
 	                <div class="row top-row">
-	                    <div class="col-md-12 width-10">
+	                    <div class="col-md-12">
 	                        <div class="row">
 	                        	<div class="col-md-6 header-item-container">
 	                                <div class="row">
@@ -79,19 +79,19 @@
 	                                <!-- Temporary Sale Image Goes here-->
 	                            </div>
 	                            <div class="col-md-4 pull-right right-panel">
-	                                <div class="header-item extreme-right right-panel">My eBay</div>
+	                                <div class="header-item right-panel">My eBay</div>
 	                                <notification-icon count='notifications' animation='bounce' disappear-animation='fade'>
-	                                	<div class="header-item extreme-right right-panel glyphicon glyphicon-bell"></div>
+	                                	<div class="header-item right-panel glyphicon glyphicon-bell"></div>
 	                                </notification-icon>
 	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade'>
-	                                	<div class="header-item extreme-right right-panel glyphicon glyphicon-shopping-cart"></div>
+	                                	<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
 	                                </notification-icon>
 	                            </div>
 	                        </div>
 	                    </div>
 	                </div>
 	                <div class="row middle-body">
-	                    <div class="col-md-12 width-10">
+	                    <div class="col-md-12">
 	                    	<div class="row search-row">
 	                        	<div class="col-md-2">
 	                            	<div class="row" align="center">
@@ -101,7 +101,7 @@
 	                            </div>
 	                            <div class="col-md-8">
 	                            	<div class="row">
-	                                	<input type="text" id="search-bar" class="form-control" ng-model="searchString" focus-if ng-enter="search()"/>
+	                                	<input type="text" class="form-control search-bar" ng-model="searchString" focus-if ng-enter="search()"/>
 	                                </div>
 	                            </div>
 	                            <div class="col-md-2">

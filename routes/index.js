@@ -14,6 +14,10 @@ router.get('/sell', function(req, res, next) {
 	res.render('sell', {  });
 });
 
+router.get('/viewItem', function(req, res, next) {
+	res.render('viewItem', {  });
+});
+
 router.post('/emailIDAvailable', function(req, res, next) {
 	dao.executeQuery("SELECT COUNT(email) as count FROM user_account WHERE email like ?", [req.body.email], function(result) {
 		if(result[0].count === 0) {

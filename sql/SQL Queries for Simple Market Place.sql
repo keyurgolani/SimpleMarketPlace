@@ -74,7 +74,7 @@ CREATE TABLE `simple_market_place`.`sale_details` (
   `condition` int(11) DEFAULT NULL,
   `sale_price` FLOAT NOT NULL,
   `title` VARCHAR(50) NOT NULL,
-  `desc` VARCHAR(400) NULL,
+  `desc` VARCHAR(2500) NULL,
   `is_bid` TINYINT(1) NOT NULL,
   `sale_qty` INT NOT NULL,
   PRIMARY KEY (`sale_id`),
