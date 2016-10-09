@@ -15,6 +15,27 @@ router.get('/sell', function(req, res, next) {
 });
 
 router.get('/viewItem', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT count(suggestion_id) as entries FROM suggestion_details WHERE user = ? AND suggestion_item = ?", [req.session.loggedInUser.user_id, Number(req.param('itemid'))], function(rows) {
+			if(rows.entries !== 0) {
+				dao.executeQuery("DELETE FROM suggestion_details WHERE user=? AND suggestion_item=?", [req.session.loggedInUser.user_id, Number(req.param('itemid'))], function(suggestionDetails) {
+					dao.insertData("suggestion_details", {
+						"user"				:	req.session.loggedInUser.user_id,
+						"suggestion_item"	:	Number(req.param('itemid'))
+					}, function(rows) {
+						// Do nothing
+					});
+				});
+			} else {
+				dao.insertData("suggestion_details", {
+					"user"				:	req.session.loggedInUser.user_id,
+					"suggestion_item"	:	Number(req.param('itemid'))
+				}, function(rows) {
+					// Do nothing
+				});
+			}
+		});
+	}
 	res.render('viewItem', {  });
 });
 
@@ -59,7 +80,7 @@ router.post('/loggedInUser', function(req, res, next) {
 });
 
 router.post('/fetchItemDetails', function(req, res, next) {
-	dao.executeQuery("select sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name from sale_details as sale, user_account as seller, item_conditions as cond where sale.condition = cond.condition_id and sale.seller = seller.user_id and sale_id = ?", [req.body.itemid], function(results) {
+	dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [req.body.itemid], function(results) {
 		res.send({
 			"item_id" : results[0].sale_id,
 			"item_title" : results[0].title,
@@ -74,6 +95,76 @@ router.post('/fetchItemDetails', function(req, res, next) {
 			"item_seller_id" : results[0].user_id
 		});
 	});
+});
+
+router.post('/fetchTransactions', function(req, res, next) {
+	dao.executeQuery("select sum(txn_id) as totalCount from txn_details where sale = ?", [req.body.itemid], function(results) {
+		res.send({
+			"total_sold" : results[0].totalCount,
+		});
+	});
+});
+
+router.post('/fetchCartCount', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT count(cart_qty) as totalCount FROM cart_details WHERE user = ?", [req.session.loggedInUser.user_id], function(results) {
+			res.send({
+				"cart_qty" : results[0].totalCount,
+			});
+		});
+	} else {
+		res.send({
+			"cart_qty" : 0,
+		});
+	}
+});
+
+router.post('/addToCart', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.fetchData("count(cart_item_id) as entries", "cart_details", {
+			"user"		:	req.session.loggedInUser.user_id,
+			"sale_item"	:	req.body.itemid
+		}, function(results) {
+			if(results[0].entries > 0) {
+				dao.updateData("cart_details", {
+					"cart_qty"	:	Number(results[0].entries) + Number(req.body.qty)
+				}, {
+					"user"		:	req.session.loggedInUser.user_id,
+					"sale_item"	:	req.body.itemid
+				}, function(update_status) {
+					if(update_status.affectedRows === 1) {
+						res.send({
+							"status_code"	:	200
+						});
+					} else {
+						res.send({
+							"status_code"	:	500
+						});
+					}
+				});
+			} else {
+				dao.insertData("cart_details", {
+					"user"		:	req.session.loggedInUser.user_id,
+					"sale_item"	:	req.body.itemid,
+					"cart_qty"	:	req.body.qty
+				}, function(rows) {
+					if(rows.affectedRows === 1) {
+						res.send({
+							"status_code"	:	200
+						});
+					} else {
+						res.send({
+							"status_code"	:	500
+						});
+					}
+				});
+			}
+		})
+	} else {
+		res.send({
+			"status_code"	:	301
+		});
+	}
 });
 
 router.post('/fetchSales', function(req, res, next) {

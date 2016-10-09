@@ -19,8 +19,18 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
 
 	$scope.items_loaded = false;
-	$scope.notifications = 100;
-	$scope.cartItemCount = 10;
+	$scope.notifications = 1;
+	
+	$scope.fetchCartCount = function() {
+		$http({
+			method : "POST",
+			url : "/fetchCartCount"
+		}).success(function(data) {
+			$scope.cartItemCount = data.cart_qty;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 
 	$scope.sellAnItem = function() {
 		$window.location.href = "/sell";
@@ -113,6 +123,8 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	}).error(function(error) {
 		// TODO: Handle Error
 	});
+	
+	$scope.fetchCartCount();
 
 
 });

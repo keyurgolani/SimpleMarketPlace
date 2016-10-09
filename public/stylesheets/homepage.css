@@ -258,6 +258,7 @@
 .angular-notifications-icon.overlay {
 	zoom: 50%;
 	top: -2px;
+	right: 10px;
 	font-weight: bolder;
 	font-size: 1.2em;
 }

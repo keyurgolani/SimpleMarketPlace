@@ -48,7 +48,7 @@ eBay.controller('account', function($scope, $http, $location, $window) {
 	
 });
 
-eBay.controller('signinController', function($scope, $http, $window) {
+eBay.controller('signinController', function($scope, $http, $window, $location) {
 	$scope.signin = function() {
 		$http({
 			method	:	"POST",
@@ -59,7 +59,16 @@ eBay.controller('signinController', function($scope, $http, $window) {
 			}
 		}).success(function(data) {
 			if(Boolean(data.valid)) {
-				$window.location.href = "/";
+				if($location.search().redir === undefined) {
+					$window.location.href = "/";
+				} else {
+					var redir = $location.search().redir.split("-");
+					if(redir.length > 1) {
+						$window.location.href = "/" + redir[0] + "?" + redir[1] + "=" + redir[2];
+					} else {
+						$window.location.href = "/" + redir[0];
+					}
+				}
 			} else {
 				$scope.error_message = "Oops, that's not a match.";
 			}

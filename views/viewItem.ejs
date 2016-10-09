@@ -9,6 +9,7 @@
 		
 		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="modules/angular-notification-icons/dist/angular-notification-icons.css"/>
 		<link rel='stylesheet' href='css/viewItem.css' />
 		
 		<!--[if lt IE 9]>
@@ -23,6 +24,7 @@
 		<script src="modules/angular-animate/angular-animate.js"></script>
 		<script src="modules/ng-focus-if/focusIf.min.js"></script>
 		<script src="modules/angular-sanitize/angular-sanitize.js"></script>
+		<script src="modules/angular-notification-icons/dist/angular-notification-icons.js"></script>
 		
 		<script src="ngjs/viewItem.js"></script>
 	</head>
@@ -110,6 +112,11 @@
 	                            </div>
 	                        </div>
 	                        <hr class="separator"/>
+	                        <div class="row message" ng-show="message" ng-click="message = ''" align="center">
+	                        	<div class="col-md-12">
+	                        		<span ng-class="{true:'alert alert-success', false:'alert alert-danger'}[success]">{{message}}</span>
+	                        	</div>
+	                        </div>
 	                        <div class="row">
 	                        	<div class="col-md-7">
 	                        		<div class="row">
@@ -149,11 +156,11 @@
 	                        				<div class="row details-value">
 	                        					<div class="col-md-4">
 	                        						<div class="row">
-	                        							<input type="text" ng-model="cart_qty" class="form-control"/>
+	                        							<input type="text" ng-model="cart_qty" focus-if class="form-control"/>
 	                        						</div>
 	                        					</div>
 	                        					<div class="col-md-8">
-	                        						<span class="sold-qty">100 sold</span><span class="available-qty">{{available_quantity}} available/</span>
+	                        						<span class="sold-qty">{{total_sold}} sold</span><span class="available-qty">{{available_quantity}} available/</span>
 	                        					</div>
 	                        				</div>
 	                        			</div>
@@ -176,11 +183,11 @@
 	                        		</div>
 	                        		<div class="row detail-tuple">
 	                        			<div class="col-md-6">
-	                        				Add To Cart
-	                        			</div>
-	                        			<div class="col-md-6">
-	                        				Buy It Now
-	                        			</div>
+            								<button type="submit" class="btn btn-primary form-control buy-button" ng-click="addToCart()">Add To Cart</span>
+            							</div>
+            							<div class="col-md-6">
+                							<button type="submit" class="btn btn-primary form-control buy-button" ng-click="buyAndCheckout()">Buy It Now</span>
+            							</div>
 	                        		</div>
 	                        	</div>
 	                        </div>

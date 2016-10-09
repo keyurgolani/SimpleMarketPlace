@@ -1,4 +1,4 @@
-var eBay = angular.module('eBay', ['ngSanitize']);
+var eBay = angular.module('eBay', ['ngSanitize', 'angular-notification-icons', 'ngAnimate', 'focus-if' ]);
 
 eBay.config(['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode({
@@ -9,7 +9,20 @@ eBay.config(['$locationProvider', function($locationProvider){
 
 eBay.controller('viewItem', function($scope, $http, $location, $window) {
 	
+	$scope.notifications = 1;
 	$scope.cart_qty = 0;
+	
+	$scope.fetchCartCount = function() {
+		$http({
+			method : "POST",
+			url : "/fetchCartCount"
+		}).success(function(data) {
+			$scope.cartItemCount = data.cart_qty;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
 	
 	$http({
 		method	:	"POST",
@@ -32,6 +45,67 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		$window.document.title = $scope.item_title + " | eBay";
 	}).error(function(err) {
 		
+	});
+	
+	$scope.buyAndCheckout = function() {
+		
+	};
+	
+	$scope.addToCart  = function() {
+		$http({
+			method	:	"POST",
+			url		:	"/addToCart",
+			data	:	{
+				"itemid"	:	$scope.item_id,
+				"qty"		:	$scope.cart_qty
+			}
+		}).success(function(data) {
+			if(data.status_code === 200) {
+				$scope.fetchCartCount();
+				$scope.message = "Congratulations! " + $scope.item_title + " Added to your Cart!";
+				$scope.success = true;
+			} else if(data.status_code === 500) {
+				$scope.message = "Internal error! Please try again.";
+				$scope.success = true;
+			} else if(data.status_code === 301) {
+				$window.location.href = "/account?view=signin&redir=viewItem-itemid-" + $scope.item_id;
+			}
+		}).error(function(err) {
+			
+		});
+	};
+	
+	$http({
+		method	:	"POST",
+		url		:	"/fetchTransactions",
+		data	:	{
+			"itemid"	:	$location.search().itemid
+		}
+	}).success(function(data) {
+		$scope.total_sold = data.total_sold === null ? 0 : data.total_sold;
+	}).error(function(err) {
+		
+	});
+	
+	$scope.homepageClicked = function() {
+		$window.location.href = "/";
+	};
+	
+	$scope.fetchCartCount();
+	
+	$http({
+		method : "POST",
+		url : "/loggedInUser"
+	}).success(function(data) {
+		if (!angular.equals({}, data.userBO)) {
+			$scope.user_fname = data.userBO.f_name;
+			$scope.user_lname = data.userBO.l_name;
+			$scope.user_name = data.userBO.user_name;
+		} else {
+
+		}
+	}).error(function(error) {
+		// TODO: Handle Error
 	});
 	
 });
