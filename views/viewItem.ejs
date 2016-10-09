@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<title>Product Title | eBay</title>
+		<title>eBay</title>
 		
 		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="modules/bootstrap/dist/css/bootstrap-theme.min.css">
@@ -22,6 +22,7 @@
 		<script src="modules/angular/angular.min.js"></script>
 		<script src="modules/angular-animate/angular-animate.js"></script>
 		<script src="modules/ng-focus-if/focusIf.min.js"></script>
+		<script src="modules/angular-sanitize/angular-sanitize.js"></script>
 		
 		<script src="ngjs/viewItem.js"></script>
 	</head>
@@ -118,7 +119,77 @@
                 					</div>
 	                        	</div>
 	                        	<div class="col-md-5 sale-details-text-bound">
-	                        		<span class="sale-title">Goose Down Alternative Luxurious Reversible Comforter Full Queen and King</span>
+	                        		<div class="row">
+	                        			<div class="col-md-12 title-bar">
+	                        				<span class="sale-title">{{item_title}}</span>
+	                        			</div>
+	                        		</div>
+	                        		<hr class="separator"/>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-4">
+	                        				<span class="details-key">eBay Item ID:</span>
+	                        			</div>
+	                        			<div class="col-md-8">
+	                        				<span class="details-value">{{item_id}}</span>
+	                        			</div>
+	                        		</div>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-4">
+	                        				<span class="details-key">Item Condition:</span>
+	                        			</div>
+	                        			<div class="col-md-8">
+	                        				<span class="details-value">{{item_condition}}</span>
+	                        			</div>
+	                        		</div>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-4">
+	                        				<span class="details-key">Quantity:</span>
+	                        			</div>
+	                        			<div class="col-md-8">
+	                        				<div class="row details-value">
+	                        					<div class="col-md-4">
+	                        						<div class="row">
+	                        							<input type="text" ng-model="cart_qty" class="form-control"/>
+	                        						</div>
+	                        					</div>
+	                        					<div class="col-md-8">
+	                        						<span class="sold-qty">100 sold</span><span class="available-qty">{{available_quantity}} available/</span>
+	                        					</div>
+	                        				</div>
+	                        			</div>
+	                        		</div>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-4">
+	                        				<span class="details-key">Item Price:</span>
+	                        			</div>
+	                        			<div class="col-md-8">
+	                        				<span class="details-value">${{current_price}}</span>
+	                        			</div>
+	                        		</div>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-4">
+	                        				<span class="details-key">Seller:</span>
+	                        			</div>
+	                        			<div class="col-md-8" ng-click="showUser(item_seller_id)">
+	                        				<span class="details-value link">{{item_seller_fname}} {{item_seller_lname }} ( @{{item_seller_handle}} )</span>
+	                        			</div>
+	                        		</div>
+	                        		<div class="row detail-tuple">
+	                        			<div class="col-md-6">
+	                        				Add To Cart
+	                        			</div>
+	                        			<div class="col-md-6">
+	                        				Buy It Now
+	                        			</div>
+	                        		</div>
+	                        	</div>
+	                        </div>
+	                        <hr class="separator"/>
+	                        <span class="section-title">Detailed Item Description</span>
+	                        <hr class="separator"/>
+	                        <div class="row">
+	                        	<div class="col-md-12">
+	                        		<p ng-bind-html="item_description" class="descripion-text"></p>
 	                        	</div>
 	                        </div>
 						</div>

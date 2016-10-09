@@ -58,6 +58,24 @@ router.post('/loggedInUser', function(req, res, next) {
 	}
 });
 
+router.post('/fetchItemDetails', function(req, res, next) {
+	dao.executeQuery("select sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name from sale_details as sale, user_account as seller, item_conditions as cond where sale.condition = cond.condition_id and sale.seller = seller.user_id and sale_id = ?", [req.body.itemid], function(results) {
+		res.send({
+			"item_id" : results[0].sale_id,
+			"item_title" : results[0].title,
+			"item_description" : results[0].desc,
+			"item_condition" : results[0].condition_name,
+			"available_quantity" : results[0].sale_qty,
+			"is_bid" : results[0].is_bid,
+			"current_price" : results[0].sale_price,
+			"item_seller_fname" : results[0].f_name,
+			"item_seller_lname" : results[0].l_name,
+			"item_seller_handle" : results[0].user_name,
+			"item_seller_id" : results[0].user_id
+		});
+	});
+});
+
 router.post('/fetchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND seller <> ?", [req.session.loggedInUser.user_id], function(saleDetails) {

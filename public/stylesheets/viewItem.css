@@ -160,6 +160,77 @@
 	color: #333;
 }
 
+.title-bar {
+	margin-bottom: 15px;
+}
+
+.detail-tuple {
+	margin-top: 20px;
+}
+
+.details-key {
+	font-family: "Helvetica neue",Helvetica,Verdana,Sans-serif;
+	font-size: small;
+    text-align: right;
+    float: right;
+    color: #666;
+    font-weight: normal;
+    word-wrap: break-word;
+    line-height: 34px;
+}
+
+.details-value {
+	font-family: "Helvetica neue",Helvetica,Verdana,Sans-serif;
+	float: left;
+	text-align: left;
+	color: #333;
+    font-size: small;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+    line-height: 34px;
+    height: 34px;
+}
+
 .sale-details-text-bound {
 	padding: 50px 50px 0px 0px;
+}
+
+.available-qty {
+	line-height: 34px;
+	float: right;
+	text-align: right;
+	font-family: "Helvetica neue",Helvetica,Verdana,Sans-serif;
+	font-weight: normal;
+}
+
+.sold-qty {
+	line-height: 34px;
+	float: right;
+	text-align: right;
+	font-family: "Helvetica neue",Helvetica,Verdana,Sans-serif;
+	color: #DD1E31;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.section-title {
+	line-height: 1em;
+    color: #555;
+    font-size: 1.625em;
+    font-family: "Helvetica neue",Helvetica,Arial,Sans-serif;
+    line-height: 40px;
+}
+
+.descripion-text {
+	line-height: 150%;
+	font-family: "Helvetica neue",Helvetica,Verdana,Sans-serif;
+	font-size: medium;
+    color: #777!important;
+    font-weight: normal;
+    line-height: normal;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    line-height: 200%
 }

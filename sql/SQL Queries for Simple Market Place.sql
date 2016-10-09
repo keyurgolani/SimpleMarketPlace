@@ -27,7 +27,6 @@ CREATE TABLE `simple_market_place`.`cc_details` (
 ---------------------------------------------------------------
   CREATE TABLE `simple_market_place`.`user_profile` (
   `profile_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_handle` varchar(50) NOT NULL,
   `dob` date NULL,
   `contact` bigint(10) UNSIGNED NULL,
   `user` int(11) DEFAULT NULL,
