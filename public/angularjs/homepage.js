@@ -125,7 +125,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	});
 	
 	$scope.fetchCartCount();
-
+	if($location.search().query) {
+		$scope.searchString = $location.search().query;
+		$scope.search();
+	}
 
 });
 

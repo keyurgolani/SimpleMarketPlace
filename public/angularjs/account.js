@@ -12,21 +12,33 @@ eBay.controller('account', function($scope, $http, $location, $window) {
 	$scope.show_more = true;
 	
 	$scope.changeToSignin = function() {
-		$location.url("/account?view=signin");
+		if($location.search().redir) {
+			$location.url("/account?view=signin&redir="+$location.search().redir);
+		} else {
+			$location.url("/account?view=signin");
+		}
 		$scope.isSignin = true;
 		$scope.isSignup = false;
 		$scope.isForgot = false;
 	};
 	
 	$scope.changeToRegister = function() {
-		$location.url("/account?view=register");
+		if($location.search().redir) {
+			$location.url("/account?view=register&redir="+$location.search().redir);
+		} else {
+			$location.url("/account?view=register");
+		}
 		$scope.isSignin = false;
 		$scope.isSignup = true;
 		$scope.isForgot = false;
 	};
 	
 	$scope.changeToForgot = function() {
-		$location.url("/account?view=forgot");
+		if($location.search().redir) {
+			$location.url("/account?view=forgot&redir="+$location.search().redir);
+		} else {
+			$location.url("/account?view=forgot");
+		}
 		$scope.isSignin = false;
 		$scope.isSignup = false;
 		$scope.isForgot = true;
@@ -95,13 +107,21 @@ eBay.controller('registerController', function($scope, $http, $location) {
 		}).success(function(data) {
 			$scope.$parent.status_code = data.status_code;
 			if(data.status_code === 200) {
-				$location.url("/account?view=signin");
+				if($location.search().redir) {
+					$location.url("/account?view=signin&redir="+$location.search().redir);
+				} else {
+					$location.url("/account?view=signin");
+				}
 				$scope.$parent.isSignin = true;
 				$scope.$parent.isSignup = false;
 				$scope.$parent.isForgot = false;
 				$scope.$parent.messages = data.messages;
 			} else {
-				$location.url("/account?view=register");
+				if($location.search().redir) {
+					$location.url("/account?view=register&redir="+$location.search().redir);
+				} else {
+					$location.url("/account?view=register");
+				}
 				$scope.$parent.messages = data.messages;
 				$scope.$parent.isSignin = false;
 				$scope.$parent.isSignup = true;

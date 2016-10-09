@@ -47,8 +47,24 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		
 	});
 	
+	$scope.search = function() {
+		$window.location.href = "/?query=" + $scope.searchString;
+	};
+	
 	$scope.buyAndCheckout = function() {
 		
+	};
+	
+	$scope.registerClicked = function() {
+		$window.location.href = "/account?view=register";
+	};
+
+	$scope.signinClicked = function() {
+		$window.location.href = "/account?view=signin";
+	};
+	
+	$scope.sellAnItem = function() {
+		$window.location.href = "/sell";
 	};
 	
 	$scope.addToCart  = function() {
@@ -108,4 +124,17 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		// TODO: Handle Error
 	});
 	
+});
+
+eBay.directive('ngEnter', function() {
+	return function(scope, element, attrs) {
+		element.bind("keydown keypress", function(event) {
+			if (event.which === 13) {
+				scope.$apply(function() {
+					scope.$eval(attrs.ngEnter);
+				});
+				event.preventDefault();
+			}
+		});
+	};
 });

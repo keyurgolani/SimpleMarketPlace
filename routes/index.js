@@ -121,17 +121,9 @@ router.post('/fetchCartCount', function(req, res, next) {
 
 router.post('/addToCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.fetchData("count(cart_item_id) as entries", "cart_details", {
-			"user"		:	req.session.loggedInUser.user_id,
-			"sale_item"	:	req.body.itemid
-		}, function(results) {
+		dao.executeQuery("SELECT count(cart_item_id) as entries FROM cart_details WHERE user = ? AND sale_item = ?", [req.session.loggedInUser.user_id, req.body.itemid], function(results) {
 			if(results[0].entries > 0) {
-				dao.updateData("cart_details", {
-					"cart_qty"	:	Number(results[0].entries) + Number(req.body.qty)
-				}, {
-					"user"		:	req.session.loggedInUser.user_id,
-					"sale_item"	:	req.body.itemid
-				}, function(update_status) {
+				dao.executeQuery("UPDATE cart_details SET `cart_qty` = ? WHERE `user` = ? AND `sale_item` = ?", [Number(results[0].entries) + Number(req.body.qty), req.session.loggedInUser.user_id, req.body.itemid], function(update_status) {
 					if(update_status.affectedRows === 1) {
 						res.send({
 							"status_code"	:	200
