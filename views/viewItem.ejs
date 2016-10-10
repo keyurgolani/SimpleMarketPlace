@@ -25,6 +25,8 @@
 		<script src="modules/ng-focus-if/focusIf.min.js"></script>
 		<script src="modules/angular-sanitize/angular-sanitize.js"></script>
 		<script src="modules/angular-notification-icons/dist/angular-notification-icons.js"></script>
+		<script src="modules/jquery.easing/jquery.easing.js"></script>
+		<script src="modules/angular-counter/js/angular-counter.js"></script>
 		
 		<script src="ngjs/viewItem.js"></script>
 	</head>
@@ -81,8 +83,19 @@
 	                            </div>
 	                            <div class="col-md-4 pull-right right-panel">
 	                                <div class="header-item right-panel">My eBay</div>
-	                                <notification-icon count='notifications' animation='bounce' disappear-animation='fade'>
+	                                <notification-icon count='notificationCount' animation='bounce' ng-click="show_notifications = true" disappear-animation='fade'>
 	                                	<div class="header-item right-panel glyphicon glyphicon-bell"></div>
+	                                	<div id="notifications" ng-show="show_notifications" ng-mouseleave="show_notifications = false" class="notifications-window" ng-class="{show: show_notifications}">
+	                            			<div ng-repeat="notification in notifications">
+		                            			<div class="row">
+		                            				<div class="col-md-12 notification-detail">
+		                            					<div class="detail-item">{{$index + 1}}</div>
+				                                		<div class="detail-item">{{notification.notification_text}}</div>
+		                            				</div>
+		                            			</div>
+		                            			<hr class="separator"/>
+	                            			</div>
+	                            		</div>
 	                                </notification-icon>
 	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade'>
 	                                	<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
@@ -132,6 +145,12 @@
 	                        			</div>
 	                        		</div>
 	                        		<hr class="separator"/>
+	                        		<div class="row" ng-show="is_bid">
+	                        			<div class="col-md-12">
+	                        				<span class="remaining-bid-time">Remaining Bid Time: {{countdownTime}}</span>
+	                        			</div>
+	                        		</div>
+	                        		<hr class="separator" ng-show="is_bid"/>
 	                        		<div class="row detail-tuple">
 	                        			<div class="col-md-4">
 	                        				<span class="details-key">eBay Item ID:</span>

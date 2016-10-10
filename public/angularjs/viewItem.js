@@ -1,4 +1,4 @@
-var eBay = angular.module('eBay', ['ngSanitize', 'angular-notification-icons', 'ngAnimate', 'focus-if' ]);
+var eBay = angular.module('eBay', ['ngSanitize', 'angular-notification-icons', 'ngAnimate', 'focus-if', 'counter' ]);
 
 //	TODO: Prevent showing anything until the whole DOM is loaded.
 
@@ -9,16 +9,17 @@ eBay.config(['$locationProvider', function($locationProvider){
     });
 }]);
 
-eBay.controller('viewItem', function($scope, $http, $location, $window) {
+eBay.controller('viewItem', function($scope, $http, $location, $window, $interval, Util) {
 	
 	$scope.cart_qty = 0;
 	
-	$scope.fetchNotificationsCount = function() {
+	$scope.fetchNotifications = function() {
 		$http({
 			method : "POST",
-			url : "/fetchNotificationsCount"
+			url : "/fetchNotifications"
 		}).success(function(data) {
-			$scope.notifications = data.notification_count;
+			$scope.notifications = data.notifications;
+			$scope.notificationCount = data.notifications.length;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -45,11 +46,12 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		}).success(function(data) {
 			$scope.bid_details = data.results;
 			$scope.number_of_bids = data.results.length;
+			$scope.futureTime = new Date(data.futureTime);
 			$scope.bid_price = Number($scope.current_price) + 1;
 		}).error(function(err) {
 			
 		});
-	}
+	};
 	
 	
 	$scope.fetchItemDetails = function() {
@@ -82,7 +84,7 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		}).error(function(err) {
 			
 		});
-	}
+	};
 	
 	$scope.search = function() {
 		$window.location.href = "/?query=" + $scope.searchString;
@@ -188,13 +190,18 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		});
 	};
 	
+	$interval(function() {
+		var diff = Math.floor(($scope.futureTime.getTime() - new Date().getTime()) / 1000);
+		$scope.countdownTime = Util.dhms(diff);
+	}, 1000);
+	
 	$scope.openBids = function() {
 		$scope.fetchBidDetails();
 		$scope.show_bid_details = true;
 	};
 	
 	$scope.fetchCartCount();
-	$scope.fetchNotificationsCount();
+	$scope.fetchNotifications();
 	
 	$http({
 		method : "POST",
@@ -225,3 +232,34 @@ eBay.directive('ngEnter', function() {
 		});
 	};
 });
+
+eBay.directive('ngCountdown', ['Util', '$interval', function(Util, $interval) {
+	return {
+		restrict: 'A',
+		link: function($scope, element, attrs) {
+			var future;
+			future = new Date(scope.date);
+			$interval(function() {
+				var diff;
+				diff = Math.floor((future.getTime() - new Date().getTime()) / 1000);
+				return element.text(Util.dhms(diff));
+			}, 1000);
+		}
+	};
+}]);
+
+eBay.factory('Util', [function() {
+	return {
+		dhms	:	function(t) {
+			var days, hours, minutes, seconds;
+			days = Math.floor(t / 86400);
+			t -= days * 86400;
+			hours = Math.floor(t / 3600) % 24;
+			t -= hours * 3600;
+			minutes = Math.floor(t / 60) % 60;
+			t -= minutes * 60;
+			seconds = t % 60;
+			return [days + 'd', hours + 'h', minutes + 'm', seconds + 's'].join(' ');
+		}
+	}
+}]);

@@ -79,8 +79,13 @@ router.post('/emailIDAvailable', function(req, res, next) {
 
 router.post('/fetchBidDetails', function(req, res, next) {
 	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [req.body.itemid], function(results) {
-		res.send({
-			"results"	:	results
+		dao.executeQuery("select sale_time from sale_details where sale_id = ?", [req.body.itemid], function(remainingTime) {
+			var saleDate = new Date(remainingTime[0].sale_time);
+			var futureDate = Math.abs(saleDate.getTime() + 345600000);
+			res.send({
+				"results"		:	results,
+				"futureTime"	:	new Date(futureDate)
+			});
 		});
 	});
 });
@@ -251,19 +256,19 @@ router.post('/fetchCartCount', function(req, res, next) {
 	}
 });
 
-router.post('/fetchNotificationsCount', function(req, res, next) {
+router.post('/fetchNotifications', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.executeQuery("SELECT COUNT(notification_id) AS totalCount FROM notification_details WHERE user_id = ?", [req.session.loggedInUser.user_id], function(results) {
+		dao.executeQuery("SELECT * FROM notification_details WHERE user_id = ?", [req.session.loggedInUser.user_id], function(results) {
 			res.send({
-				"notification_count" : results[0].totalCount,
+				"notifications" : results
 			});
 		});
 	} else {
 		res.send({
-			"notification_count" : 0,
+			"notifications" : []
 		});
 	}
-})
+});
 
 router.post('/addToCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
