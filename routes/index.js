@@ -53,6 +53,86 @@ router.post('/emailIDAvailable', function(req, res, next) {
 	});
 });
 
+router.post('/fetchBidDetails', function(req, res, next) {
+	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ?", [req.body.itemid], function(results) {
+		res.send({
+			"results"	:	results
+		});
+	});
+});
+
+router.post('/updateContact', function(req, res, next) {
+	dao.updateData("user_profile", {
+		"contact"	:	req.body.contat
+	}, {
+		"user"	:	req.body.user
+	}, function(update_status) {
+		dao.executeQuery("select contact from user_profile where user = ?", [req.body.user], function(profile_details) {
+			res.send({
+				"contact"		:	profile_details[0].contact
+			});
+		});
+	});
+});
+
+router.post('/updateDOB', function(req, res, next) {
+	dao.updateData("user_profile", {
+		"dob"	:	req.body.dob
+	}, {
+		"user"	:	req.body.user
+	}, function(update_status) {
+		dao.executeQuery("select dob from user_profile where user = ?", [req.body.user], function(profile_details) {
+			res.send({
+				"dob"		:	profile_details[0].dob
+			});
+		});
+	});
+});
+
+router.post('/fetchUserProfile', function(req, res, next) {
+	var user_id;
+	var user_name;
+	var lname;
+	var fname;
+	var sold_count;
+	var bought_count;
+	var sale_count;
+	var contact;
+	var dob;
+	dao.executeQuery("select user_name, f_name, l_name, user_id from user_account where user_name = ?", [req.body.username], function(userProfile) {
+		user_id = userProfile[0].user_id;
+		user_name = userProfile[0].user_name;
+		fname = userProfile[0].f_name;
+		lname = userProfile[0].l_name;
+		dao.executeQuery("select count(txn_id) as soldCount from txn_details where sale in (select sale_id from sale_details where seller = ?)", [userProfile[0].user_id], function(soldCount) {
+			sold_count = soldCount[0].soldCount;
+			dao.executeQuery("select count(txn_id) as boughtCount from txn_details where buyer = ?", [userProfile[0].user_id], function(boughtCount) {
+				bought_count = boughtCount[0].boughtCount;
+				dao.executeQuery("select count(sale_id) as saleCount from sale_details where seller = ?", [userProfile[0].user_id], function(saleCount) {
+					sale_count = saleCount[0].saleCount;
+					dao.executeQuery("select contact, dob from user_profile where user = ?", [userProfile[0].user_id], function(profile_details) {
+						if(profile_details.length) {
+							contact = profile_details[0].contact;
+							dob = profile_details[0].dob;
+						}
+						res.send({
+							"user_id"		:	user_id,
+							"user_name"		:	user_name,
+							"lname"			:	lname,
+							"fname"			:	fname,
+							"sold_count"	:	sold_count,
+							"bought_count"	:	bought_count,
+							"sale_count"	:	sale_count,
+							"contact"		:	contact,
+							"dob"			:	dob
+						});
+					});
+				});
+			});
+		});
+	});
+});
+
 router.post('/usernameAvailable', function(req, res, next) {
 	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [req.body.username], function(result) {
 		if(result[0].count === 0) {
@@ -302,10 +382,22 @@ router.post('/register', function(req, res, next) {
 			};
 		dao.insertData("user_account", insertParameters, function(rows) {
 			if(rows.affectedRows === 1) {
-				success_messages.push("User " + firstname + " created successfully !");
-				res.send({
-					"status_code"	:	status_code,
-					"messages"		:	success_messages
+				dao.insertData("user_profile", {
+					"contact"	:	phone
+				}, function(rows) {
+					if(rows.affectedRows === 1) {
+						success_messages.push("User " + firstname + " created successfully !");
+						res.send({
+							"status_code"	:	status_code,
+							"messages"		:	success_messages
+						});
+					} else {
+						error_messages.push("Internal error. Please try again..!!");
+						res.send({
+							"status_code"	:	status_code,
+							"messages"		:	error_messages
+						});
+					}
 				});
 			} else {
 				error_messages.push("Internal error. Please try again..!!");

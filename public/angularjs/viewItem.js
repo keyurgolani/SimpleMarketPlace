@@ -55,6 +55,20 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 		$scope.item_seller_handle = data.item_seller_handle;
 		$scope.item_seller_id = data.item_seller_id;
 		$window.document.title = $scope.item_title + " | eBay";
+		if($scope.is_bid) {
+			$http({
+				method	:	"POST",
+				url		:	"/fetchBidDetails",
+				data	:	{
+					"itemid"	:	$scope.item_id
+				}
+			}).success(function(data) {
+				$scope.bid_details = data.results;
+				$scope.number_of_bids = data.results.length;
+			}).error(function(err) {
+				
+			});
+		}
 	}).error(function(err) {
 		
 	});
@@ -77,6 +91,10 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 	
 	$scope.sellAnItem = function() {
 		$window.location.href = "/sell";
+	};
+	
+	$scope.showUser = function(eBay_handle) {
+		$window.location.href = "/"+eBay_handle;
 	};
 	
 	$scope.addToCart  = function() {
@@ -117,6 +135,21 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 	
 	$scope.homepageClicked = function() {
 		$window.location.href = "/";
+	};
+	
+	$scope.userProfile = function() {
+		$window.location.href = "/"+$scope.user_name;
+	};
+	
+	$scope.signout = function() {
+		$http({
+			method : "POST",
+			url : "/signoutUser"
+		}).success(function(data) {
+			$window.location.href = "/?signout=true";
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
 	};
 	
 	$scope.fetchCartCount();

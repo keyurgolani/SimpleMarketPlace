@@ -88,6 +88,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			// TODO: Handle Error
 		});
 	};
+	
+	$scope.userProfile = function() {
+		$window.location.href = "/"+$scope.user_name;
+	};
 
 	$scope.signout = function() {
 		$http({

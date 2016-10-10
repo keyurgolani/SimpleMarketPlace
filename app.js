@@ -11,6 +11,10 @@ var app = express();
 
 var session = require('express-session');
 
+var dao = require('./utils/dao');
+
+// Nice library on dynamic calls REST application: https://github.com/deitch/booster
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -42,9 +46,17 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	dao.fetchData("count(user_id) as userCount", "user_account", {
+		"user_name"	:	req.originalUrl.substring(1)
+	}, function(results) {
+		if(results[0].userCount === 0) {
+			var err = new Error('Not Found');
+			err.status = 404;
+			next(err);
+		} else {
+			res.render('userProfile', {  });
+		}
+	});
 });
 
 // Prevents caching for every page
