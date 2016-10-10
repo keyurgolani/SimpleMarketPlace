@@ -27,6 +27,7 @@ CREATE TABLE `simple_market_place`.`cc_details` (
 ---------------------------------------------------------------
   CREATE TABLE `simple_market_place`.`user_profile` (
   `profile_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_handle` varchar(50) NOT NULL,
   `dob` date NULL,
   `contact` bigint(10) UNSIGNED NULL,
   `user` int(11) DEFAULT NULL,
@@ -73,7 +74,7 @@ CREATE TABLE `simple_market_place`.`sale_details` (
   `condition` int(11) DEFAULT NULL,
   `sale_price` FLOAT NOT NULL,
   `title` VARCHAR(50) NOT NULL,
-  `desc` VARCHAR(2500) NULL,
+  `desc` VARCHAR(400) NULL,
   `is_bid` TINYINT(1) NOT NULL,
   `sale_qty` INT NOT NULL,
   PRIMARY KEY (`sale_id`),
@@ -134,6 +135,17 @@ CREATE TABLE `simple_market_place`.`suggestion_details` (
   KEY `suggestion_item` (`suggestion_item`),
   CONSTRAINT `fk_user_suggestion` FOREIGN KEY (`user`) REFERENCES `user_account` (`user_id`),
   CONSTRAINT `fk_suggestion_item` FOREIGN KEY (`suggestion_item`) REFERENCES `sale_details` (`sale_id`)
+);
+
+----------------------------------------------------------------------
+
+CREATE TABLE `simple_market_place`.`notification_details` (
+  `notification_id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_text` varchar(500) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`notification_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_user_notification` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`)
 );
 
 ----------------------------------------------------------------------

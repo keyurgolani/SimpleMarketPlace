@@ -1,5 +1,7 @@
 var eBay = angular.module('eBay', ['ngSanitize', 'angular-notification-icons', 'ngAnimate', 'focus-if' ]);
 
+//	TODO: Prevent showing anything until the whole DOM is loaded.
+
 eBay.config(['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode({
     	  enabled: true,
@@ -9,8 +11,18 @@ eBay.config(['$locationProvider', function($locationProvider){
 
 eBay.controller('viewItem', function($scope, $http, $location, $window) {
 	
-	$scope.notifications = 1;
 	$scope.cart_qty = 0;
+	
+	$scope.fetchNotificationsCount = function() {
+		$http({
+			method : "POST",
+			url : "/fetchNotificationsCount"
+		}).success(function(data) {
+			$scope.notifications = data.notification_count;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 	
 	$scope.fetchCartCount = function() {
 		$http({
@@ -108,6 +120,7 @@ eBay.controller('viewItem', function($scope, $http, $location, $window) {
 	};
 	
 	$scope.fetchCartCount();
+	$scope.fetchNotificationsCount();
 	
 	$http({
 		method : "POST",

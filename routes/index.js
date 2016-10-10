@@ -119,6 +119,20 @@ router.post('/fetchCartCount', function(req, res, next) {
 	}
 });
 
+router.post('/fetchNotificationsCount', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("SELECT COUNT(notification_id) AS totalCount FROM notification_details WHERE user_id = ?", [req.session.loggedInUser.user_id], function(results) {
+			res.send({
+				"notification_count" : results[0].totalCount,
+			});
+		});
+	} else {
+		res.send({
+			"notification_count" : 0,
+		});
+	}
+})
+
 router.post('/addToCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		dao.executeQuery("SELECT count(cart_item_id) as entries FROM cart_details WHERE user = ? AND sale_item = ?", [req.session.loggedInUser.user_id, req.body.itemid], function(results) {

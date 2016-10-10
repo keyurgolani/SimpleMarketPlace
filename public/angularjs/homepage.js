@@ -19,7 +19,17 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
 
 	$scope.items_loaded = false;
-	$scope.notifications = 1;
+	
+	$scope.fetchNotificationsCount = function() {
+		$http({
+			method : "POST",
+			url : "/fetchNotificationsCount"
+		}).success(function(data) {
+			$scope.notifications = data.notification_count;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 	
 	$scope.fetchCartCount = function() {
 		$http({
@@ -125,6 +135,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	});
 	
 	$scope.fetchCartCount();
+	$scope.fetchNotificationsCount();
 	if($location.search().query) {
 		$scope.searchString = $location.search().query;
 		$scope.search();
