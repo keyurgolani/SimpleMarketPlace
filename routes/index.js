@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 var dao = require('../utils/dao');
 var logger = require("../utils/logger");
+var schedule = require('node-schedule');
 
-/* GET home page. */
+// Nice Utility for scheduled tasks: https://github.com/ncb000gt/node-cron
+// Nice tool for scheduling bid end job: https://github.com/node-schedule/node-schedule
+
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
 	res.render('index', {  });
@@ -39,6 +42,27 @@ router.get('/viewItem', function(req, res, next) {
 	res.render('viewItem', {  });
 });
 
+router.post('/placeBid', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.insertData("bid_details", {
+			"sale"			:	req.body.bid_item,
+			"bidder"		:	req.session.loggedInUser.user_id,
+			"bid_amount"	:	req.body.bid_price,
+			"bid_qty"		:	req.body.bid_qty
+		}, function(rows) {
+			dao.executeQuery("update sale_details set sale_price = ? where sale_id = ?", [req.body.bid_price, req.body.bid_item], function() {
+				res.send({
+					"status_code"	:	200
+				});
+			});
+		});
+	} else {
+		res.send({
+			"status_code"	:	301
+		});
+	}
+});
+
 router.post('/emailIDAvailable', function(req, res, next) {
 	dao.executeQuery("SELECT COUNT(email) as count FROM user_account WHERE email like ?", [req.body.email], function(result) {
 		if(result[0].count === 0) {
@@ -54,7 +78,7 @@ router.post('/emailIDAvailable', function(req, res, next) {
 });
 
 router.post('/fetchBidDetails', function(req, res, next) {
-	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ?", [req.body.itemid], function(results) {
+	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [req.body.itemid], function(results) {
 		res.send({
 			"results"	:	results
 		});
@@ -160,20 +184,48 @@ router.post('/loggedInUser', function(req, res, next) {
 });
 
 router.post('/fetchItemDetails', function(req, res, next) {
-	dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [req.body.itemid], function(results) {
-		res.send({
-			"item_id" : results[0].sale_id,
-			"item_title" : results[0].title,
-			"item_description" : results[0].desc,
-			"item_condition" : results[0].condition_name,
-			"available_quantity" : results[0].sale_qty,
-			"is_bid" : results[0].is_bid,
-			"current_price" : results[0].sale_price,
-			"item_seller_fname" : results[0].f_name,
-			"item_seller_lname" : results[0].l_name,
-			"item_seller_handle" : results[0].user_name,
-			"item_seller_id" : results[0].user_id
-		});
+	dao.executeQuery("select is_bid from sale_details where sale_id = ?", [req.body.itemid], function(results) {
+		if(results[0].is_bid) {
+			dao.executeQuery("select active from sale_details where sale_id = ?", [req.body.itemid], function(activeStatus) {
+				if(activeStatus[0].active === 1) {
+					dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [req.body.itemid], function(results) {
+						res.send({
+							"item_id" : results[0].sale_id,
+							"item_title" : results[0].title,
+							"item_description" : results[0].desc,
+							"item_condition" : results[0].condition_name,
+							"available_quantity" : results[0].sale_qty,
+							"is_bid" : results[0].is_bid,
+							"current_price" : results[0].sale_price,
+							"item_seller_fname" : results[0].f_name,
+							"item_seller_lname" : results[0].l_name,
+							"item_seller_handle" : results[0].user_name,
+							"item_seller_id" : results[0].user_id
+						});
+					});
+				} else {
+					res.send({
+						"item_id"	:	-1
+					});
+				}
+			});
+		} else {
+			dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [req.body.itemid], function(results) {
+				res.send({
+					"item_id" : results[0].sale_id,
+					"item_title" : results[0].title,
+					"item_description" : results[0].desc,
+					"item_condition" : results[0].condition_name,
+					"available_quantity" : results[0].sale_qty,
+					"is_bid" : results[0].is_bid,
+					"current_price" : results[0].sale_price,
+					"item_seller_fname" : results[0].f_name,
+					"item_seller_lname" : results[0].l_name,
+					"item_seller_handle" : results[0].user_name,
+					"item_seller_id" : results[0].user_id
+				});
+			});
+		}
 	});
 });
 
@@ -383,7 +435,8 @@ router.post('/register', function(req, res, next) {
 		dao.insertData("user_account", insertParameters, function(rows) {
 			if(rows.affectedRows === 1) {
 				dao.insertData("user_profile", {
-					"contact"	:	phone
+					"contact"	:	phone,
+					"user"		:	rows.insertId
 				}, function(rows) {
 					if(rows.affectedRows === 1) {
 						success_messages.push("User " + firstname + " created successfully !");
@@ -432,9 +485,50 @@ router.post('/publishSale', function(req, res, next) {
 		"title"		:	title,
 		"desc"		:	desc,
 		"is_bid"	:	(is_bid ? 1 : 0),
-		"sale_qty"	:	quantity
+		"sale_qty"	:	quantity,
+		"active"	:	1
 	}, function(rows) {
 		if(rows.affectedRows === 1) {
+//			var today = new Date();
+//			var j = schedule.scheduleJob(today.addDays(4), );
+			setTimeout(function() {
+				if(is_bid) {
+					dao.updateData("sale_details", {
+						"active"	:	0
+					}, {
+						"sale_id"	:	rows.insertId
+					}, function(update_status) {
+						dao.executeQuery("select * from bid_details where sale = ? order by bid_amount desc limit 1", [rows.insertId], function(top_bid) {
+							if(top_bid.length) {
+								dao.fetchData("sale_qty", "sale_details", {
+									"sale_id"	:	rows.insertId
+								}, function(sale_qty) {
+									dao.updateData("sale_details", {
+										"sale_qty"	:	Number(sale_qty[0].sale_qty) - Number(top_bid[0].bid_qty)
+									}, {
+										"sale_id"	:	rows.insertId
+									}, function(update_status) {
+										dao.insertData("txn_details", {
+											"sale"				:	rows.insertId,
+											"buyer"				:	top_bid[0].bidder,
+											"transaction_price"	:	top_bid[0].bid_amount,
+											"txn_qty"			:	top_bid[0].bid_qty
+										}, function(rows) {
+											dao.insertData("notification_details", {
+												"notification_text"	:	"Your highest bid won! You purchased " + title,
+												"user_id"			:	top_bid[0].bidder
+											}, function(rows) {
+												//Do nothing
+											});
+										});
+									});
+								});
+							}
+						});
+					});
+				}
+			}, 345600000);
+//			}, 120000);
 			res.send({
 				"status_code"	:	"200"
 			});

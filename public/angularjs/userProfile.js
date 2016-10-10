@@ -133,6 +133,7 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		$scope.sale_count = data.sale_count;
 		$scope.contact = data.contact;
 		$scope.dob = new Date(data.dob);
+		$window.document.title = $scope.fname + " " + $scope.lname + " | eBay";
 	}).error(function(error) {
 		// TODO: Handle Error
 	});

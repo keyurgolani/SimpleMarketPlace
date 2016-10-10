@@ -156,11 +156,11 @@
 	                        				<div class="row details-value">
 	                        					<div class="col-md-4">
 	                        						<div class="row">
-	                        							<input type="text" ng-model="cart_qty" focus-if class="form-control"/>
+	                        							<input type="number" ng-model="cart_qty" focus-if class="form-control"/>
 	                        						</div>
 	                        					</div>
 	                        					<div class="col-md-8">
-	                        						<span class="sold-qty">{{total_sold}} sold</span><span class="available-qty">{{available_quantity}} available/</span>
+	                        						<span class="sold-qty">&nbsp;{{total_sold}} sold</span><span class="available-qty">{{available_quantity}} available /</span>
 	                        					</div>
 	                        				</div>
 	                        			</div>
@@ -179,11 +179,26 @@
 	                        							<span class="details-value">${{current_price}}</span>
 	                        						</div>
 	                        					</div>
-	                        					<div class="col-md-8">
+	                        					<div class="col-md-8" ng-show="is_bid">
 	                        						<span ng-click="openBids()" class="bids-count link">[ Bids: {{number_of_bids}} so far ]</span>
 	                        					</div>
+	                        					<div id="user_profile_menu" ng-show="show_bid_details" ng-mouseleave="show_bid_details = false" class="bid-details-window" ng-class="{show: show_bid_details}">
+	                        						<span class="section-title ">All Bids on {{item_title}}</span>
+		                                			<div ng-repeat="bid in bid_details">
+		                                				<div class="row">
+		                                					<div class="col-md-12 bid-detail">
+		                                						<div class="detail-item">{{$index + 1}}</div>
+			                                					<div class="detail-item">${{bid.bid_amount}}</div>
+			                                					<div class="detail-item"> by </div>
+			                                					<div ng-click="showUser(bid.user_name)" class="link detail-item">@{{bid.user_name}}</div>
+			                                					<div class="detail-item">for</div>
+			                                					<div class="detail-item">{{bid.bid_qty}} quantities</div>
+		                                					</div>
+		                                				</div>
+		                                				<hr class="separator"/>
+		                                			</div>
+		                                		</div>
 	                        				</div>
-	                        				
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
@@ -195,11 +210,17 @@
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
-	                        			<div class="col-md-6">
-            								<button type="submit" class="btn btn-primary form-control buy-button" ng-click="addToCart()">Add To Cart</span>
+	                        			<div class="col-md-6" ng-hide="is_bid">
+            								<button class="btn btn-primary form-control buy-button" ng-click="addToCart()">Add To Cart</span>
             							</div>
-            							<div class="col-md-6">
-                							<button type="submit" class="btn btn-primary form-control buy-button" ng-click="buyAndCheckout()">Buy It Now</span>
+            							<div class="col-md-6" ng-hide="is_bid">
+                							<button class="btn btn-primary form-control buy-button" ng-click="buyAndCheckout()">Buy It Now</span>
+            							</div>
+            							<div class="col-md-6" ng-show="is_bid">
+            								<input type="text" ng-model="bid_price" class="form-control buy-button" ng-enter="bid()"/>
+            							</div>
+            							<div class="col-md-6" ng-show="is_bid">
+                							<button class="btn btn-primary form-control buy-button" ng-click="bid()">Bid</span>
             							</div>
 	                        		</div>
 	                        	</div>

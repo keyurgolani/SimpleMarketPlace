@@ -185,10 +185,10 @@
 							    				<div class="col-md-4">Date of Birth:</div>
 							    				<div class="col-md-4">
 							    					<div ng-hide="edit_dob">
-							    						{{dob}}
+							    						{{dob | date:'MM-dd-yyyy'}}
 							    					</div>
 							    					<div ng-show="edit_dob">
-							    						<input type="date" data-date-format="yyyy/mm/dd" class="form-control" ng-model="dob">
+							    						<input type="date" class="form-control" ng-model="dob">
 							    					</div>
 							    				</div>
 							    				<div class="col-md-4" ng-show="user_name === profile_name">
