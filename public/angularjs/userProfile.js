@@ -42,12 +42,13 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		});
 	};
 	
-	$scope.fetchNotificationsCount = function() {
+	$scope.fetchNotifications = function() {
 		$http({
 			method : "POST",
-			url : "/fetchNotificationsCount"
+			url : "/fetchNotifications"
 		}).success(function(data) {
-			$scope.notifications = data.notification_count;
+			$scope.notifications = data.notifications;
+			$scope.notificationCount = data.notifications.length;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -89,7 +90,7 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 	};
 	
 	$scope.fetchCartCount();
-	$scope.fetchNotificationsCount();
+	$scope.fetchNotifications();
 	
 	$scope.signout = function() {
 		$http({
