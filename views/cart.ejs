@@ -80,21 +80,21 @@
 	                            </div>
 	                            <div class="col-md-4 pull-right right-panel">
 	                                <div class="header-item right-panel">My eBay</div>
-	                                <notification-icon count='notificationCount' animation='bounce' ng-click="show_notifications = true" disappear-animation='fade'>
+	                                <notification-icon count='notificationCount' animation='bounce' ng-click="show_notifications = !show_notifications" disappear-animation='fade'>
 	                                	<div class="header-item right-panel glyphicon glyphicon-bell"></div>
-	                                	<div id="notifications" ng-show="show_notifications" ng-mouseleave="show_notifications = false" class="notifications-window" ng-class="{show: show_notifications}">
-	                            			<div ng-repeat="notification in notifications">
-		                            			<div class="row">
-		                            				<div class="col-md-12 notification-detail">
-		                            					<div class="detail-item">{{$index + 1}}</div>
-				                                		<div class="detail-item">{{notification.notification_text}}</div>
-		                            				</div>
-		                            			</div>
-		                            			<hr class="separator"/>
-	                            			</div>
-	                            		</div>
 	                                </notification-icon>
-	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade'>
+                                	<div id="notifications" ng-show="show_notifications" ng-click="hideNotifications()" class="notifications-window" ng-class="{show: show_notifications}">
+                            			<div ng-repeat="notification in notifications">
+	                            			<div class="row">
+	                            				<div class="col-md-12 notification-detail">
+	                            					<div class="detail-item">{{$index + 1}}</div>
+			                                		<div class="detail-item">{{notification.notification_text}}</div>
+	                            				</div>
+	                            			</div>
+	                            			<hr class="separator"/>
+                            			</div>
+                            		</div>
+	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade' ng-click="gotoCart()" class="black-link">
 	                                	<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
 	                                </notification-icon>
 	                            </div>
@@ -126,82 +126,94 @@
 	                        
 	                        
 	                        <div class="row">
-    							<div class="col-md-1"></div>
-      								<div class="col-md-7 cart-box">
-        								<div ng-repeat="cart_item in cart_items">
-        									<div class="cart-second-box">
-            								<div class="cart-header">
-            									<span class="seller-details link" ng-click="showUser(cart_item.user_name)">Seller: @{{cart_item.user_name}}</span>
-            								</div>
-              								<div class="cart-body row">
-                								<div class="col-md-4">
-                  									<span><img src="http://images.anthropologie.com/is/image/Anthropologie/4130256236055_065_b?$an-category$" alt="No image availabe" class="product-image"></span>
-                								</div>
-                								<div class="col-md-8">
-                									<div class="row">
-                    									<div class="col-md-6">
-                        									<div class="row">
-                        										<div class="col-md-12">
-                        											<span class="product-title link" ng-click="shop(cart_item.sale_id)">{{cart_item.title}}</span>
-                        										</div>
-                        									</div>
-                            								<div class="row">
-                            									<div class="col-md-12">
-                            										<div class="details">Condition: {{cart_item.condition_name}}</div>
-                            									</div>
-                            								</div>
-                            								<div class="row">
-                            									<div class="col-md-12">
-                            										<div class="details">Quantity: {{cart_item.cart_qty}}</div>
-                            									</div>
-                            								</div>
-                        								</div>
-                        								<div class="col-md-6">
-                        									<span class="product-price"><strong>${{cart_item.sale_price}}</strong></span>
-                        								</div>
-                    								</div>
-                								</div>
-                								<div class="col-md-12 foot">
-                  									<span class="other-details link" ng-click="remove(cart_item.sale_id)">Remove</span>
-                								</div>
-              								</div>
-          								</div>
-        								</div>
-    								</div>
-    								<div class="col-md-4 cart-summary-box">
-    									<div class="cart-summary-title">Cart Summary <span class="item-count">({{cart_items.length}} items)</span></div> 	
-        									<div class="total cart-summary-total">Total : ${{cart_total}}</div> 	
-        										<div>
-                									<button type="submit" class="btn btn-primary button check-out-button"> Proceed to checkout </span>
-        										</div>
-        										<div>
-        											<img src="http://ir.ebaystatic.com/pictures/aw/pics/shoppingcart/eMBG_stacked.gif" width="150" height="35" alt="Learn more about eBay Money Back Guarantee">
-        										</div>
-        										<div>
-        											<p class="cart-summary-info">Covers your purchase price plus original shipping on virtually all items. Get the item you ordered or get your money back. <span class="learn-more link">Learn more</span></p>
-        										</div>
-    										</div>
-  										</div>
-  										<div class="row">
-  											<div class="col-md-3"></div>
-    										<div class="col-md-5 cart-box" style="margin-top:10px;">
-    											<div class="row">
-        											<div class="col-md-2"></div>
-            											<div class="col-md-10" style="text-align:right;">
-            												<div> Subtotal (2 items): ${{cart_total}}</div>
-                											<div class="shipping"> Shipping: $0.00</div>
-                											<div class="total">Total : ${{cart_total}} </div>
-            											</div>
-        											</div>
-        											<div class="row">
-            											<div class="col-md-12">
-            												<button type="submit" class="btn btn-primary continue-button"> Continue Shopping </span>
-                											<button type="submit" class="btn btn-primary check-out-button"> Proceed to checkout </span>
-            											</div>
-        											</div>
-    											</div>
-    											<div class="col-md-4"></div>
-											</div>
+							    <div class="col-md-1"></div>
+							    <div class="col-md-7 cart-box">
+							        <div ng-repeat="cart_item in cart_items">
+							            <div class="cart-second-box">
+							                <div class="cart-header">
+							                    <span class="seller-details link" ng-click="showUser(cart_item.user_name)">Seller: @{{cart_item.user_name}}</span>
+							                </div>
+							                <div class="cart-body row">
+							                    <div class="col-md-4">
+							                        <span><img src="http://images.anthropologie.com/is/image/Anthropologie/4130256236055_065_b?$an-category$" alt="No image availabe" class="product-image"></span>
+							                    </div>
+							                    <div class="col-md-8">
+							                        <div class="row">
+							                            <div class="col-md-6">
+							                                <div class="row">
+							                                    <div class="col-md-12">
+							                                        <span class="product-title link" ng-click="shop(cart_item.sale_id)">{{cart_item.title}}</span>
+							                                    </div>
+							                                </div>
+							                                <div class="row">
+							                                    <div class="col-md-12">
+							                                        <div class="details">Condition: {{cart_item.condition_name}}</div>
+							                                    </div>
+							                                </div>
+							                                <div class="row">
+							                                    <div class="col-md-12">
+							                                        <div class="details">Quantity: {{cart_item.cart_qty}}</div>
+							                                    </div>
+							                                </div>
+							                            </div>
+							                            <div class="col-md-6">
+							                                <span class="product-price"><strong>${{cart_item.sale_price}}</strong></span>
+							                            </div>
+							                        </div>
+							                    </div>
+							                    <div class="col-md-12 foot">
+							                        <span class="other-details link" ng-click="remove(cart_item.sale_id)">Remove</span>
+							                    </div>
+							                </div>
+							            </div>
+							        </div>
+							    </div>
+							    <div class="col-md-4 cart-summary-box">
+							        <div class="cart-summary-title">Cart Summary <span class="item-count">({{cart_items.length}} items)</span></div>
+							        <div class="total cart-summary-total">Total : ${{cart_total}}</div>
+							        <div>
+							        	<button class="btn btn-primary button check-out-button" ng-click="show_checkout = true">Proceed to checkout</button>
+							    	</div>
+							    	
+							    	<div id="checkout_window" ng-show="show_checkout" class="show_checkout_window" ng-class="{show: show_checkout}">
+                						
+                            		</div>
+                            		
+							    	<div>
+							        	<img src="http://ir.ebaystatic.com/pictures/aw/pics/shoppingcart/eMBG_stacked.gif" width="150" height="35" alt="Learn more about eBay Money Back Guarantee">
+							    	</div>
+							    	<div>
+							        	<p class="cart-summary-info">Covers your purchase price plus original shipping on virtually all items. Get the item you ordered or get your money back. <span class="learn-more link">Learn more</span></p>
+							    	</div>
+								</div>
+	                        </div>
+	                        <div class="row">
+							    <div class="col-md-3"></div>
+							    <div class="col-md-5 cart-box" style="margin-top:10px;">
+							        <div class="row">
+							            <div class="col-md-2"></div>
+							            <div class="col-md-10" style="text-align:right;">
+							                <div> Subtotal (2 items): ${{cart_total}}</div>
+							                <div class="shipping"> Shipping: $0.00</div>
+							                <div class="total">Total : ${{cart_total}} </div>
+							            </div>
+							        </div>
+							        <div class="row">
+							            <div class="col-md-12">
+							                <button type="submit" class="btn btn-primary continue-button"> Continue Shopping </button>
+							                <button type="submit" class="btn btn-primary check-out-button"> Proceed to checkout </button>
+							            </div>
+							        </div>
+							    </div>
+							    <div class="col-md-4"></div>
+							</div>
+	                        
+	                        
+	                        
+	                        
+	                        
+	                        
+	                        
 	                        </div>
 						</div>
 					</div>

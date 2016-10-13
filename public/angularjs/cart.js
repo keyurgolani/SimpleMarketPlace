@@ -72,6 +72,16 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		$window.location.href = "/viewItem?itemid=" + item_id;
 	};
 	
+	$scope.gotoCart = function() {
+		$window.location.href = "/cart";
+	};
+	
+	$scope.show_notifications = false;
+	
+	$scope.hideNotifications = function() {
+		$scope.show_notifications = false;
+	};
+	
 	$scope.signout = function() {
 		$http({
 			method : "POST",

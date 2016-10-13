@@ -19,6 +19,11 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
 
 	$scope.items_loaded = false;
+	$scope.show_notifications = false;
+	
+	$scope.hideNotifications = function() {
+		$scope.show_notifications = false;
+	};
 	
 	$scope.fetchNotifications = function() {
 		$http({
@@ -32,12 +37,17 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		});
 	};
 	
-	$scope.fetchCartCount = function() {
+	$scope.fetchCart = function() {
 		$http({
 			method : "POST",
-			url : "/fetchCartCount"
+			url : "/fetchCart"
 		}).success(function(data) {
-			$scope.cartItemCount = data.cart_qty;
+			$scope.cart_items = data.cart_items;
+			$scope.cartItemCount = data.cart_items.length;
+			$scope.cart_total = 0;
+			for(var i = 0; i < $scope.cart_items.length; i++) {
+				$scope.cart_total = $scope.cart_total + Number($scope.cart_items[i].sale_price) * Number($scope.cart_items[i].cart_qty);
+			}
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -81,10 +91,6 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			$scope.sales = data.saleDetails;
 			$scope.suggestions = [];
 			$scope.items_loaded = true;
-			if($scope.sales.length > 0) {
-				$location.hash('search-results');
-				$anchorScroll();
-			}
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -92,6 +98,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	
 	$scope.userProfile = function() {
 		$window.location.href = "/"+$scope.user_name;
+	};
+	
+	$scope.gotoCart = function() {
+		$window.location.href = "/cart";
 	};
 
 	$scope.signout = function() {
@@ -139,7 +149,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		// TODO: Handle Error
 	});
 	
-	$scope.fetchCartCount();
+	$scope.fetchCart();
 	$scope.fetchNotifications();
 	
 	if($location.search().query) {
