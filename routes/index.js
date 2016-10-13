@@ -9,13 +9,19 @@ var sjcl = require('sjcl');
 // TODO: Nice tool for scheduling bid end job: https://github.com/node-schedule/node-schedule -- Done
 
 router.get('/', function(req, res, next) {
-	logger.log("info", "Inside home directory");
 	res.render('index', {  });
 });
 
 router.get('/sell', function(req, res, next) {
-	logger.log("info", "Inside home directory");
 	res.render('sell', {  });
+});
+
+router.get('/cart', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		res.render('cart', {  });
+	} else {
+		res.redirect('/');
+	}
 });
 
 router.get('/viewItem', function(req, res, next) {
@@ -82,10 +88,10 @@ router.post('/fetchBidDetails', function(req, res, next) {
 	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [req.body.itemid], function(results) {
 		dao.executeQuery("select sale_time from sale_details where sale_id = ?", [req.body.itemid], function(remainingTime) {
 			var saleDate = new Date(remainingTime[0].sale_time);
-			var futureDate = Math.abs(saleDate.getTime() + 345600000);
+			var bidEnd = Math.abs(saleDate.getTime() + 345600000);
 			res.send({
 				"results"		:	results,
-				"futureTime"	:	new Date(futureDate)
+				"futureTime"	:	new Date(bidEnd)
 			});
 		});
 	});
@@ -238,22 +244,32 @@ router.post('/fetchItemDetails', function(req, res, next) {
 router.post('/fetchTransactions', function(req, res, next) {
 	dao.executeQuery("select sum(txn_id) as totalCount from txn_details where sale = ?", [req.body.itemid], function(results) {
 		res.send({
-			"total_sold" : results[0].totalCount,
+			"total_sold" : results[0].totalCount
 		});
 	});
 });
 
-router.post('/fetchCartCount', function(req, res, next) {
+router.post('/fetchCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.executeQuery("SELECT count(cart_qty) as totalCount FROM cart_details WHERE user = ?", [req.session.loggedInUser.user_id], function(results) {
+		dao.executeQuery("SELECT seller.user_name, sale.sale_id, sale.title, condi.condition_name, cart.cart_qty, sale.sale_price FROM cart_details AS cart, sale_details AS sale, user_account AS seller, item_conditions AS condi WHERE condi.condition_id = sale.condition AND cart.sale_item = sale.sale_id AND seller.user_id = sale.seller AND cart.user = ?", [req.session.loggedInUser.user_id], function(results) {
 			res.send({
-				"cart_qty" : results[0].totalCount,
+				"cart_items" : results
 			});
 		});
 	} else {
 		res.send({
-			"cart_qty" : 0,
+			"cart_items" : []
 		});
+	}
+});
+
+router.post('/removeFromCart', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		dao.executeQuery("delete from cart_details where user = ? and sale_item = ?", [req.session.loggedInUser.user_id, req.body.item], function(results) {
+			res.send({ });
+		});
+	} else {
+		res.redirect('/');
 	}
 });
 
