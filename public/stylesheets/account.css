@@ -10,6 +10,10 @@ a {
 	color: #00B7FF;
 }
 
+.intl-tel-input {
+	display: flex;
+}
+
 .ebay-icon {
 	width: 120px;
 	height: 90px;

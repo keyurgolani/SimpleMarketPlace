@@ -19,6 +19,7 @@
 		
 		<script src="modules/jquery/dist/jquery.min.js"></script>
 		<script src="js/jquery-ui.js"></script>
+		<script src="modules/sjcl/sjcl.js"></script>
 		<script src="modules/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="modules/angular/angular.min.js"></script>
 		<script src="modules/angular-animate/angular-animate.js"></script>
@@ -55,10 +56,10 @@
 							</div>
 							<div class="account-form">
 								<div class="form-group">
-									<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
+									<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" ng-encrypt focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="signin()">
+									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-encrypt ng-enter="signin()">
 								</div>
 								<button class="btn btn-primary form-control account-button" ng-click="signin()">Sign in</button>
 								<div class="row checkbox">
@@ -116,7 +117,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-11 form-group">
-										<input type="text" class="form-control" id="username" ng-model="username" placeholder="Username" ng-enter="register()">
+										<input type="text" class="form-control" id="username" ng-model="username" ng-encrypt placeholder="Username" ng-enter="register()">
 									</div>
 									<div class="col-md-1 form-group true-false">
 										<abbr title="User Name Available">
@@ -129,7 +130,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-11 form-group">
-										<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="register()">
+										<input type="password" class="form-control" id="pwd" ng-model="password" ng-encrypt placeholder="Password" ng-enter="register()">
 									</div>
 									<div class="col-md-1 form-group true-false">
 										<abbr title="Password is valid">
@@ -156,7 +157,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-11 form-group">
-										<input type="text" class="form-control" style="width: 100%;" id="user" ng-model="contact" international-phone-number placeholder="Mobile phone" ng-enter="register()">
+										<input type="text" id="user" ng-model="contact" international-phone-number placeholder="Mobile phone" ng-enter="register()" class="form-control">
 									</div>
 									<div class="col-md-1 form-group true-false">
 										<abbr title="Phone number is valid">

@@ -28,6 +28,7 @@
     "node-schedule": "^1.1.1",
     "nodemon": "^1.11.0",
     "serve-favicon": "^2.3.0",
+    "sjcl": "^1.0.6",
     "winston": "^2.2.0"
   }
 }

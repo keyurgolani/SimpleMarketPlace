@@ -3,9 +3,10 @@ var router = express.Router();
 var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 var schedule = require('node-schedule');
+var sjcl = require('sjcl');
 
-// Nice Utility for scheduled tasks: https://github.com/ncb000gt/node-cron
-// Nice tool for scheduling bid end job: https://github.com/node-schedule/node-schedule
+// TODO: Nice Utility for scheduled tasks: https://github.com/ncb000gt/node-cron -- Done
+// TODO: Nice tool for scheduling bid end job: https://github.com/node-schedule/node-schedule -- Done
 
 router.get('/', function(req, res, next) {
 	logger.log("info", "Inside home directory");
@@ -163,7 +164,7 @@ router.post('/fetchUserProfile', function(req, res, next) {
 });
 
 router.post('/usernameAvailable', function(req, res, next) {
-	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [req.body.username], function(result) {
+	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [sjcl.decrypt(req.body.passwordpassword, req.body.username)], function(result) {
 		if(result[0].count === 0) {
 			res.send({
 				"available"	:	true
@@ -380,23 +381,21 @@ router.post('/register', function(req, res, next) {
 	var error_messages = [];
 	var status_code = 200;
 	var success_messages = [];
-	logger.log("info", "Inside signup form");
-	var username = req.param('username');
-	var email = req.param('email');
-	var secret = req.param('password');
-	var firstname = req.param('fname');
-	var lastname = req.param('lname');
-	var phone = req.param('contact');
-	console.log(phone);
+	var username = sjcl.decrypt(req.body.passwordpassword, req.body.username);
+	var email = req.body.email;
+	var secret = sjcl.decrypt(req.body.passwordpassword, req.body.password);
+	var firstname = req.body.fname;
+	var lastname = req.body.lname;
+	var phone = req.body.contact;
 	var username_validator = new RegExp("^[a-z0-9_-]{3,16}$");
-	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/
+	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/ -- Done
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
 	var firstname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 	var lastname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 	var phone_validator = new RegExp(/^(\d{11,12})$/);
-	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask
-	// TODO: Continued: http://digitalbush.com/projects/masked-input-plugin/
-	// TODO: Continued: http://filamentgroup.github.io/politespace/demo/demo.html
+	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask -- Done
+	// TODO: Continued: http://digitalbush.com/projects/masked-input-plugin/ -- Done
+	// TODO: Continued: http://filamentgroup.github.io/politespace/demo/demo.html -- Done
 	
 	if(username.match(username_validator) === null) {
 		logger.log("info", "Invalid username: " + username);
@@ -586,11 +585,11 @@ router.post('/signoutUser', function(req, res, next) {
 });
 
 router.post('/signin', function(req, res, next) {
-	var username = req.body.userID;
-	var password = req.body.password;
-	dao.fetchData("user_id", "user_account", {
-		"user_name"	:	username
-	}, function(id_details) {
+	console.log();
+	var passwordpassword = req.body.passwordpassword;
+	var username = sjcl.decrypt(req.body.passwordpassword, req.body.userID);
+	var password = sjcl.decrypt(req.body.passwordpassword, req.body.password);
+	dao.executeQuery('SELECT user_id FROM user_account WHERE user_name = ? OR email = ?', [username, username], function(id_details) {
 		dao.fetchData("*", "user_account", {
 			"user_id"	:	id_details[0].user_id
 		}, function(user_details) {
