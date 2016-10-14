@@ -118,5 +118,28 @@ module.exports = {
 			logger.log("debug", "Insert Executed: " + query.sql);
 
 		});
+	},
+	
+	transaction	:	function(queries) {
+		connectionPool.get(function(connectionNumber, connection) {
+			connection.beginTransaction(function(err) {
+				queries.forEach(function(query) {
+					connection.query(query, function(err, result) {
+						if(err) {
+							return connection.rollback(function() {
+								throw err;
+							});
+						}
+					});
+				});
+				connection.commit(function(err) {
+					if(err) {
+						return connection.rollback(function() {
+							throw err;
+						});
+					}
+				});
+			});
+		});
 	}
 };

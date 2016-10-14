@@ -22,6 +22,12 @@
 	margin-left: 15px;
 }
 
+.head-border {
+	margin: auto;
+	width: 99%;
+	border-bottom: 2px solid #ddd;
+}
+
 .header-item {
 	padding-right: 2%;
 	padding-left: 2%;
@@ -201,11 +207,6 @@
     font-size: 1.625em;
     font-family: "Helvetica neue",Helvetica,Arial,Sans-serif;
     line-height: 40px;
-}
-
-.warning-message {
-	margin-top: 50px;
-	margin-bottom: 50px;
 }
 
 .user-menu-row {
@@ -494,10 +495,8 @@ a {
 
 .card-details {
 	display: block;
-    font-size: 30px;
     background-color: #fff;
 	margin: auto;
-	border-top: 2px solid #ddd;
 }
 
 .payment-info {
@@ -544,6 +543,14 @@ a {
 .cancel-button:hover {
 	text-decoration:underline;
 	cursor:pointer;
+}
+
+.success-message {
+	margin-top: 20px;
+}
+
+.error-message {
+	margin-top: 20px;
 }
 
 .group { 

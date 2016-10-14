@@ -105,6 +105,7 @@ CREATE TABLE `simple_market_place`.`txn_details` (
   `buyer` int(11) DEFAULT NULL,
   `transaction_price` FLOAT NOT NULL,
   `txn_qty` INT NOT NULL,
+  `txn_time` TIMESTAMP(6) NOT NULL,
   PRIMARY KEY (`txn_id`),
   KEY `sale` (`sale`),
   KEY `buyer` (`buyer`),

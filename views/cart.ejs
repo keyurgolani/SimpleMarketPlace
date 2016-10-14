@@ -123,7 +123,17 @@
 	                        </div>
 	                        <hr class="separator"/>
 	                        
-	                        
+	                        <div class="row success-message" ng-hide="success.length === 0" align="center">
+			        			<div class="col-md-12">
+			        				<div ng-repeat="message in success">
+			        					<div class="row">
+			        						<div class="col-md-12">
+			        							<span class="alert alert-success">{{message}}</span>
+			        						</div>
+			        					</div>
+			        				</div>
+			        			</div>
+			        		</div>
 	                        
 	                        <div class="row">
 							    <div class="col-md-1"></div>
@@ -190,11 +200,22 @@
 									        </div>
 									        <div class="row">
 									        	<div class="col-md-12">
+									        		<div class="row error-message" ng-hide="messages.length === 0" align="center">
+									        			<div class="col-md-12">
+									        				<div ng-repeat="message in messages">
+									        					<div class="row">
+									        						<div class="col-md-12">
+									        							<span class="alert alert-danger">{{message}}</span>
+									        						</div>
+									        					</div>
+									        				</div>
+									        			</div>
+									        		</div>
 									            	<div class="row payment-box card-details">
 									                    <div class="col-md-6">
 									                        <div class="row">
 									                            <div class="col-md-12 group">     
-									                                <input type="text" required>
+									                                <input type="text" ng-model="cardNumber" required>
 									                                <span class="highlight"></span>
 									                                <span class="bar"></span>
 									                                <label>Card Number</label>
@@ -207,7 +228,7 @@
 									                    <div class="col-md-6">
 									                        <div class="row">
 									                            <div class="col-md-12 group">     
-									                                <input type="text" required>
+									                                <input type="text" ng-model="expiryDate" required>
 									                                <span class="highlight"></span>
 									                                <span class="bar"></span>
 									                                <label>Expiration Date</label>
@@ -217,7 +238,7 @@
 									                     <div class="col-md-6">
 									                        <div class="row">
 									                            <div class="col-md-12 group">     
-									                                <input type="text" required>
+									                                <input type="text" ng-model="cvvNumber" required>
 									                                <span class="highlight"></span>
 									                                <span class="bar"></span>
 									                                <label>Security Code</label>
@@ -229,7 +250,7 @@
 									                    <div class="col-md-6">
 									                        <div class="row">
 									                            <div class="col-md-12 group">     
-									                                <input type="text" required>
+									                                <input type="text" ng-model="card_holder_fname" required>
 									                                <span class="highlight"></span>
 									                                <span class="bar"></span>
 									                                <label>First Name</label>
@@ -239,7 +260,7 @@
 									                     <div class="col-md-6">
 									                        <div class="row">
 									                            <div class="col-md-12 group">     
-									                                <input type="text" required>
+									                                <input type="text" ng-model="card_holder_lname" required>
 									                                <span class="highlight"></span>
 									                                <span class="bar"></span>
 									                                <label>Last Name</label>
@@ -254,12 +275,33 @@
 									                        </div>
 									                     </div>
 									                     <div class="col-md-12">
-									                        <div class="row billing-address">
-									                        	<div>Kalgi Bhatt</div>
-									                         	<div>201 S 4th St. 544</div>
-									                            <div>San Jose, CA 95112</div>
-									                            <div>United States</div>
-									                            <div>(669)xxxxx56</div>
+									                        <div ng-repeat="address in addresses">
+									                        	<div class="row billing-address">
+										                        	<div class="col-md-12">
+											                        	<div ng-repeat="address in addresses">
+											                        		<hr class="separator"/>
+											                        		<div class="row">
+											                        			<div class="col-md-1">
+											                        				<input type="radio" name="default_address" value="$index" ng-model="default_address" />
+											                        			</div>
+											                        			<div class="col-md-11">
+																	    			<div class="row">
+																	    				{{address.f_name}}&nbsp;{{address.l_name}}	
+																	    			</div>
+																	    			<div class="row">
+																	    				{{address.st_address}}&nbsp;{{address.apt}}
+																	    			</div>
+																	    			<div class="row">
+																	    				{{address.city}}&nbsp;{{address.state}}&nbsp;{{address.zip}}
+																	    			</div>
+																	    			<div class="row">
+																	    				{{address.country}}
+																	    			</div>
+											                        			</div>
+											                        		</div>
+														    			</div>
+											                        </div>
+										                        </div>
 									                        </div>
 									                     </div>
 									            	</div>
@@ -267,7 +309,7 @@
 									                    <div class="col-md-6"></div>
 									                    <div class="col-md-6" style="text-align:right;">
 									                    	<span class="cancel-button" ng-click="show_checkout = false">Cancel</span>
-									                    	<button type="submit" class="btn btn-primary done-button">Checkout</button>
+									                    	<button type="submit" class="btn btn-primary done-button" ng-click="checkout()">Checkout</button>
 									                    </div>
 									            	</div>
 									            </div>

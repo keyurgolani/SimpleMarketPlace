@@ -150,7 +150,7 @@ eBay.controller('viewItem', function($scope, $http, $location, $window, $interva
 			}
 		}).success(function(data) {
 			if(data.status_code === 200) {
-				$scope.fetchCartCount();
+				$scope.fetchCart();
 				$scope.message = "Congratulations! " + $scope.item_title + " Added to your Cart!";
 				$scope.success = true;
 			} else if(data.status_code === 500) {

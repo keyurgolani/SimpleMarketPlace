@@ -203,6 +203,30 @@ router.post('/fetchAddresses', function(req, res, next) {
 	});
 });
 
+router.post('/checkout', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		var success = true;
+		dao.executeQuery("select cart_details.sale_item as sale, cart_details.user as buyer, sale_details.sale_price as transaction_price,  cart_details.cart_qty as txn_qty from cart_details, sale_details where cart_details.sale_item = sale_details.sale_id and user = ?", [req.session.loggedInUser.user_id], function(results) {
+			results.forEach(function(purchase) {
+				dao.insertData("txn_details", purchase, function(rows) {
+					if(rows.affectedRows !== 1) {
+						success = false;
+					}
+				});
+			});
+		});
+		if(success) {
+			dao.executeQuery("delete from cart_details where user = ?", [req.session.loggedInUser.user_id], function(results) {
+				res.send({
+					"status_code" : 200
+				});
+			});
+		}
+	} else {
+		res.redirect('/');
+	}
+});
+
 router.post('/addAddress', function(req, res, next) {
 	dao.fetchData("profile_id", "user_profile", {
 		"user"	:	req.body.user_id
@@ -363,13 +387,13 @@ router.post('/addToCart', function(req, res, next) {
 
 router.post('/fetchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND seller <> ? AND sale.active = 1", [req.session.loggedInUser.user_id], function(saleDetails) {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND seller <> ? AND sale.active = 1 order by sale.sale_id desc", [req.session.loggedInUser.user_id], function(saleDetails) {
 			res.send({
 				"saleDetails"	:	saleDetails
 			});
 		});
 	} else {
-		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND sale.active = 1", [], function(saleDetails) {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale WHERE seller = user_id AND sale.active = 1 order by sale.sale_id desc", [], function(saleDetails) {
 			res.send({
 				"saleDetails"	:	saleDetails
 			});
@@ -379,13 +403,13 @@ router.post('/fetchSales', function(req, res, next) {
 
 router.post('/searchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND loggedInuser.user_id <> ? AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?) AND sale.active = 1)", [req.session.loggedInUser.user_id, '%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
+		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND loggedInuser.user_id <> ? AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?) AND sale.active = 1) order by details.sale_id desc", [req.session.loggedInUser.user_id, '%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
 			res.send({
 				"saleDetails"	:	saleDetails
 			});
 		});
 	} else {
-		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?) AND sale.active = 1)", ['%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
+		dao.executeQuery("SELECT loggedInuser.user_name, details.* FROM sale_details AS details, user_account AS loggedInuser WHERE details.seller = loggedInuser.user_id AND details.sale_id IN (SELECT sale_id FROM sale_details AS sale, user_account AS seller WHERE sale.seller = seller.user_id AND (sale.title LIKE ? OR seller.user_name LIKE ?) AND sale.active = 1) order by details.sale_id desc", ['%' + req.body.searchString + '%', '%' + req.body.searchString + '%'], function(saleDetails) {
 			res.send({
 				"saleDetails"	:	saleDetails
 			});
@@ -395,7 +419,7 @@ router.post('/searchSales', function(req, res, next) {
 
 router.post('/fetchSuggestions', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale, suggestion_details as suggestions WHERE seller = user_id AND seller <> ? AND suggestions.user = ? AND sale.active = 1 AND suggestions.suggestion_item = sale.sale_id LIMIT 4", [req.session.loggedInUser.user_id, req.session.loggedInUser.user_id], function(suggestionDetails) {
+		dao.executeQuery("SELECT user.user_name, sale.* FROM user_account as user, sale_details as sale, suggestion_details as suggestions WHERE seller = user_id AND seller <> ? AND suggestions.user = ? AND sale.active = 1 AND suggestions.suggestion_item = sale.sale_id order by sale_id desc LIMIT 4", [req.session.loggedInUser.user_id, req.session.loggedInUser.user_id], function(suggestionDetails) {
 			res.send({
 				"suggestionDetails"	:	suggestionDetails
 			});
