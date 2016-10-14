@@ -88,7 +88,6 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 	};
 	
 	$scope.fetchAddresses = function() {
-		console.log($scope.user_id);
 		$http({
 			method	:	"POST",
 			url 	:	"/fetchAddresses",

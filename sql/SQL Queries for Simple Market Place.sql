@@ -27,7 +27,6 @@ CREATE TABLE `simple_market_place`.`cc_details` (
 ---------------------------------------------------------------
   CREATE TABLE `simple_market_place`.`user_profile` (
   `profile_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_handle` varchar(50) NOT NULL,
   `dob` date NULL,
   `contact` bigint(10) UNSIGNED NULL,
   `user` int(11) DEFAULT NULL,
@@ -77,6 +76,7 @@ CREATE TABLE `simple_market_place`.`sale_details` (
   `description` VARCHAR(400) NULL,
   `is_bid` TINYINT(1) NOT NULL,
   `sale_qty` INT NOT NULL,
+  `active` TINYINT(1) NOT NULL,
   PRIMARY KEY (`sale_id`),
   KEY `seller` (`seller`),
   KEY `item` (`item`),

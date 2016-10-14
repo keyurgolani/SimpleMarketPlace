@@ -13,8 +13,8 @@
 		<link rel='stylesheet' href='css/account.css'/>
 		
 		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="modules/html5shiv/dist/html5shiv.min.js"></script>
+			<script src="modules/respond.js/dest/respond.min.js"></script>
 		<![endif]-->
 		
 		<script src="modules/jquery/dist/jquery.min.js"></script>
@@ -36,8 +36,16 @@
 			<div class="row">
 				<div class="col-md-12" align="center">
 					<img src="http://www.symbols.com/gi.php?type=1&id=2032&i=1" ng-click="homepage()" class="ebay-icon spacer">
-					<div ng-repeat="message in messages">
-						<div ng-class="{'200':'alert alert-success', '500':'alert alert-danger'}[status_code]">{{message}}</div>
+					<div class="row message" ng-hide="messages.length === 0" align="center">
+						<div class="col-md-12">
+							<div ng-repeat="message in messages">
+								<div class="row">
+									<div class="col-md-12">
+										<span class="alert alert-warning">{{message}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div ng-show="isSignin" ng-controller="signinController">
 						<div class="box">

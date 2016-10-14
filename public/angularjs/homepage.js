@@ -12,17 +12,50 @@ eBay.config([ '$locationProvider', function($locationProvider) {
 
 eBay.controller('homepage', function($scope, $http, $window, $location, $anchorScroll) {
 
+	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
+	$scope.messages = [];
+	$scope.items_loaded = false;
+	$scope.show_notifications = false;
+	
 	if ($location.search().signout === 'true') {
 		$scope.signout_success = true;
 	}
 	
-	// Good article on angular page load: https://weblog.west-wind.com/posts/2014/jun/02/angularjs-ngcloak-problems-on-large-pages
-
-	$scope.items_loaded = false;
-	$scope.show_notifications = false;
-	
 	$scope.hideNotifications = function() {
 		$scope.show_notifications = false;
+	};
+	
+	$scope.sellAnItem = function() {
+		$window.location.href = "/sell";
+	};
+	
+	$scope.registerClicked = function() {
+		$window.location.href = "/account?view=register";
+	};
+	
+	$scope.signinClicked = function() {
+		$window.location.href = "/account?view=signin";
+	};
+	
+	$scope.homepageClicked = function() {
+		$window.location.href = "/";
+	};
+	
+	$scope.hideSignOutMessage = function() {
+		$scope.signout_success = false;
+		$location.url("/");
+	};
+	
+	$scope.shop = function(item_id) {
+		$window.location.href = "/viewItem?itemid=" + item_id;
+	};
+	
+	$scope.userProfile = function() {
+		$window.location.href = "/"+$scope.user_name;
+	};
+	
+	$scope.gotoCart = function() {
+		$window.location.href = "/cart";
 	};
 	
 	$scope.fetchNotifications = function() {
@@ -53,55 +86,35 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		});
 	};
 
-	$scope.sellAnItem = function() {
-		$window.location.href = "/sell";
-	};
-
-	$scope.registerClicked = function() {
-		$window.location.href = "/account?view=register";
-	};
-
-	$scope.signinClicked = function() {
-		$window.location.href = "/account?view=signin";
-	};
-
-	$scope.homepageClicked = function() {
-		$window.location.href = "/";
-	};
-
-	$scope.hideSignOutMessage = function() {
-		$scope.signout_success = false;
-		$location.url("/");
-	};
-	
-	$scope.shop = function(item_id) {
-		$window.location.href = "/viewItem?itemid=" + item_id;
-	};
-
 	$scope.search = function() {
-		var searchString = $scope.searchString;
-		$scope.items_loaded = false;
-		$http({
-			method : "POST",
-			url : "/searchSales",
-			data : {
-				"searchString" : searchString
+		$scope.messages = [];
+		if($scope.searchString === undefined || $scope.searchString.trim() === "") {
+			$scope.messages.push("Enter item title or seller name to search!");
+			$scope.fetchSales();
+			$scope.fetchSuggestions();
+		} else {
+			if($scope.searchString.length > 100) {
+				$scope.messages.push("Please enter a shorter search string");
+				$scope.fetchSales();
+				$scope.fetchSuggestions();
+			} else {
+				var searchString = $scope.searchString;
+				$scope.items_loaded = false;
+				$http({
+					method : "POST",
+					url : "/searchSales",
+					data : {
+						"searchString" : searchString
+					}
+				}).success(function(data) {
+					$scope.sales = data.saleDetails;
+					$scope.suggestions = [];
+					$scope.items_loaded = true;
+				}).error(function(error) {
+					// TODO: Handle Error
+				});
 			}
-		}).success(function(data) {
-			$scope.sales = data.saleDetails;
-			$scope.suggestions = [];
-			$scope.items_loaded = true;
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
-	};
-	
-	$scope.userProfile = function() {
-		$window.location.href = "/"+$scope.user_name;
-	};
-	
-	$scope.gotoCart = function() {
-		$window.location.href = "/cart";
+		}
 	};
 
 	$scope.signout = function() {
@@ -115,40 +128,49 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		});
 	};
 
-	$http({
-		method : "POST",
-		url : "/loggedInUser"
-	}).success(function(data) {
-		if (!angular.equals({}, data.userBO)) {
-			$scope.user_fname = data.userBO.f_name;
-			$scope.user_lname = data.userBO.l_name;
-			$scope.user_name = data.userBO.user_name;
-		} else {
+	$scope.fetchLoggedInUser = function() {
+		$http({
+			method : "POST",
+			url : "/loggedInUser"
+		}).success(function(data) {
+			if (!angular.equals({}, data.userBO)) {
+				$scope.user_fname = data.userBO.f_name;
+				$scope.user_lname = data.userBO.l_name;
+				$scope.user_name = data.userBO.user_name;
+			} else {
 
-		}
-	}).error(function(error) {
-		// TODO: Handle Error
-	});
+			}
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 
-	$http({
-		method : "POST",
-		url : "/fetchSuggestions"
-	}).success(function(data) {
-		$scope.suggestions = data.suggestionDetails;
-	}).error(function(error) {
-		// TODO: Handle Error
-	});
+	$scope.fetchSuggestions = function() {
+		$http({
+			method : "POST",
+			url : "/fetchSuggestions"
+		}).success(function(data) {
+			$scope.suggestions = data.suggestionDetails;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 
-	$http({
-		method : "POST",
-		url : "/fetchSales"
-	}).success(function(data) {
-		$scope.sales = data.saleDetails;
-		$scope.items_loaded = true;
-	}).error(function(error) {
-		// TODO: Handle Error
-	});
+	$scope.fetchSales = function() {
+		$http({
+			method : "POST",
+			url : "/fetchSales"
+		}).success(function(data) {
+			$scope.sales = data.saleDetails;
+			$scope.items_loaded = true;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 	
+	$scope.fetchLoggedInUser();
+	$scope.fetchSuggestions();
+	$scope.fetchSales();
 	$scope.fetchCart();
 	$scope.fetchNotifications();
 	
