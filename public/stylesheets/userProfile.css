@@ -13,6 +13,20 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+.edit-text {
+	float: right;
+	font-weight: 300;
+}
+
+.edit-input {
+	padding: 0px;
+}
+
+.messages {
+	margin-top: 20px;
+}
+
 .card.hovercard {
     position: relative;
     padding-top: 0;

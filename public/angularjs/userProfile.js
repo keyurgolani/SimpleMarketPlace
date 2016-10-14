@@ -102,26 +102,35 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 	};
 	
 	$scope.addAddress = function() {
-		$http({
-			method	:	"POST",
-			url 	:	"/addAddress",
-			data	:	{
-				"st_address"	:	$scope.street_address,
-				"apt"			:	$scope.apartment,
-				"city"			:	$scope.city,
-				"state"			:	$scope.state,
-				"country"		:	$scope.country,
-				"zip"			:	$scope.zip_code,
-				"user_id"		:	$scope.user_id
-			}
-		}).success(function(data) {
-			if(data.status_code === 200) {
-				$scope.fetchAddresses();
-				$scope.add_address = false;
-			}
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
+		$scope.messages = [];
+		if($scope.street_address !== undefined && $scope.street_address.trim() !== "" &&
+				$scope.city !== undefined && $scope.city.trim() !== "" && 
+				$scope.state !== undefined && $scope.state.trim() !== "" &&
+				$scope.country !== undefined && $scope.country.trim() !== "" &&
+				$scope.zip_code !== undefined && $scope.zip_code.trim() !== "") {
+			$http({
+				method	:	"POST",
+				url 	:	"/addAddress",
+				data	:	{
+					"st_address"	:	$scope.street_address,
+					"apt"			:	$scope.apartment,
+					"city"			:	$scope.city,
+					"state"			:	$scope.state,
+					"country"		:	$scope.country,
+					"zip"			:	$scope.zip_code,
+					"user_id"		:	$scope.user_id
+				}
+			}).success(function(data) {
+				if(data.status_code === 200) {
+					$scope.fetchAddresses();
+					$scope.add_address = false;
+				}
+			}).error(function(error) {
+				// TODO: Handle Error
+			});
+		} else {
+			$scope.messages.push("Please add all mendatory values of address!");
+		}
 	};
 	
 	$scope.fetchNotifications = function() {
@@ -148,8 +157,12 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 				$scope.cart_total = $scope.cart_total + Number($scope.cart_items[i].sale_price) * Number($scope.cart_items[i].cart_qty);
 			}
 		}).error(function(error) {
-			// TODO: Handle Error
+			// Do Nothing
 		});
+	};
+	
+	$scope.updatePrice = function(sale_item) {
+		sale_item.edit_price = false;
 	};
 	
 	$scope.search = function() {
