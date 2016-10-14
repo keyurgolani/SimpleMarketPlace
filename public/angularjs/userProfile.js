@@ -118,6 +118,7 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		}).success(function(data) {
 			if(data.status_code === 200) {
 				$scope.fetchAddresses();
+				$scope.add_address = false;
 			}
 		}).error(function(error) {
 			// TODO: Handle Error

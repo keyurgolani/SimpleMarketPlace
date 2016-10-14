@@ -121,7 +121,8 @@ eBay.controller('viewItem', function($scope, $http, $location, $window, $interva
 	$scope.fetchItemDetails();
 	
 	$scope.buyAndCheckout = function() {
-		
+		$scope.addToCart();
+		$window.location.href = "/cart";
 	};
 	
 	$scope.registerClicked = function() {
