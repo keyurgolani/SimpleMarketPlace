@@ -195,6 +195,40 @@ router.post('/loggedInUser', function(req, res, next) {
 	}
 });
 
+router.post('/fetchAddresses', function(req, res, next) {
+	dao.executeQuery("SELECT user_account.f_name, user_account.l_name, location_details.* FROM location_details, user_profile, user_account WHERE location_details.profile = user_profile.profile_id AND user_profile.user = user_account.user_id AND user_account.user_id = ?", [req.body.user], function(results) {
+		res.send({
+			"addresses"	:	results
+		});
+	});
+});
+
+router.post('/addAddress', function(req, res, next) {
+	dao.fetchData("profile_id", "user_profile", {
+		"user"	:	req.body.user_id
+	}, function(profile_ids) {
+		dao.insertData("location_details", {
+			"st_address"		:	req.body.st_address,
+			"apt"		:	req.body.apt,
+			"city"		:	req.body.city,
+			"state"		:	req.body.state,
+			"country"	:	req.body.country,
+			"zip"		:	req.body.zip,
+			"profile"	:	profile_ids[0].profile_id
+		}, function(rows) {
+			if(rows.affectedRows === 1) {
+				res.send({
+					"status_code"	:	200
+				});
+			} else {
+				res.send({
+					"status_code"	:	500
+				});
+			}
+		});
+	});
+});
+
 router.post('/fetchItemDetails', function(req, res, next) {
 	dao.executeQuery("select is_bid from sale_details where sale_id = ?", [req.body.itemid], function(results) {
 		if(results[0].is_bid) {

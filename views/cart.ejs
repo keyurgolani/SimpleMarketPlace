@@ -174,11 +174,106 @@
 							        <div>
 							        	<button class="btn btn-primary button check-out-button" ng-click="show_checkout = true">Proceed to checkout</button>
 							    	</div>
-							    	
-							    	<div id="checkout_window" ng-show="show_checkout" class="show_checkout_window" ng-class="{show: show_checkout}">
-                						
-                            		</div>
-                            		
+            						<div class="row show_checkout_window" id="checkout_window" ng-show="show_checkout" ng-class="{show: show_checkout}">
+									    <div class="col-md-12 payment-box">
+									    	<div class="row head-border">
+									            <div class="col-md-6" style="display:flex;">
+									            	<div class="glyphicon glyphicon-credit-card card-image"></div>
+													<div class="heading h4">Credit or debit card</div>
+									            </div>
+									            <div class="col-md-6">
+									            	<img class="credit-card-image" src="https://pbs.twimg.com/profile_images/747394758285365248/XuBsjokt.jpg">
+									                <img class="credit-card-image" src="http://frequentmiler.boardingarea.com/wp-content/uploads/2015/09/Discover.jpg">
+									                <img class="credit-card-image" src="http://www.pngall.com/wp-content/uploads/2016/07/Mastercard-Download-PNG.png">
+									            	<img class="credit-card-image" src="http://www.pittsburghpolicefcu.com/wp/wp-content/uploads/2014/09/visa.jpg">            
+									            </div>
+									        </div>
+									        <div class="row">
+									        	<div class="col-md-12">
+									            	<div class="row payment-box card-details">
+									                    <div class="col-md-6">
+									                        <div class="row">
+									                            <div class="col-md-12 group">     
+									                                <input type="text" required>
+									                                <span class="highlight"></span>
+									                                <span class="bar"></span>
+									                                <label>Card Number</label>
+									                             </div>
+									                         </div>
+									                     </div>
+									                     <div class="col-md-6"></div>
+									            	</div>
+									            	<div class="row payment-box card-details" style="border:0px;">
+									                    <div class="col-md-6">
+									                        <div class="row">
+									                            <div class="col-md-12 group">     
+									                                <input type="text" required>
+									                                <span class="highlight"></span>
+									                                <span class="bar"></span>
+									                                <label>Expiration Date</label>
+									                             </div>
+									                         </div>
+									                     </div>
+									                     <div class="col-md-6">
+									                        <div class="row">
+									                            <div class="col-md-12 group">     
+									                                <input type="text" required>
+									                                <span class="highlight"></span>
+									                                <span class="bar"></span>
+									                                <label>Security Code</label>
+									                             </div>
+									                         </div>
+									                     </div>
+									                </div>
+									            	<div class="row payment-box card-details" style="border:0px;">
+									                    <div class="col-md-6">
+									                        <div class="row">
+									                            <div class="col-md-12 group">     
+									                                <input type="text" required>
+									                                <span class="highlight"></span>
+									                                <span class="bar"></span>
+									                                <label>First Name</label>
+									                             </div>
+									                         </div>
+									                     </div>
+									                     <div class="col-md-6">
+									                        <div class="row">
+									                            <div class="col-md-12 group">     
+									                                <input type="text" required>
+									                                <span class="highlight"></span>
+									                                <span class="bar"></span>
+									                                <label>Last Name</label>
+									                             </div>
+									                         </div>
+									                     </div>
+									            	</div>
+									                <div class="row payment-box card-details" style="border:0px;">
+									                    <div class="col-md-12">
+									                        <div class="row">
+									                         	<div class="billing-address-title">Address</div>
+									                        </div>
+									                     </div>
+									                     <div class="col-md-12">
+									                        <div class="row billing-address">
+									                        	<div>Kalgi Bhatt</div>
+									                         	<div>201 S 4th St. 544</div>
+									                            <div>San Jose, CA 95112</div>
+									                            <div>United States</div>
+									                            <div>(669)xxxxx56</div>
+									                        </div>
+									                     </div>
+									            	</div>
+									                <div class="row payment-box card-details" style="border:0px;margin-bottom: 15px;">
+									                    <div class="col-md-6"></div>
+									                    <div class="col-md-6" style="text-align:right;">
+									                    	<span class="cancel-button" ng-click="show_checkout = false">Cancel</span>
+									                    	<button type="submit" class="btn btn-primary done-button">Checkout</button>
+									                    </div>
+									            	</div>
+									            </div>
+									      	</div>  
+									    </div>
+									</div>
 							    	<div>
 							        	<img src="http://ir.ebaystatic.com/pictures/aw/pics/shoppingcart/eMBG_stacked.gif" width="150" height="35" alt="Learn more about eBay Money Back Guarantee">
 							    	</div>
@@ -200,8 +295,8 @@
 							        </div>
 							        <div class="row">
 							            <div class="col-md-12">
-							                <button type="submit" class="btn btn-primary continue-button"> Continue Shopping </button>
-							                <button type="submit" class="btn btn-primary check-out-button"> Proceed to checkout </button>
+							                <button type="submit" class="btn btn-primary continue-button" ng-click="homepageClicked()">Continue Shopping</button>
+							                <button type="submit" class="btn btn-primary check-out-button" ng-click="show_checkout = true">Proceed to Checkout</button>
 							            </div>
 							        </div>
 							    </div>

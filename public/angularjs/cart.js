@@ -101,6 +101,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			$scope.user_fname = data.userBO.f_name;
 			$scope.user_lname = data.userBO.l_name;
 			$scope.user_name = data.userBO.user_name;
+			$scope.user_id = data.userBO.user_id;
 		} else {
 
 		}

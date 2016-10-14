@@ -296,6 +296,106 @@
 	cursor: pointer;
 }
 
+.group { 
+  	position:relative; 
+	margin-top: 30px;
+	padding-left: 0px;
+}
+
+input {
+  	font-size:12px;
+  	padding:10px 10px 5px 5px;
+  	display:block;
+  	width:100%;
+  	border:none;
+  	border-bottom: 2px solid #ddd;
+  	background-color: transparent;
+}
+
+input:focus { 
+	outline:none;
+	border-bottom:0px; 
+}
+
+label 				 {
+  color:#76767e; 
+  font-size:15px;
+  font-weight:lighter;
+  position:absolute;
+  pointer-events:none;
+  top:10px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+/* active state */
+input:focus ~ label, input:valid ~ label 		{
+  top:-10px;
+  font-size:14px;
+}
+
+/* BOTTOM BARS ================================= */
+.bar {
+	position:relative; 
+ 	display:block;
+}
+
+.bar:before, .bar:after 	{
+  content:'';
+  height:1px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background:#4a90e2; 
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+.bar:before {
+  left:50%;
+}
+.bar:after {
+  right:50%; 
+}
+
+/* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width:50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* active state */
+input:focus ~ .highlight {
+  -webkit-animation:inputHighlighter 0.3s ease;
+  -moz-animation:inputHighlighter 0.3s ease;
+  animation:inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+	from { background:#4a90e2; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+	from { background:#4a90e2; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+	from { background:#4a90e2; }
+  to 	{ width:0; background:transparent; }
+}
+
 .ng-hide-add {
 	-webkit-animation: fadeout 0.3s; /* Safari, Chrome and Opera > 12.1 */
        -moz-animation: fadeout 0.3s; /* Firefox < 16 */

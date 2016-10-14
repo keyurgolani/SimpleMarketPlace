@@ -9,6 +9,34 @@ eBay.config([ '$locationProvider', function($locationProvider) {
 
 eBay.controller('userProfile', function($scope, $http, $location, $window) {
 	
+	$scope.fetchUserProfile = function() {
+		$http({
+			method	:	"POST",
+			url 	:	"/fetchUserProfile",
+			data	:	{
+				"username"	:	$location.path().substring(1)
+			}	
+		}).success(function(data) {
+			$scope.user_id = data.user_id;
+			$scope.fname = data.fname;
+			$scope.lname = data.lname;
+			$scope.profile_name = data.user_name;
+			$scope.sold_count = data.sold_count;
+			$scope.bought_count = data.bought_count;
+			$scope.sale_count = data.sale_count;
+			$scope.contact = data.contact;
+			$scope.dob = new Date(data.dob);
+			$window.document.title = $scope.fname + " " + $scope.lname + " | eBay";
+			$scope.fetchAddresses();
+			$scope.fetchCart();
+			$scope.fetchNotifications();
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
+	$scope.fetchUserProfile();
+	
 	$scope.updateContact = function() {
 		$http({
 			method	:	"POST",
@@ -37,6 +65,43 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		}).success(function(data) {
 			$scope.dob = new Date(data.dob);
 			$scope.edit_dob = false;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
+	$scope.fetchAddresses = function() {
+		console.log($scope.user_id);
+		$http({
+			method	:	"POST",
+			url 	:	"/fetchAddresses",
+			data	:	{
+				"user"		:	$scope.user_id
+			}
+		}).success(function(data) {
+			$scope.addresses = data.addresses;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
+	$scope.addAddress = function() {
+		$http({
+			method	:	"POST",
+			url 	:	"/addAddress",
+			data	:	{
+				"st_address"	:	$scope.street_address,
+				"apt"			:	$scope.apartment,
+				"city"			:	$scope.city,
+				"state"			:	$scope.state,
+				"country"		:	$scope.country,
+				"zip"			:	$scope.zip_code,
+				"user_id"		:	$scope.user_id
+			}
+		}).success(function(data) {
+			if(data.status_code === 200) {
+				$scope.fetchAddresses();
+			}
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -104,9 +169,6 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		$scope.show_notifications = false;
 	};
 	
-	$scope.fetchCart();
-	$scope.fetchNotifications();
-	
 	$scope.signout = function() {
 		$http({
 			method : "POST",
@@ -129,27 +191,6 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 		} else {
 
 		}
-	}).error(function(error) {
-		// TODO: Handle Error
-	});
-	
-	$http({
-		method	:	"POST",
-		url 	:	"/fetchUserProfile",
-		data	:	{
-			"username"	:	$location.path().substring(1)
-		}	
-	}).success(function(data) {
-		$scope.user_id = data.user_id;
-		$scope.fname = data.fname;
-		$scope.lname = data.lname;
-		$scope.profile_name = data.user_name;
-		$scope.sold_count = data.sold_count;
-		$scope.bought_count = data.bought_count;
-		$scope.sale_count = data.sale_count;
-		$scope.contact = data.contact;
-		$scope.dob = new Date(data.dob);
-		$window.document.title = $scope.fname + " " + $scope.lname + " | eBay";
 	}).error(function(error) {
 		// TODO: Handle Error
 	});
