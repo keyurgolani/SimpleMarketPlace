@@ -130,9 +130,6 @@ router.post('/fetchUserProfile', function(req, res, next) {
 	var user_name;
 	var lname;
 	var fname;
-	var sold_count;
-	var bought_count;
-	var sale_count;
 	var contact;
 	var dob;
 	dao.executeQuery("select user_name, f_name, l_name, user_id from user_account where user_name = ?", [req.body.username], function(userProfile) {
@@ -140,31 +137,43 @@ router.post('/fetchUserProfile', function(req, res, next) {
 		user_name = userProfile[0].user_name;
 		fname = userProfile[0].f_name;
 		lname = userProfile[0].l_name;
-		dao.executeQuery("select count(txn_id) as soldCount from txn_details where sale in (select sale_id from sale_details where seller = ?)", [userProfile[0].user_id], function(soldCount) {
-			sold_count = soldCount[0].soldCount;
-			dao.executeQuery("select count(txn_id) as boughtCount from txn_details where buyer = ?", [userProfile[0].user_id], function(boughtCount) {
-				bought_count = boughtCount[0].boughtCount;
-				dao.executeQuery("select count(sale_id) as saleCount from sale_details where seller = ?", [userProfile[0].user_id], function(saleCount) {
-					sale_count = saleCount[0].saleCount;
-					dao.executeQuery("select contact, dob from user_profile where user = ?", [userProfile[0].user_id], function(profile_details) {
-						if(profile_details.length) {
-							contact = profile_details[0].contact;
-							dob = profile_details[0].dob;
-						}
-						res.send({
-							"user_id"		:	user_id,
-							"user_name"		:	user_name,
-							"lname"			:	lname,
-							"fname"			:	fname,
-							"sold_count"	:	sold_count,
-							"bought_count"	:	bought_count,
-							"sale_count"	:	sale_count,
-							"contact"		:	contact,
-							"dob"			:	dob
-						});
-					});
-				});
+		dao.executeQuery("select contact, dob from user_profile where user = ?", [userProfile[0].user_id], function(profile_details) {
+			if(profile_details.length) {
+				contact = profile_details[0].contact;
+				dob = profile_details[0].dob;
+			}
+			res.send({
+				"user_id"		:	user_id,
+				"user_name"		:	user_name,
+				"lname"			:	lname,
+				"fname"			:	fname,
+				"contact"		:	contact,
+				"dob"			:	dob
 			});
+		});
+	});
+});
+
+router.post('/fetchSoldByUser', function(req, res, next) {
+	dao.executeQuery("select sale_details.title, txn_details.txn_qty, txn_details.transaction_price, txn_details.txn_time from txn_details, sale_details where txn_details.sale = sale_details.sale_id and sale_details.seller = ?", [req.body.user], function(soldItems) {
+		res.send({
+			"soldItems"	:	soldItems
+		});
+	});
+});
+
+router.post('/fetchBoughtByUser', function(req, res, next) {
+	dao.executeQuery("select sale_details.title, txn_details.txn_qty, txn_details.transaction_price, txn_details.txn_time from txn_details, sale_details where txn_details.sale = sale_details.sale_id and txn_details.buyer = ?", [req.body.user], function(boughtItems) {
+		res.send({
+			"boughtItems"	:	boughtItems
+		});
+	});
+});
+
+router.post('/fetchSaleByUser', function(req, res, next) {
+	dao.executeQuery("select title, sale_price, sale_qty, description, sale_time from sale_details where seller = ? and active=1;", [req.body.user], function(saleItems) {
+		res.send({
+			"saleItems"	:	saleItems
 		});
 	});
 });
@@ -262,7 +271,7 @@ router.post('/fetchItemDetails', function(req, res, next) {
 						res.send({
 							"item_id" : results[0].sale_id,
 							"item_title" : results[0].title,
-							"item_description" : results[0].desc,
+							"item_description" : results[0].description,
 							"item_condition" : results[0].condition_name,
 							"available_quantity" : results[0].sale_qty,
 							"is_bid" : results[0].is_bid,
@@ -284,7 +293,7 @@ router.post('/fetchItemDetails', function(req, res, next) {
 				res.send({
 					"item_id" : results[0].sale_id,
 					"item_title" : results[0].title,
-					"item_description" : results[0].desc,
+					"item_description" : results[0].description,
 					"item_condition" : results[0].condition_name,
 					"available_quantity" : results[0].sale_qty,
 					"is_bid" : results[0].is_bid,
@@ -554,14 +563,14 @@ router.post('/publishSale', function(req, res, next) {
 	var is_bid = req.body.advertise_is_bid;
 	var price = req.body.advertise_price;
 	var quantity = req.body.advertise_quantity;
-	var desc = req.body.advertise_desc;
+	var description = req.body.advertise_desc;
 	dao.insertData("sale_details", {
 		"seller"	:	req.session.loggedInUser.user_id,
 		"item"		:	item,
 		"condition"	:	condition.condition_id,
 		"sale_price":	price,
 		"title"		:	title,
-		"desc"		:	desc,
+		"description"		:	description,
 		"is_bid"	:	(is_bid ? 1 : 0),
 		"sale_qty"	:	quantity,
 		"active"	:	1

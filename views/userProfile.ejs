@@ -156,30 +156,147 @@
 							    	<div class="tab-content">
 							    		<div class="tab-pane fade in active descripion-text" id="tab1">
 							    			<div class="row">
-							    				<div class="col-md-6">Total Items Sold:</div>
-							    				<div class="col-md-6">{{sold_count}}</div>
+							    				<div class="col-md-4">Total Items Sold:</div>
+							    				<div class="col-md-4 text-center">{{sold_count}}</div>
+							    				<div class="col-md-4 text-center link" ng-hide="show_items_sold" ng-click="show_items_sold = true">more</div>
+							    				<div class="col-md-4 text-center link" ng-show="show_items_sold" ng-click="show_items_sold = false">less</div>
+							    			</div>
+							    			<div class="row" ng-show="show_items_sold">
+							    				<div class="col-md-12">
+							    					<div ng-repeat="sold_item in sold_items">
+							    						<div class="row item">
+							    							<div class="col-md-12">
+							    								<div class="row item-title">
+							    									{{sold_item.title}}
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Price:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sold_item.transaction_price}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Quantity:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sold_item.txn_qty}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Sold Time:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sold_item.txn_time | date:'yyyy-MM-dd HH:mm:ss'}}
+							    									</div>
+							    								</div>
+							    							</div>
+							    						</div>
+							    					</div>
+							    				</div>
 							    			</div>
 							    			<hr class="details-separator"/>
 							    			<div class="row">
-							    				<div class="col-md-6">Total Items Bought:</div>
-							    				<div class="col-md-6">{{bought_count}}</div>
+							    				<div class="col-md-4">Total Items Bought:</div>
+							    				<div class="col-md-4 text-center">{{bought_count}}</div>
+							    				<div class="col-md-4 text-center link" ng-hide="show_items_bought" ng-click="show_items_bought = true">more</div>
+							    				<div class="col-md-4 text-center link" ng-show="show_items_bought" ng-click="show_items_bought = false">less</div>
+							    			</div>
+							    			<div class="row" ng-show="show_items_bought">
+							    				<div class="col-md-12">
+							    					<div ng-repeat="bought_item in bought_items">
+							    						<div class="row item">
+							    							<div class="col-md-12">
+							    								<div class="row item-title">
+							    									{{bought_item.title}}
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Price:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{bought_item.transaction_price}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Quantity:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{bought_item.txn_qty}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Bought Time:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{bought_item.txn_time | date:'yyyy-MM-dd HH:mm:ss'}}
+							    									</div>
+							    								</div>
+							    							</div>
+							    						</div>
+							    					</div>
+							    				</div>
 							    			</div>
 							    			<hr class="details-separator"/>
 							    			<div class="row">
-							    				<div class="col-md-6">Total Items Currently Selling</div>
-							    				<div class="col-md-6">{{sale_count}}</div>
+							    				<div class="col-md-4">Total Items Currently Selling</div>
+							    				<div class="col-md-4 text-center">{{sale_count}}</div>
+							    				<div class="col-md-4 text-center link" ng-hide="show_items_sale" ng-click="show_items_sale = true">more</div>
+							    				<div class="col-md-4 text-center link" ng-show="show_items_sale" ng-click="show_items_sale = false">less</div>
+							    			</div>
+							    			<div class="row" ng-show="show_items_sale">
+							    				<div class="col-md-12">
+							    					<div ng-repeat="sale_item in sale_items">
+							    						<div class="row item">
+							    							<div class="col-md-12">
+							    								<div class="row item-title">
+							    									{{sale_item.title}}
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Price:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sale_item.sale_price}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Quantity:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sale_item.sale_qty}}
+							    									</div>
+							    								</div>
+							    								<div class="row item-detail">
+							    									<div class="col-md-6">
+							    										Sale Time:
+							    									</div>
+							    									<div class="col-md-6">
+							    										{{sale_item.sale_time | date:'yyyy-MM-dd HH:mm:ss'}}
+							    									</div>
+							    								</div>
+							    							</div>
+							    						</div>
+							    					</div>
+							    				</div>
 							    			</div>
 							    		</div>
 							    		<div class="tab-pane fade in descripion-text" id="tab2">
 											<div class="row">
 							    				<div class="col-md-4">eBay Handle:</div>
-							    				<div class="col-md-4">@{{profile_name}}</div>
+							    				<div class="col-md-4 text-center">@{{profile_name}}</div>
 							    				<div class="col-md-4"></div>
 							    			</div>
 							    			<hr class="details-separator"/>
 											<div class="row">
 							    				<div class="col-md-4">Contact:</div>
-							    				<div class="col-md-4">
+							    				<div class="col-md-4 text-center">
 							    					<div ng-hide="edit_contact">
 							    						{{contact}}
 							    					</div>
@@ -187,7 +304,7 @@
 							    						<input type="text" class="form-control" ng-model="contact">
 							    					</div>
 							    				</div>
-							    				<div class="col-md-4" ng-show="user_name === profile_name">
+							    				<div class="col-md-4 text-center" ng-show="user_name === profile_name">
 							    					<div ng-hide="edit_contact">
 							    						<button class="btn btn-primary" ng-click="edit_contact = 'true'">Edit</button>
 							    					</div>
@@ -199,7 +316,7 @@
 							    			<hr class="details-separator"/>
 							    			<div class="row">
 							    				<div class="col-md-4">Date of Birth:</div>
-							    				<div class="col-md-4">
+							    				<div class="col-md-4 text-center">
 							    					<div ng-hide="edit_dob">
 							    						{{dob | date:'MM-dd-yyyy'}}
 							    					</div>
@@ -207,7 +324,7 @@
 							    						<input type="date" class="form-control" ng-model="dob">
 							    					</div>
 							    				</div>
-							    				<div class="col-md-4" ng-show="user_name === profile_name">
+							    				<div class="col-md-4 text-center" ng-show="user_name === profile_name">
 							    					<div ng-hide="edit_dob">
 							    						<button class="btn btn-primary" ng-click="edit_dob = 'true'">Edit</button>
 							    					</div>
@@ -217,7 +334,7 @@
 							    				</div>
 							    			</div>
 								        </div>
-								        <div class="tab-pane fade in descripion-text" id="tab3">
+								        <div class="tab-pane fade in descripion-text addresses" id="tab3">
 							    			<div ng-repeat="address in addresses">
 								    			<div class="row">
 								    				{{address.f_name}}&nbsp;{{address.l_name}}	
@@ -232,8 +349,10 @@
 							    			</div>
 							    			<div class="row">
 							    				<div class="col-md-12">
-							    					<button class="btn btn-primary" ng-click="add_address = true" ng-show="user_name === profile_name">Add an Address</button>
-							    					<div class="row" ng-show="add_address">
+							    					<div class="row add-address-button">
+							    						<button class="btn btn-primary form-control" ng-click="add_address = true" ng-show="user_name === profile_name">Add an Address</button>
+							    					</div>
+							    					<div class="row add-address-block" ng-show="add_address">
 							    						<div class="col-md-12">
 							    							<div class="row">
 							    								<div class="col-md-6 group">     
@@ -278,8 +397,11 @@
 									                            </div>
 							    							</div>
 							    							<div class="row">
-							    								<div class="col-md-12 group">     
-									                                <button class="btn btn-primary" ng-click="addAddress()">Add</button>
+							    								<div class="col-md-6 group">
+									                                <button class="btn btn-primary form-control" ng-click="addAddress()">Add</button>
+									                            </div>
+									                            <div class="col-md-6 group">
+									                                <button class="btn btn-primary form-control" ng-click="add_address = false">Cancel</button>
 									                            </div>
 							    							</div>
 							    						</div>

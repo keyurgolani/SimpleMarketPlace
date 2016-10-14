@@ -9,33 +9,50 @@ eBay.config([ '$locationProvider', function($locationProvider) {
 
 eBay.controller('userProfile', function($scope, $http, $location, $window) {
 	
-	$scope.fetchUserProfile = function() {
+	$scope.fetchSold = function() {
 		$http({
 			method	:	"POST",
-			url 	:	"/fetchUserProfile",
+			url 	:	"/fetchSoldByUser",
 			data	:	{
-				"username"	:	$location.path().substring(1)
-			}	
+				"user"		:	$scope.user_id
+			}
 		}).success(function(data) {
-			$scope.user_id = data.user_id;
-			$scope.fname = data.fname;
-			$scope.lname = data.lname;
-			$scope.profile_name = data.user_name;
-			$scope.sold_count = data.sold_count;
-			$scope.bought_count = data.bought_count;
-			$scope.sale_count = data.sale_count;
-			$scope.contact = data.contact;
-			$scope.dob = new Date(data.dob);
-			$window.document.title = $scope.fname + " " + $scope.lname + " | eBay";
-			$scope.fetchAddresses();
-			$scope.fetchCart();
-			$scope.fetchNotifications();
+			$scope.sold_items = data.soldItems;
+			$scope.sold_count = $scope.sold_items.length;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
 	};
 	
-	$scope.fetchUserProfile();
+	$scope.fetchBought = function() {
+		$http({
+			method	:	"POST",
+			url 	:	"/fetchBoughtByUser",
+			data	:	{
+				"user"		:	$scope.user_id
+			}
+		}).success(function(data) {
+			$scope.bought_items = data.boughtItems;
+			$scope.bought_count = $scope.bought_items.length;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
+	$scope.fetchSale = function() {
+		$http({
+			method	:	"POST",
+			url 	:	"/fetchSaleByUser",
+			data	:	{
+				"user"		:	$scope.user_id
+			}
+		}).success(function(data) {
+			$scope.sale_items = data.saleItems;
+			$scope.sale_count = $scope.sale_items.length;
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
 	
 	$scope.updateContact = function() {
 		$http({
@@ -179,6 +196,34 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 			// TODO: Handle Error
 		});
 	};
+	
+	$scope.fetchUserProfile = function() {
+		$http({
+			method	:	"POST",
+			url 	:	"/fetchUserProfile",
+			data	:	{
+				"username"	:	$location.path().substring(1)
+			}	
+		}).success(function(data) {
+			$scope.user_id = data.user_id;
+			$scope.fname = data.fname;
+			$scope.lname = data.lname;
+			$scope.profile_name = data.user_name;
+			$scope.contact = data.contact;
+			$scope.dob = new Date(data.dob);
+			$window.document.title = $scope.fname + " " + $scope.lname + " | eBay";
+			$scope.fetchAddresses();
+			$scope.fetchCart();
+			$scope.fetchNotifications();
+			$scope.fetchSold();
+			$scope.fetchBought();
+			$scope.fetchSale();
+		}).error(function(error) {
+			// TODO: Handle Error
+		});
+	};
+	
+	$scope.fetchUserProfile();
 	
 	$http({
 		method : "POST",

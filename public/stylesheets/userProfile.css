@@ -296,6 +296,41 @@
 	cursor: pointer;
 }
 
+.add-address-block {
+	border: 3px solid #ccc;
+	border-radius: 10px;
+	padding: 0px 20px 20px 20px;
+	margin: 20px auto;
+}
+
+.addresses {
+	padding: 0px 20px 20px 20px;
+	margin: 20px auto;
+	width: 90%;
+}
+
+.add-address-button {
+	margin-top: 20px;
+}
+
+.item {
+	background-color: #FFF;
+	margin: 20px;
+	border: 2px solid #aaa;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.item-detail {
+	line-height: 20px;
+}
+
+.item-title {
+	font-weight: bold;
+	font-size: 120%;
+	text-decoration: underline;
+}
+
 .group { 
   	position:relative; 
 	margin-top: 30px;
@@ -397,19 +432,19 @@ input:focus ~ .highlight {
 }
 
 .ng-hide-add {
-	-webkit-animation: fadeout 0.3s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadeout 0.3s; /* Firefox < 16 */
-        -ms-animation: fadeout 0.3s; /* Internet Explorer */
-         -o-animation: fadeout 0.3s; /* Opera < 12.1 */
-            animation: fadeout 0.3s;
+	-webkit-animation: fadeout 0.2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadeout 0.2s; /* Firefox < 16 */
+        -ms-animation: fadeout 0.2s; /* Internet Explorer */
+         -o-animation: fadeout 0.2s; /* Opera < 12.1 */
+            animation: fadeout 0.2s;
 }
 
 .ng-hide-remove {
-	-webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 1s; /* Firefox < 16 */
-        -ms-animation: fadein 1s; /* Internet Explorer */
-         -o-animation: fadein 1s; /* Opera < 12.1 */
-            animation: fadein 1s;
+	-webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 0.5s; /* Firefox < 16 */
+        -ms-animation: fadein 0.5s; /* Internet Explorer */
+         -o-animation: fadein 0.5s; /* Opera < 12.1 */
+            animation: fadein 0.5s;
 }
 
 @keyframes fadein {
