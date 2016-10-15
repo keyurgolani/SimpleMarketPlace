@@ -124,7 +124,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		}).success(function(data) {
 			$window.location.href = "/?signout=true";
 		}).error(function(error) {
-			// TODO: Handle Error
+			$window.location.href = "/";
 		});
 	};
 
@@ -133,13 +133,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			method : "POST",
 			url : "/loggedInUser"
 		}).success(function(data) {
-			if (!angular.equals({}, data.userBO)) {
-				$scope.user_fname = data.userBO.f_name;
-				$scope.user_lname = data.userBO.l_name;
-				$scope.user_name = data.userBO.user_name;
-			} else {
-
-			}
+			$scope.user_fname = data.userBO.f_name;
+			$scope.user_lname = data.userBO.l_name;
+			$scope.user_name = data.userBO.user_name;
+			$scope.user_id = data.userBO.user_id;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});

@@ -252,7 +252,7 @@ eBay.directive('ngEnter', function() {
 eBay.directive('ngCountdown', ['Util', '$interval', function(Util, $interval) {
 	return {
 		restrict: 'A',
-		link: function($scope, element, attrs) {
+		link: function(scope, element, attrs) {
 			var future;
 			future = new Date(scope.date);
 			$interval(function() {
@@ -277,5 +277,5 @@ eBay.factory('Util', [function() {
 			seconds = t % 60;
 			return [days + 'd', hours + 'h', minutes + 'm', seconds + 's'].join(' ');
 		}
-	}
+	};
 }]);

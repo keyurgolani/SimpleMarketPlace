@@ -7,7 +7,8 @@ CREATE TABLE `simple_market_place`.`user_account` (
   `f_name` varchar(50) NOT NULL,
   `l_name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `secret` varchar(50) NOT NULL,
+  `secret` varchar(500) NOT NULL,
+  `salt` varchar(50) NOT NULL,
   `last_login` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 );
@@ -76,6 +77,7 @@ CREATE TABLE `simple_market_place`.`sale_details` (
   `description` VARCHAR(400) NULL,
   `is_bid` TINYINT(1) NOT NULL,
   `sale_qty` INT NOT NULL,
+  `sale_time` TIMESTAMP(6) NOT NULL,
   `active` TINYINT(1) NOT NULL,
   PRIMARY KEY (`sale_id`),
   KEY `seller` (`seller`),

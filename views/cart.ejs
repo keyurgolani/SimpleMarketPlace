@@ -101,6 +101,17 @@
 	                        </div>
 	                    </div>
 	                </div>
+	                <div class="row success-message" ng-hide="outer_messages.length === 0" align="center">
+	        			<div class="col-md-12">
+	        				<div ng-repeat="message in outer_messages">
+	        					<div class="row">
+	        						<div class="col-md-12">
+	        							<span class="alert alert-warning">{{message}}</span>
+	        						</div>
+	        					</div>
+	        				</div>
+	        			</div>
+	        		</div>
 	                <div class="row middle-body">
 	                    <div class="col-md-12">
 	                    	<div class="row search-row">
@@ -179,10 +190,10 @@
 							        </div>
 							    </div>
 							    <div class="col-md-4 cart-summary-box">
-							        <div class="cart-summary-title">Cart Summary <span class="item-count">({{cart_items.length}} items)</span></div>
+							        <div class="cart-summary-title">Cart Summary <span class="item-count">({{cart_items.length}} <span ng-show="cart_items.length !== 1">items</span><span ng-hide="cart_items.length !== 1">item</span>)</span></div>
 							        <div class="total cart-summary-total">Total : ${{cart_total}}</div>
 							        <div>
-							        	<button class="btn btn-primary button check-out-button" ng-click="show_checkout = true">Proceed to checkout</button>
+							        	<button class="btn btn-primary button check-out-button" ng-click="show_checkout = true; outer_messages = []">Proceed to checkout</button>
 							    	</div>
             						<div class="row show_checkout_window" id="checkout_window" ng-show="show_checkout" ng-class="{show: show_checkout}">
 									    <div class="col-md-12 payment-box">
@@ -330,7 +341,7 @@
 							        <div class="row">
 							            <div class="col-md-2"></div>
 							            <div class="col-md-10" style="text-align:right;">
-							                <div> Subtotal (2 items): ${{cart_total}}</div>
+							                <div> Subtotal ({{cart_items.length}} <span ng-show="cart_items.length !== 1">items</span><span ng-hide="cart_items.length !== 1">item</span>): ${{cart_total}}</div>
 							                <div class="shipping"> Shipping: $0.00</div>
 							                <div class="total">Total : ${{cart_total}} </div>
 							            </div>
@@ -338,7 +349,7 @@
 							        <div class="row">
 							            <div class="col-md-12">
 							                <button type="submit" class="btn btn-primary continue-button" ng-click="homepageClicked()">Continue Shopping</button>
-							                <button type="submit" class="btn btn-primary check-out-button" ng-click="show_checkout = true">Proceed to Checkout</button>
+							                <button type="submit" class="btn btn-primary check-out-button" ng-click="show_checkout = true; outer_messages = []">Proceed to Checkout</button>
 							            </div>
 							        </div>
 							    </div>

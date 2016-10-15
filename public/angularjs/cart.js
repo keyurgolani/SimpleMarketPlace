@@ -4,6 +4,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	
 	$scope.messages = [];
 	$scope.success = [];
+	$scope.outer_messages = [];
 	
 	$scope.fetchLoggedInUser = function() {
 		$http({
@@ -19,21 +20,6 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			} else {
 
 			}
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
-	};
-	
-	$scope.fetchAddresses = function() {
-		console.log($scope.user_id);
-		$http({
-			method	:	"POST",
-			url 	:	"/fetchAddresses",
-			data	:	{
-				"user"		:	$scope.user_id
-			}
-		}).success(function(data) {
-			$scope.addresses = data.addresses;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -166,7 +152,11 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	};
 	
 	$scope.search = function() {
-		$window.location.href = "/?query=" + $scope.searchString;
+		if($scope.searchString !== undefined && $scope.searchString.trim() !== "") {
+			$window.location.href = "/?query=" + $scope.searchString;
+		} else {
+			$scope.outer_messages.push("Please enter an item name or seller name to search!");
+		}
 	};
 	
 	$scope.userProfile = function() {

@@ -59,7 +59,7 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 			method	:	"POST",
 			url 	:	"/updateContact",
 			data	:	{
-				"contat"	:	$scope.contact,
+				"contact"	:	$scope.contact,
 				"user"		:	$scope.user_id
 			}
 		}).success(function(data) {
@@ -246,6 +246,7 @@ eBay.controller('userProfile', function($scope, $http, $location, $window) {
 			$scope.user_fname = data.userBO.f_name;
 			$scope.user_lname = data.userBO.l_name;
 			$scope.user_name = data.userBO.user_name;
+			$scope.user_id = data.userBO.user_id;
 		} else {
 
 		}
