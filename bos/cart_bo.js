@@ -1,6 +1,10 @@
 
 var dao = require('../utils/dao');
 
+module.exports.cart = function(res) {
+	res.render('cart', {});
+};
+
 module.exports.checkout = function(user_id, res) {
 	var success = true;
 	dao.executeQuery("select cart_details.sale_item as sale, cart_details.user as buyer, sale_details.sale_price as transaction_price,  cart_details.cart_qty as txn_qty from cart_details, sale_details where cart_details.sale_item = sale_details.sale_id and user = ?", [user_id], function(results) {

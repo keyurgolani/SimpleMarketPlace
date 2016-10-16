@@ -1,6 +1,10 @@
 
 var dao = require('../utils/dao');
 
+module.exports.sell = function(res) {
+	res.render('sell', {});
+};
+
 module.exports.sendConditions = function(res) {
 	dao.fetchData("*", "item_conditions", null, function(rows) {
 		res.send({

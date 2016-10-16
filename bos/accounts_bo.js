@@ -147,3 +147,25 @@ module.exports.checkUserAvailability = function(username, res) {
 		}
 	});
 };
+
+module.exports.handleForgotRequest = function(email, res) {
+	var error_messages = [];
+	var status_code = 200;
+	var success_messages = [];
+	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
+	if(email.match(email_validator) !== null) {
+		dao.fetchData("count(user_id) as matches", "user_account", {
+			"email"	:	email
+		}, function(rows) {
+			if(Number(rows[0].matches) > 0) {
+				// TODO: Send an email to user -- Not going to implement
+			} else {
+				error_messages.push("Email ID not found in our records.");
+				status_code = 400;
+			}
+		});
+	} else {
+		error_messages.push("Not valid Email ID");
+		status_code = 400;
+	}
+};

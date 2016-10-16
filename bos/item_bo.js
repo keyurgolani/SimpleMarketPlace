@@ -1,6 +1,10 @@
 
 var dao = require('../utils/dao');
 
+module.exports.item = function(res) {
+	res.render('viewItem', {});
+};
+
 module.exports.sendBidDetails = function(sale_id, res) {
 	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [sale_id], function(results) {
 		dao.executeQuery("select sale_time from sale_details where sale_id = ?", [sale_id], function(sale_time) {

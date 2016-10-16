@@ -25,12 +25,12 @@ router.get('/account', function(req, res, next) {
 });
 
 router.get('/sell', function(req, res, next) {
-	res.render('sell', {  });
+	sell_bo.sell(res);
 });
 
 router.get('/cart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		res.render('cart', {  });
+		cart_bo.cart(res);
 	} else {
 		res.redirect('/');
 	}
@@ -40,7 +40,7 @@ router.get('/viewItem', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		item_bo.addItemToUserSuggestion(req.session.loggedInUser.user_id, Number(req.param('itemid')));
 	}
-	res.render('viewItem', {  });
+	item_bo.item(res);
 });
 
 router.post('/placeBid', function(req, res, next) {
@@ -198,48 +198,19 @@ router.post('/fetchConditions', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-	var username = sjcl.decrypt(req.body.passwordpassword, req.body.username);
-	var email = req.body.email;
-	var secret = sjcl.decrypt(req.body.passwordpassword, req.body.password);
-	var firstname = req.body.fname;
-	var lastname = req.body.lname;
-	var phone = req.body.contact;
-	accounts_bo.register(username, email, secret, firstname, lastname, phone, res);
+	accounts_bo.register(sjcl.decrypt(req.body.passwordpassword, req.body.username), 
+			req.body.email, sjcl.decrypt(req.body.passwordpassword, req.body.password), 
+			req.body.fname, req.body.lname, req.body.contact, res);
 });
 
 router.post('/publishSale', function(req, res, next) {
-	var title = req.body.advertise_title;
-	var item = req.body.advertise_item;
-	var condition = req.body.advertise_condition;
-	var is_bid = req.body.advertise_is_bid;
-	var price = req.body.advertise_price;
-	var quantity = req.body.advertise_quantity;
-	var description = req.body.advertise_desc;
-	sell_bo.publishSale(title, item, condition, is_bid, price, quantity, description, res);
+	sell_bo.publishSale(req.body.advertise_title, req.body.advertise_item, 
+			req.body.advertise_condition, req.body.advertise_is_bid, req.body.advertise_price, 
+			req.body.advertise_quantity, req.body.advertise_desc, res);
 });
 
 router.get('/forgotPassword', function(req, res, next) {
-	var error_messages = [];
-	var status_code = 200;
-	var success_messages = [];
-	logger.log("info", "Forgot Password form");
-	var email = req.param('email'); 
-	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
-	if(email.match(email_validator) !== null) {
-		dao.fetchData("count(user_id) as matches", "user_account", {
-			"email"	:	email
-		}, function(rows) {
-			if(Number(rows[0].matches) > 0) {
-				// TODO: Send an email to 
-			} else {
-				error_messages.push("Email ID not found in our records.");
-				status_code = 400;
-			}
-		});
-	} else {
-		error_messages.push("Not valid Email ID");
-		status_code = 400;
-	}
+	accounts_bo.handleForgotRequest(req.param('email'), res);
 });
 
 router.post('/signoutUser', function(req, res, next) {
@@ -249,10 +220,7 @@ router.post('/signoutUser', function(req, res, next) {
 });
 
 router.post('/signin', function(req, res, next) {
-	var passwordpassword = req.body.passwordpassword;
-	var username = sjcl.decrypt(req.body.passwordpassword, req.body.userID);
-	var password = sjcl.decrypt(req.body.passwordpassword, req.body.password);
-	accounts_bo.signin(username, password, req, res);
+	accounts_bo.signin(sjcl.decrypt(req.body.passwordpassword, req.body.userID), sjcl.decrypt(req.body.passwordpassword, req.body.password), req, res);
 });
 
 module.exports = router;
