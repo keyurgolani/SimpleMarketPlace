@@ -1,3 +1,4 @@
+
 var eBay = angular.module('eBay', ['ngSanitize', 'angular-notification-icons', 'ngAnimate', 'focus-if', 'counter' ]);
 
 //	TODO: Prevent showing anything until the whole DOM is loaded.

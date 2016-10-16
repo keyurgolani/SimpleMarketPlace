@@ -1,3 +1,4 @@
+
 var mysql = require("mysql");
 var logger = require("../utils/logger");
 
@@ -68,7 +69,7 @@ module.exports = {
 					processResult(rows);
 				}
 			});
-			logger.log("debug", "Fetch Executed: " + query.sql);
+			logger.logQuery(query.sql);
 
 		});
 	},
@@ -83,7 +84,7 @@ module.exports = {
 					processResult(rows);
 				}
 			});
-			logger.log("debug", "Query Executed: " + query.sql);
+			logger.logQuery(query.sql);
 
 		});
 	},
@@ -99,7 +100,7 @@ module.exports = {
 					processInsertStatus(rows);
 				}
 			});
-			logger.log("debug", "Insert Executed: " + query.sql);
+			logger.logQuery(query.sql);
 
 		});
 	},
@@ -115,31 +116,8 @@ module.exports = {
 					processUpdateStatus(rows);
 				}
 			});
-			logger.log("debug", "Insert Executed: " + query.sql);
+			logger.logQuery(query.sql);
 
-		});
-	},
-	
-	transaction	:	function(queries) {
-		connectionPool.get(function(connectionNumber, connection) {
-			connection.beginTransaction(function(err) {
-				queries.forEach(function(query) {
-					connection.query(query, function(err, result) {
-						if(err) {
-							return connection.rollback(function() {
-								throw err;
-							});
-						}
-					});
-				});
-				connection.commit(function(err) {
-					if(err) {
-						return connection.rollback(function() {
-							throw err;
-						});
-					}
-				});
-			});
 		});
 	}
 };

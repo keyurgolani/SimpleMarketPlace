@@ -1,12 +1,15 @@
 
 var dao = require('../utils/dao');
 var bcrypt = require("bcrypt");
+var logger = require("../utils/logger");
 
 module.exports.accounts = function(res) {
+	logger.logEntry("accounts_bo", "accounts");
 	res.render('account', {});
 };
 
 module.exports.signin = function(username, password, req, res) {
+	logger.logEntry("accounts_bo", "signin");
 	var salt = bcrypt.genSaltSync(10);
 	var passwordToSave = bcrypt.hashSync(password, salt);
 	dao.executeQuery("SELECT user_id, secret, salt FROM user_account WHERE user_name = ? OR email = ?", [username, username], function(secret_elements) {
@@ -36,6 +39,7 @@ module.exports.signin = function(username, password, req, res) {
 };
 
 module.exports.register = function(username, email, secret, firstname, lastname, phone, res) {
+	logger.logEntry("accounts_bo", "register");
 	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/ -- Done
 	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask -- Done
 	// TODO: Continued: http://digitalbush.com/projects/masked-input-plugin/ -- Done
@@ -84,6 +88,7 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 };
 
 module.exports.checkEmailAvailability = function(email, res) {
+	logger.logEntry("accounts_bo", "checkEmailAvailability");
 	dao.executeQuery("SELECT COUNT(email) as count FROM user_account WHERE email like ?", [email], function(result) {
 		if(result[0].count === 0) {
 			res.send({
@@ -98,6 +103,7 @@ module.exports.checkEmailAvailability = function(email, res) {
 };
 
 module.exports.checkUserAvailability = function(username, res) {
+	logger.logEntry("accounts_bo", "checkUserAvailability");
 	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [username], function(result) {
 		if(result[0].count === 0) {
 			res.send({
@@ -112,6 +118,7 @@ module.exports.checkUserAvailability = function(username, res) {
 };
 
 module.exports.handleForgotRequest = function(email, res) {
+	logger.logEntry("accounts_bo", "handleForgotRequest");
 	var error_messages = [];
 	var status_code = 200;
 	var success_messages = [];

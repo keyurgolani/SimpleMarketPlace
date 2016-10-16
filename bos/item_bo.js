@@ -1,11 +1,14 @@
 
 var dao = require('../utils/dao');
+var logger = require("../utils/logger");
 
 module.exports.item = function(res) {
+	logger.logEntry("item_bo", "item");
 	res.render('viewItem', {});
 };
 
 module.exports.sendBidDetails = function(sale_id, res) {
+	logger.logEntry("item_bo", "sendBidDetails");
 	dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [sale_id], function(results) {
 		dao.executeQuery("select sale_time from sale_details where sale_id = ?", [sale_id], function(sale_time) {
 			var saleDate = new Date(sale_time[0].sale_time);
@@ -19,6 +22,7 @@ module.exports.sendBidDetails = function(sale_id, res) {
 };
 
 module.exports.sendItemDetails = function(sale_id, res) {
+	logger.logEntry("item_bo", "sendItemDetails");
 	dao.executeQuery("select is_bid from sale_details where sale_id = ?", [sale_id], function(results) {
 		if(results[0].is_bid) {
 			dao.executeQuery("select active from sale_details where sale_id = ?", [sale_id], function(activeStatus) {
@@ -65,6 +69,7 @@ module.exports.sendItemDetails = function(sale_id, res) {
 };
 
 module.exports.placeUserBid = function(user_id, item_id, bid_price, bid_qty, res) {
+	logger.logEntry("item_bo", "placeUserBid");
 	dao.insertData("bid_details", {
 		"sale"			:	item_id,
 		"bidder"		:	user_id,
@@ -72,6 +77,7 @@ module.exports.placeUserBid = function(user_id, item_id, bid_price, bid_qty, res
 		"bid_qty"		:	bid_qty
 	}, function(rows) {
 		dao.executeQuery("update sale_details set sale_price = ? where sale_id = ?", [bid_price, item_id], function() {
+			logger.logBid(user_id, item_id, bid_price, bid_qty);
 			res.send({
 				"status_code"	:	200
 			});
@@ -80,10 +86,16 @@ module.exports.placeUserBid = function(user_id, item_id, bid_price, bid_qty, res
 };
 
 module.exports.addItemToCart = function(user_id, item_id, qty, res) {
+	logger.logEntry("item_bo", "addItemToCart");
 	dao.executeQuery("SELECT count(cart_item_id) as entries FROM cart_details WHERE user = ? AND sale_item = ?", [user_id, item_id], function(results) {
 		if(results[0].entries > 0) {
 			dao.executeQuery("UPDATE cart_details SET `cart_qty` = ? WHERE `user` = ? AND `sale_item` = ?", [Number(results[0].entries) + Number(qty), user_id, item_id], function(update_status) {
 				if(update_status.affectedRows === 1) {
+					dao.fetchData("sale_price", "sale_details", {
+						"sale_id"	:	item_id
+					}, function(result) {
+						logger.logUserCartEntry(user_id, item_id, qty, result[0].sale_price);
+					});
 					res.send({
 						"status_code"	:	200
 					});
@@ -114,6 +126,7 @@ module.exports.addItemToCart = function(user_id, item_id, qty, res) {
 };
 
 module.exports.sendTotalSold = function(item_id, res) {
+	logger.logEntry("item_bo", "sendTotalSold");
 	dao.executeQuery("select sum(txn_id) as totalCount from txn_details where sale = ?", [item_id], function(results) {
 		res.send({
 			"total_sold" : results[0].totalCount
@@ -122,6 +135,8 @@ module.exports.sendTotalSold = function(item_id, res) {
 };
 
 module.exports.addItemToUserSuggestion = function(user_id, item_id) {
+	logger.logEntry("item_bo", "addItemToUserSuggestion");
+	logger.logItemVisit(user_id, item_id);
 	dao.executeQuery("SELECT count(suggestion_id) as entries FROM suggestion_details WHERE user = ? AND suggestion_item = ?", [user_id, item_id], function(rows) {
 		if(rows.entries !== 0) {
 			dao.executeQuery("DELETE FROM suggestion_details WHERE user=? AND suggestion_item=?", [user_id, item_id], function(suggestionDetails) {

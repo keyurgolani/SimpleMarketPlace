@@ -1,11 +1,14 @@
 
 var dao = require('../utils/dao');
+var logger = require("../utils/logger");
 
 module.exports.sell = function(res) {
+	logger.logEntry("sell_bo", "sell");
 	res.render('sell', {});
 };
 
 module.exports.sendConditions = function(res) {
+	logger.logEntry("sell_bo", "sendConditions");
 	dao.fetchData("*", "item_conditions", null, function(rows) {
 		res.send({
 			"result"	:	rows
@@ -14,6 +17,7 @@ module.exports.sendConditions = function(res) {
 };
 
 module.exports.sendItems = function(res) {
+	logger.logEntry("sell_bo", "sendItems");
 	dao.fetchData("*", "item_details", null, function(rows) {
 		res.send({
 			"result"	:	rows
@@ -21,9 +25,10 @@ module.exports.sendItems = function(res) {
 	});
 };
 
-module.exports.publishSale = function(title, item, condition, is_bid, price, quantity, description, res) {
+module.exports.publishSale = function(user_id, title, item, condition, is_bid, price, quantity, description, res) {
+	logger.logEntry("sell_bo", "publishSale");
 	dao.insertData("sale_details", {
-		"seller"		:	req.session.loggedInUser.user_id,
+		"seller"		:	user_id,
 		"item"			:	item,
 		"condition"		:	condition.condition_id,
 		"sale_price"	:	price,
