@@ -35,7 +35,7 @@ var logger = new winston.Logger({
 // Generic Logging - Specific to method and operation
 module.exports.genericLog = function(user_id, genericLog) {
 	var logString = "Generic: " + genericLog;
-	if(user_id !== null && user_id !== undefined && user_id !== 0 && user_id.trim() !== "") {
+	if(user_id !== null && user_id !== undefined && user_id !== 0) {
 		logString = logString + " - " + "UserID: " + user_id;
 	}
 	logger.log("info", logString);
@@ -49,7 +49,7 @@ module.exports.logQuery = function(sql) {
 // Routes requests logging
 module.exports.logRouteEntry = function(user_id, method, route) {
 	var logString = "RouteEntered: " + " - " + "Route: " + route + " - " + "Method: " + method;
-	if(user_id !== null && user_id !== undefined && user_id !== 0 && user_id.trim() !== "") {
+	if(user_id !== null && user_id !== undefined && user_id !== 0) {
 		logString = logString + " - " + "UserID: " + user_id;
 	}
 	logger.log("debug", logString);
