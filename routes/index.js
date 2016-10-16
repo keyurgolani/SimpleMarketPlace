@@ -99,13 +99,21 @@ router.post('/loggedInUser', function(req, res, next) {
 	}
 });
 
+router.post('/checkCartQtyAvailable', function(req, res, next) {
+	if(req.session.loggedInUser) {
+		cart_bo.sendCartAvailability(req.session.loggedInUser.user_id, res);
+	} else {
+		res.redirect('/');
+	}
+});
+
 router.post('/fetchAddresses', function(req, res, next) {
 	common_bo.sendAddresses(req.body.user, res);
 });
 
 router.post('/checkout', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		cart_bo.checkout(req.session.loggedInUser.user_id);
+		cart_bo.checkout(req.session.loggedInUser.user_id, res);
 	} else {
 		res.redirect('/');
 	}

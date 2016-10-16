@@ -45,7 +45,7 @@
 		                                		<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
 		                                			<div class="row user-menu-row link" ng-click="userProfile()">
 		                                				<div class="col-md-5 profile-image-bound">
-				                							<img src="/images/products/laptop.jpg" class="profile-image">
+				                							<img src="/images/products/profile.jpg" class="profile-image">
 				                						</div>
 				                						<div class="col-md-7 profile-names">
 				                							<span>{{user_fname}}&nbsp;{{user_lname}}</span>
@@ -149,18 +149,23 @@
 	                        <div class="row">
 							    <div class="col-md-1"></div>
 							    <div class="col-md-7 cart-box">
+							    	<div class="row success-message" ng-show="cart_items.length === 0" align="center">
+							    		<div class="col-md-12">
+							    			<span class="alert alert-warning">Nothing added to cart! Go shop something...!!!</span>
+							    		</div>
+							    	</div>
 							        <div ng-repeat="cart_item in cart_items">
 							            <div class="cart-second-box">
 							                <div class="cart-header">
 							                    <span class="seller-details link" ng-click="showUser(cart_item.user_name)">Seller: @{{cart_item.user_name}}</span>
 							                </div>
 							                <div class="cart-body row">
-							                    <div class="col-md-4">
-							                        <span><img src="http://images.anthropologie.com/is/image/Anthropologie/4130256236055_065_b?$an-category$" alt="No image availabe" class="product-image"></span>
+							                    <div class="col-md-6">
+							                        <img src="images/products/laptop.jpg" alt="No image availabe" class="product-image">
 							                    </div>
-							                    <div class="col-md-8">
+							                    <div class="col-md-6">
 							                        <div class="row">
-							                            <div class="col-md-6">
+							                            <div class="col-md-9">
 							                                <div class="row">
 							                                    <div class="col-md-12">
 							                                        <span class="product-title link" ng-click="shop(cart_item.sale_id)">{{cart_item.title}}</span>
@@ -177,7 +182,7 @@
 							                                    </div>
 							                                </div>
 							                            </div>
-							                            <div class="col-md-6">
+							                            <div class="col-md-3">
 							                                <span class="product-price"><strong>${{cart_item.sale_price}}</strong></span>
 							                            </div>
 							                        </div>
@@ -203,10 +208,10 @@
 													<div class="heading h4">Credit or debit card</div>
 									            </div>
 									            <div class="col-md-6">
-									            	<img class="credit-card-image" src="https://pbs.twimg.com/profile_images/747394758285365248/XuBsjokt.jpg">
-									                <img class="credit-card-image" src="http://frequentmiler.boardingarea.com/wp-content/uploads/2015/09/Discover.jpg">
-									                <img class="credit-card-image" src="http://www.pngall.com/wp-content/uploads/2016/07/Mastercard-Download-PNG.png">
-									            	<img class="credit-card-image" src="http://www.pittsburghpolicefcu.com/wp/wp-content/uploads/2014/09/visa.jpg">            
+									            	<img class="credit-card-image" src="images/amex.jpg">
+									                <img class="credit-card-image" src="images/discover.jpg">
+									                <img class="credit-card-image" src="images/mastercard.jpg">
+									            	<img class="credit-card-image" src="images/visa.jpg">            
 									            </div>
 									        </div>
 									        <div class="row">
@@ -328,7 +333,7 @@
 									    </div>
 									</div>
 							    	<div>
-							        	<img src="http://ir.ebaystatic.com/pictures/aw/pics/shoppingcart/eMBG_stacked.gif" width="150" height="35" alt="Learn more about eBay Money Back Guarantee">
+							        	<img src="images/moneybackguarantee.gif" width="150" height="35" alt="Learn more about eBay Money Back Guarantee">
 							    	</div>
 							    	<div>
 							        	<p class="cart-summary-info">Covers your purchase price plus original shipping on virtually all items. Get the item you ordered or get your money back. <span class="learn-more link">Learn more</span></p>

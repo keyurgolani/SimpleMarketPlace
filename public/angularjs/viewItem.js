@@ -142,27 +142,32 @@ eBay.controller('viewItem', function($scope, $http, $location, $window, $interva
 	};
 	
 	$scope.addToCart  = function() {
-		$http({
-			method	:	"POST",
-			url		:	"/addToCart",
-			data	:	{
-				"itemid"	:	$scope.item_id,
-				"qty"		:	$scope.cart_qty
-			}
-		}).success(function(data) {
-			if(data.status_code === 200) {
-				$scope.fetchCart();
-				$scope.message = "Congratulations! " + $scope.item_title + " Added to your Cart!";
-				$scope.success = true;
-			} else if(data.status_code === 500) {
-				$scope.message = "Internal error! Please try again.";
-				$scope.success = true;
-			} else if(data.status_code === 301) {
-				$window.location.href = "/account?view=signin&redir=viewItem-itemid-" + $scope.item_id;
-			}
-		}).error(function(err) {
-			
-		});
+		if($scope.cart_qty > 0) {
+			$http({
+				method	:	"POST",
+				url		:	"/addToCart",
+				data	:	{
+					"itemid"	:	$scope.item_id,
+					"qty"		:	$scope.cart_qty
+				}
+			}).success(function(data) {
+				if(data.status_code === 200) {
+					$scope.fetchCart();
+					$scope.message = "Congratulations! " + $scope.item_title + " Added to your Cart!";
+					$scope.success = true;
+				} else if(data.status_code === 500) {
+					$scope.message = "Internal error! Please try again.";
+					$scope.success = true;
+				} else if(data.status_code === 301) {
+					$window.location.href = "/account?view=signin&redir=viewItem-itemid-" + $scope.item_id;
+				}
+			}).error(function(err) {
+				
+			});
+		} else {
+			$scope.message = "Please add some non-zero quantity to cart!";
+			$scope.success = false;
+		}
 	};
 	
 	$http({

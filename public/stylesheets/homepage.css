@@ -23,7 +23,7 @@
 }
 
 .current-sale {
-	background: url(http://ir.ebaystatic.com/pictures/aw/mops/2016_Doodles/Halloween_small_doodle_150x30.jpg) no-repeat;
+	background: url("../images/currentsale.jpg") no-repeat;
 	height: 30px;
 	overflow: visible;
 	zoom: 0.8;

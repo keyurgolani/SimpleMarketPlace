@@ -32,6 +32,20 @@ module.exports.checkout = function(user_id, res) {
 	}
 };
 
+module.exports.sendCartAvailability = function(user_id, res) {
+	var available = true;
+	dao.executeQuery("select sale_details.sale_qty as available_qty, cart_details.cart_qty from sale_details, cart_details where cart_details.sale_item = sale_details.sale_id and cart_details.user = ?", [user_id], function(results) {
+		for(var i = 0; i < results.length; i++) {
+			if(Number(results[i].available_qty) < Number(results[i].cart_qty)) {
+				available = false;
+			}
+		}
+	});
+	res.send({
+		"available"	:	available
+	});
+};
+
 module.exports.removeFromCart = function(user_id, item_id, res) {
 	dao.executeQuery("delete from cart_details where user = ? and sale_item = ?", [user_id, item_id], function(results) {
 		res.send({ });

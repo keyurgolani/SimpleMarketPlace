@@ -49,7 +49,7 @@
 }
 
 .image {
-	background-image: url("http://p.ebaystatic.com/aw/sell/lnd/hero_card_background.png");
+	background-image: url("../images/sellBG.png");
 	min-height: 600px;
     height: auto !important;
     height: 600px;
