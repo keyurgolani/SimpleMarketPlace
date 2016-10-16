@@ -43,81 +43,44 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 	var status_code = 200;
 	var error_messages = [];
 	var success_messages = [];
-	var username_validator = new RegExp("^[a-z0-9_-]{3,16}$");
-	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
-	var firstname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
-	var lastname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
-	var phone_validator = new RegExp(/^(\d{11,12})$/);
-	
-	if(username.match(username_validator) === null) {
-		error_messages.push("'" + username + "' is not a valid username.");
-		status_code = 400;
-	}
-	
-	if(email.match(email_validator) === null) {
-		error_messages.push("'" + email + "' is not a valid email.");
-		status_code = 400;
-	}
-	
-	if(firstname.match(firstname_validator) === null) {
-		error_messages.push("'" + firstname + "' is not a valid name.");
-		status_code = 400;
-	}
-	
-	if(lastname.match(lastname_validator) === null) {
-		error_messages.push("'" + lastname + "' is not a valid name.");
-		status_code = 400;
-	}
-	
-	if(phone.match(phone_validator) === null) {
-		error_messages.push("'" + phone + "' is not a valid phone.");
-		status_code = 400;
-	}
-	if(status_code === 200) {
-		var salt = bcrypt.genSaltSync(10);
-		var insertParameters = {
-				"user_name"	:	username,
-				"f_name"	:	firstname,
-				"l_name"	:	lastname,
-				"email"		:	email,
-				"secret"	:	bcrypt.hashSync(secret, salt),
-				"salt"		:	salt,
-				"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
-			};
-		dao.insertData("user_account", insertParameters, function(rows) {
-			if(rows.affectedRows === 1) {
-				dao.insertData("user_profile", {
-					"contact"	:	phone,
-					"user"		:	rows.insertId
-				}, function(rows) {
-					if(rows.affectedRows === 1) {
-						success_messages.push("User " + firstname + " created successfully !");
-						res.send({
-							"status_code"	:	status_code,
-							"messages"		:	success_messages
-						});
-					} else {
-						error_messages.push("Internal error. Please try again..!!");
-						res.send({
-							"status_code"	:	status_code,
-							"messages"		:	error_messages
-						});
-					}
-				});
-			} else {
-				error_messages.push("Internal error. Please try again..!!");
-				res.send({
-					"status_code"	:	status_code,
-					"messages"		:	error_messages
-				});
-			}
-		});
-	} else {
-		res.send({
-			"status_code"	:	status_code,
-			"messages"		:	error_messages
-		});
-	}
+	var salt = bcrypt.genSaltSync(10);
+	var insertParameters = {
+			"user_name"	:	username,
+			"f_name"	:	firstname,
+			"l_name"	:	lastname,
+			"email"		:	email,
+			"secret"	:	bcrypt.hashSync(secret, salt),
+			"salt"		:	salt,
+			"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
+		};
+	dao.insertData("user_account", insertParameters, function(rows) {
+		if(rows.affectedRows === 1) {
+			dao.insertData("user_profile", {
+				"contact"	:	phone,
+				"user"		:	rows.insertId
+			}, function(rows) {
+				if(rows.affectedRows === 1) {
+					success_messages.push("User " + firstname + " created successfully !");
+					res.send({
+						"status_code"	:	200,
+						"messages"		:	success_messages
+					});
+				} else {
+					error_messages.push("Internal error. Please try again..!!");
+					res.send({
+						"status_code"	:	400,
+						"messages"		:	error_messages
+					});
+				}
+			});
+		} else {
+			error_messages.push("Internal error. Please try again..!!");
+			res.send({
+				"status_code"	:	400,
+				"messages"		:	error_messages
+			});
+		}
+	});
 };
 
 module.exports.checkEmailAvailability = function(email, res) {

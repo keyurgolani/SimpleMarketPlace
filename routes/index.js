@@ -198,6 +198,7 @@ router.post('/fetchConditions', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
+	console.log(req.body);
 	accounts_bo.register(sjcl.decrypt(req.body.passwordpassword, req.body.username), 
 			req.body.email, sjcl.decrypt(req.body.passwordpassword, req.body.password), 
 			req.body.fname, req.body.lname, req.body.contact, res);

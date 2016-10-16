@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "./node_modules/.bin/mocha --reporter spec ./test/new_user_test.js ./test/login_user_test.js ./test/signout_test.js"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -14,6 +15,7 @@
     "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
+    "chai": "^3.5.0",
     "cookie-parser": "^1.4.3",
     "debug": "^2.2.0",
     "ejs": "^2.5.2",
@@ -24,6 +26,7 @@
     "international-phone-number": "0.0.11",
     "intl-tel-input": "^9.2.0",
     "jquery": "^3.1.1",
+    "mocha": "^3.1.2",
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "ng-focus-if": "^1.0.7",
