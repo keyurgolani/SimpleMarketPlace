@@ -16,12 +16,11 @@ Don't worry, it's simple and quick! :)
 * **Making Sure you have everything set up.**
 
 Let's first make sure that we have MySQL installed and ready to go on your machine.
-Follow the page below to make sure that you have MySQL installed and running.
-[Install MySQL](http://dev.mysql.com/doc/mysql-getting-started/en/)
+[Follow this page to make sure that you have MySQL installed and running.](http://dev.mysql.com/doc/mysql-getting-started/en/)
 
 Now, let's make sure to install Node.js and NPM, a package manager for Node.js and other JavaScript libraries.
 
-You can find the Node.js download at this location [Install Node.js and NPM](https://nodejs.org/en/download/) where you'll install NPM package manager alongwith the Node.js binaries.
+[You can find and download Node.js here](https://nodejs.org/en/download/) where you'll install NPM package manager alongwith the Node.js binaries.
 
 Clone the code from Github.
 ```
