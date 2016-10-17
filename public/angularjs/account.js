@@ -79,7 +79,7 @@ eBay.controller('signinController', function($scope, $http, $window, $location) 
 			}).success(function(data) {
 				if(Boolean(data.valid)) {
 					if($location.search().redir === undefined) {
-						$window.location.href = "/";
+						$window.location.href = "/?last_login="+data.last_login;
 					} else {
 						var redir = $location.search().redir.split("-");
 						if(redir.length > 1) {

@@ -22,7 +22,7 @@ describe('eBay New User Tests', function() {
 			json : true,
 			body : {
 				"email"				:	"abc@xyz.com",
-				"username"			:	sjcl.encrypt(passwordpassword, "keyurrgolani"),
+				"username"			:	sjcl.encrypt(passwordpassword, "jondoe"),
 				"password"			:	sjcl.encrypt(passwordpassword, "password123"),
 				"fname"				:	"Jon",
 				"lname"				:	"Doe",

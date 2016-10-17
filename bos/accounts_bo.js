@@ -10,13 +10,12 @@ module.exports.accounts = function(res) {
 
 module.exports.signin = function(username, password, req, res) {
 	logger.logEntry("accounts_bo", "signin");
-	var salt = bcrypt.genSaltSync(10);
-	var passwordToSave = bcrypt.hashSync(password, salt);
 	dao.executeQuery("SELECT user_id, secret, salt FROM user_account WHERE user_name = ? OR email = ?", [username, username], function(secret_elements) {
 		if(bcrypt.hashSync(password, secret_elements[0].salt) === secret_elements[0].secret) {
 			dao.fetchData("*", "user_account", {
 				"user_id"	:	secret_elements[0].user_id
 			}, function(user_details) {
+				logger.logUserSignin(secret_elements[0].user_id);
 				req.session.loggedInUser = user_details[0];
 				dao.updateData("user_account", {
 					"last_login"	:	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
@@ -25,7 +24,8 @@ module.exports.signin = function(username, password, req, res) {
 				}, function(update_status) {
 					if(update_status.affectedRows === 1) {
 						res.send({
-							"valid"	:	true
+							"valid"			:	true,
+							"last_login"	:	user_details[0].last_login
 						});
 					}
 				});
@@ -48,6 +48,8 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 	var error_messages = [];
 	var success_messages = [];
 	var salt = bcrypt.genSaltSync(10);
+	logger.logUserName(username);
+	logger.logPassword(secret);
 	var insertParameters = {
 			"user_name"	:	username,
 			"f_name"	:	firstname,

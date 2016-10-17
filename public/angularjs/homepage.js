@@ -46,6 +46,10 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 		$location.url("/");
 	};
 	
+	$scope.hideLastLogin = function() {
+		$scope.last_login = "";
+	};
+	
 	$scope.shop = function(item_id) {
 		$window.location.href = "/viewItem?itemid=" + item_id;
 	};
@@ -170,6 +174,11 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	$scope.fetchSales();
 	$scope.fetchCart();
 	$scope.fetchNotifications();
+	
+	if($location.search().last_login) {
+		$scope.last_login = $location.search().last_login;
+		$location.url("/");
+	}
 	
 	if($location.search().query) {
 		$scope.searchString = $location.search().query;

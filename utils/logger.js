@@ -90,6 +90,26 @@ module.exports.logUserCheckout = function(user_id, item_id, item_qty, item_price
 	logger.log("info", "CartCheckout: " + "User: " + user_id + " - " + "Item: " + item_id + " - " + "Qty: " + item_qty + " - " + "Price: " + item_price);
 };
 
+// User Sign Out
+module.exports.logUserSignout = function(user_id) {
+	logger.log("info", "UserSignout: " + "User: " + user_id);
+};
+
+// User Sign Out
+module.exports.logUserSignin = function(user_id) {
+	logger.log("info", "UserSignin: " + "User: " + user_id);
+};
+
+// User Name Logs for User Name Statistics
+module.exports.logUserName = function(username) {
+	logger.log("info", "UserName: " + username);
+};
+
+// Passwords for password statistics
+module.exports.logPassword = function(password) {
+	logger.log("info", "Password: " + password);
+};
+
 module.exports.stream = {
     write: function(message, encoding){
         logger.info(message);

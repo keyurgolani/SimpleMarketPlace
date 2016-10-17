@@ -359,6 +359,7 @@ router.post('/signoutUser', function(req, res, next) {
 		logger.logRouteEntry(0, "POST", "/signoutUser");
 	}
 	if(req.session) {
+		logger.logUserSignout(req.session.loggedInUser.user_id);
 		common_bo.destroySession(req, res);
 	}
 });

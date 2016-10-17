@@ -32,7 +32,10 @@ Pool.prototype.get = function(useConnection) {
 	for (var i = 0; i < this.pool.length; i++) {
 		if (this.isAvailable[i]) {
 			cli = this.pool[i];
+			// Enable Connection Pooling
 			this.isAvailable[i] = false;
+			// Disable Connection Pooling
+//			this.isAvailable[i] = true;
 			connectionNumber = i;
 			break;
 		}
@@ -40,11 +43,18 @@ Pool.prototype.get = function(useConnection) {
 			i = 0;
 		}
 	}
+
+	// Enable Connection Pooling
 	useConnection(connectionNumber, cli);
+	// Disable Connection Pooling
+//	useConnection(connectionNumber, getConnection());
 };
 
 Pool.prototype.release = function(connectionNumber, connection) {
+	// Enable Connection Pooling
 	this.isAvailable[connectionNumber] = true;
+	// Disable Connection Pooling
+//	connection.end();
 };
 
 function initializeConnectionPool() {
@@ -62,30 +72,28 @@ module.exports = {
 				queryString = "SELECT " + selectFields + " FROM " + tableName + " WHERE ?";
 			}
 			var query = connection.query(queryString, queryParameters, function(error, rows) {
-				connectionPool.release(connectionNumber, connection);
 				if (error) {
 					throw error;
 				} else {
 					processResult(rows);
 				}
 			});
+			connectionPool.release(connectionNumber, connection);
 			logger.logQuery(query.sql);
-
 		});
 	},
 	
 	executeQuery:	function(sqlQuery, parameters, processResult) {
 		connectionPool.get(function(connectionNumber, connection) {
 			var query = connection.query(sqlQuery, parameters, function(error, rows) {
-				connectionPool.release(connectionNumber, connection);
 				if (error) {
 					throw error;
 				} else {
 					processResult(rows);
 				}
 			});
+			connectionPool.release(connectionNumber, connection);
 			logger.logQuery(query.sql);
-
 		});
 	},
 
@@ -93,15 +101,14 @@ module.exports = {
 		connectionPool.get(function(connectionNumber, connection) {
 			var queryString = "INSERT INTO " + tableName + " SET ?";
 			var query = connection.query(queryString, insertParameters, function(error, rows) {
-				connectionPool.release(connectionNumber, connection);
 				if (error) {
 					throw error;
 				} else {
 					processInsertStatus(rows);
 				}
 			});
+			connectionPool.release(connectionNumber, connection);
 			logger.logQuery(query.sql);
-
 		});
 	},
 	
@@ -109,15 +116,14 @@ module.exports = {
 		connectionPool.get(function(connectionNumber, connection) {
 			var queryString = "UPDATE " + tableName + " SET ? WHERE ?";
 			var query = connection.query(queryString, [insertParameters, queryParameters], function(error, rows) {
-				connectionPool.release(connectionNumber, connection);
 				if (error) {
 					throw error;
 				} else {
 					processUpdateStatus(rows);
 				}
 			});
+			connectionPool.release(connectionNumber, connection);
 			logger.logQuery(query.sql);
-
 		});
 	}
 };
