@@ -39,6 +39,8 @@ Now, we will install all the JavaScript libraries that we depend on for this pro
 npm install
 ```
 
+Now add the folder named `logs` into the application folder with `mkdir` or other relevant OS command.
+
 Please wait till this finishes.
 Now, we need to open `dao.js` file from `utils` folder which contains the details about database connection. Please change the below fields to the appropreate values.
 ```
