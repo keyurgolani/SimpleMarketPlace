@@ -294,28 +294,26 @@
 									                        <div ng-repeat="address in addresses">
 									                        	<div class="row billing-address">
 										                        	<div class="col-md-12">
-											                        	<div ng-repeat="address in addresses">
-											                        		<hr class="separator"/>
-											                        		<div class="row">
-											                        			<div class="col-md-1">
-											                        				<input type="radio" name="default_address" value="$index" ng-model="default_address" />
-											                        			</div>
-											                        			<div class="col-md-11">
-																	    			<div class="row">
-																	    				{{address.f_name}}&nbsp;{{address.l_name}}	
-																	    			</div>
-																	    			<div class="row">
-																	    				{{address.st_address}}&nbsp;{{address.apt}}
-																	    			</div>
-																	    			<div class="row">
-																	    				{{address.city}}&nbsp;{{address.state}}&nbsp;{{address.zip}}
-																	    			</div>
-																	    			<div class="row">
-																	    				{{address.country}}
-																	    			</div>
-											                        			</div>
-											                        		</div>
-														    			</div>
+											                        	<hr class="separator"/>
+										                        		<div class="row">
+										                        			<div class="col-md-1">
+										                        				<input type="radio" name="default_address" value="$index" ng-model="default_address" />
+										                        			</div>
+										                        			<div class="col-md-11">
+																    			<div class="row">
+																    				{{address.f_name}}&nbsp;{{address.l_name}}	
+																    			</div>
+																    			<div class="row">
+																    				{{address.st_address}}&nbsp;{{address.apt}}
+																    			</div>
+																    			<div class="row">
+																    				{{address.city}}&nbsp;{{address.state}}&nbsp;{{address.zip}}
+																    			</div>
+																    			<div class="row">
+																    				{{address.country}}
+																    			</div>
+										                        			</div>
+										                        		</div>
 											                        </div>
 										                        </div>
 									                        </div>
