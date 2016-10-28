@@ -1,4 +1,5 @@
 
+var mongoDao = require('../utils/mongoDao');
 var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 
@@ -9,38 +10,49 @@ module.exports.sell = function(res) {
 
 module.exports.sendConditions = function(res) {
 	logger.logEntry("sell_bo", "sendConditions");
-	dao.fetchData("*", "item_conditions", null, function(rows) {
+	mongoDao.fetch('ItemConditions', {}, function(resultDoc) {
 		res.send({
-			"result"	:	rows
+			"result"	:	resultDoc
 		});
 	});
 };
 
 module.exports.sendItems = function(res) {
 	logger.logEntry("sell_bo", "sendItems");
-	dao.fetchData("*", "item_details", null, function(rows) {
+	mongoDao.fetch('ItemDetails', {}, function(resultDoc) {
 		res.send({
-			"result"	:	rows
+			"result"	:	resultDoc
 		});
 	});
 };
 
 module.exports.publishSale = function(user_id, title, item, condition, is_bid, price, quantity, description, res) {
 	logger.logEntry("sell_bo", "publishSale");
-	dao.insertData("sale_details", {
+	mongoDao.insert('SaleDetails', {
 		"seller"		:	user_id,
 		"item"			:	item,
-		"condition"		:	condition.condition_id,
+		"condition"		:	condition.condition_name,
 		"sale_price"	:	price,
 		"title"			:	title,
 		"description"	:	description,
 		"is_bid"		:	(is_bid ? 1 : 0),
 		"sale_qty"		:	quantity,
 		"active"		:	1
-	}, function(rows) {
-		if(rows.affectedRows === 1) {
-			setTimeout(function() {
-				if(is_bid) {
+	}, function(resultDoc) {
+		console.log(resultDoc);
+		if(resultDoc.insertedCount === 1) {
+			if(is_bid) {
+				setTimeout(function() {
+					mongoDao.update('SaleDetails', {
+						$set : {
+							'active' : 0
+						}
+					}, {
+						'_id' : resultDoc.insertedIds[0]
+					}, function(resultDoc) {
+						console.log(resultDoc);
+						mongoDao.fetch('BidDetails')
+					});
 					dao.updateData("sale_details", {
 						"active"	:	0
 					}, {
@@ -74,9 +86,9 @@ module.exports.publishSale = function(user_id, title, item, condition, is_bid, p
 							}
 						});
 					});
-				}
-			}, 345600000);
-//			}, 120000);
+				}, 345600000);
+	//			}, 120000);
+			}
 			res.send({
 				"status_code"	:	"200"
 			});

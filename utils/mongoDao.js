@@ -19,11 +19,16 @@ module.exports = {
 	},
 	fetch: function(collection, queryObject, callback) {
 		logger.logEntry("mongoDao", "fetch");
-		db.collection(collection).find(queryObject, function(err, resultDoc) {
+		db.collection(collection).find(queryObject, function(err, cursor) {
 			if(err) {
 				throw err;
 			}
-			callback(resultDoc);
+			cursor.toArray(function(err, resultDoc) {
+				if(err) {
+					throw err;
+				}
+				callback(resultDoc);
+			});
 		});
 	},
 	fetchOne: function(collection, queryObject, callback) {

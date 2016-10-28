@@ -1,5 +1,4 @@
 
-var dao = require('../utils/dao');
 var mongoDao = require('../utils/mongoDao');
 var bcrypt = require("bcrypt");
 var logger = require("../utils/logger");
@@ -19,27 +18,23 @@ module.exports.signin = function(username, password, req, res) {
 		}]
 	}, function(resultDoc) {
 		if(resultDoc) {
-			//----------------------------------
-			if(bcrypt.hashSync(password, secret_elements[0].salt) === secret_elements[0].secret) {
-				dao.fetchData("*", "user_account", {
-					"user_id"	:	secret_elements[0].user_id
-				}, function(user_details) {
-					logger.logUserSignin(secret_elements[0].user_id);
-					req.session.loggedInUser = user_details[0];
-					dao.updateData("user_account", {
-						"last_login"	:	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
-					}, {
-						"user_id"		:	secret_elements[0].user_id
-					}, function(update_status) {
-						if(update_status.affectedRows === 1) {
-							res.send({
-								"valid"			:	true,
-								"last_login"	:	user_details[0].last_login
-							});
-						}
-					});
+			if(bcrypt.hashSync(password, resultDoc.salt) === resultDoc.secret) {
+				logger.logUserSignin(resultDoc.user_id);
+				req.session.loggedInUser = resultDoc;
+				mongoDao.update('UserDetails', {
+					'_id'		:	resultDoc._id
+				}, {
+					$set : {
+						'last_login':	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
+					}
+				}, function(updateResult) {
+					if(updateResult.result.nModified === 1) {
+						res.send({
+							"valid"			:	true,
+							"last_login"	:	resultDoc.last_login
+						});
+					}
 				});
-				//--------------------------------
 			} else {
 				res.send({
 					"valid"	:	false
@@ -66,7 +61,7 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 	logger.logUserName(username);
 	logger.logPassword(secret);
 	mongoDao.insert('UserDetails', {
-		"user_name"	:	username,
+		"username"	:	username,
 		"f_name"	:	firstname,
 		"l_name"	:	lastname,
 		"email"		:	email,
@@ -75,48 +70,34 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 		"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss'),
 		"contact"	:	phone
 	}, function(resultDoc) {
-		console.log(resultDoc);
+		if(resultDoc.insertedCount === 1) {
+			success_messages.push("User " + firstname + " created successfully !");
+			res.send({
+				"status_code"	:	200,
+				"messages"		:	success_messages
+			});
+		} else {
+			error_messages.push("Internal error. Please try again..!!");
+			res.send({
+				"status_code"	:	400,
+				"messages"		:	error_messages
+			});
+		}
 	});
-	// dao.insertData("user_account", insertParameters, function(rows) {
-	// 	if(rows.affectedRows === 1) {
-	// 		dao.insertData("user_profile", {
-	// 			"contact"	:	phone,
-	// 			"user"		:	rows.insertId
-	// 		}, function(rows) {
-	// 			if(rows.affectedRows === 1) {
-	// 				success_messages.push("User " + firstname + " created successfully !");
-	// 				res.send({
-	// 					"status_code"	:	200,
-	// 					"messages"		:	success_messages
-	// 				});
-	// 			} else {
-	// 				error_messages.push("Internal error. Please try again..!!");
-	// 				res.send({
-	// 					"status_code"	:	400,
-	// 					"messages"		:	error_messages
-	// 				});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		error_messages.push("Internal error. Please try again..!!");
-	// 		res.send({
-	// 			"status_code"	:	400,
-	// 			"messages"		:	error_messages
-	// 		});
-	// 	}
-	// });
 };
 
 module.exports.checkEmailAvailability = function(email, res) {
 	logger.logEntry("accounts_bo", "checkEmailAvailability");
-	dao.executeQuery("SELECT COUNT(email) as count FROM user_account WHERE email like ?", [email], function(result) {
-		if(result[0].count === 0) {
+	mongoDao.fetchOne('UserDetails', {
+		'email' : email
+	}, function(resultDoc) {
+		if(resultDoc) {
 			res.send({
-				"available"	:	true
+				"available"	:	false
 			});
 		} else {
 			res.send({
-				"available"	:	false
+				"available"	:	true
 			});
 		}
 	});
@@ -124,16 +105,19 @@ module.exports.checkEmailAvailability = function(email, res) {
 
 module.exports.checkUserAvailability = function(username, res) {
 	logger.logEntry("accounts_bo", "checkUserAvailability");
-	dao.executeQuery("SELECT COUNT(user_name) as count FROM user_account WHERE user_name like ?", [username], function(result) {
-		if(result[0].count === 0) {
-			res.send({
-				"available"	:	true
-			});
-		} else {
+	mongoDao.fetchOne('UserDetails', {
+		'username' : username
+	}, function(resultDoc) {
+		if(resultDoc) {
 			res.send({
 				"available"	:	false
 			});
+		} else {
+			res.send({
+				"available"	:	true
+			});
 		}
+		
 	});
 };
 
@@ -144,10 +128,10 @@ module.exports.handleForgotRequest = function(email, res) {
 	var success_messages = [];
 	var email_validator = new RegExp("^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,24})$");
 	if(email.match(email_validator) !== null) {
-		dao.fetchData("count(user_id) as matches", "user_account", {
-			"email"	:	email
-		}, function(rows) {
-			if(Number(rows[0].matches) > 0) {
+		mongoDao.fetchOne('UserDetails', {
+			'email' : email
+		}, function(resultDoc) {
+			if(resultDoc) {
 				// TODO: Send an email to user -- Not going to implement
 			} else {
 				error_messages.push("Email ID not found in our records.");
