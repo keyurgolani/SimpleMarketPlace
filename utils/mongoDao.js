@@ -31,6 +31,20 @@ module.exports = {
 			});
 		});
 	},
+	fetchTop: function(collection, queryObject, sortField, count, callback) {
+		logger.logEntry("mongoDao", "fetchTop");
+		db.collection(collection).find(queryObject, {sort: {sortField: -1}, limit: count}, function(err, cursor) {
+			if(err) {
+				throw err;
+			}
+			cursor.toArray(function(err, resultDoc) {
+				if(err) {
+					throw err;
+				}
+				callback(resultDoc);
+			});
+		});
+	},
 	fetchOne: function(collection, queryObject, callback) {
 		logger.logEntry("mongoDao", "fetchOne");
 		db.collection(collection).findOne(queryObject, function(err, resultDoc) {

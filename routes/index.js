@@ -283,8 +283,8 @@ router.post('/addToCart', function(req, res, next) {
 
 router.post('/fetchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchSales");
-		homepage_bo.sendUserSaleListing(req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser.username, "POST", "/fetchSales");
+		homepage_bo.sendUserSaleListing(req.session.loggedInUser.username, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchSales");
 		homepage_bo.sendSaleListing(res);
@@ -303,7 +303,7 @@ router.post('/searchSales', function(req, res, next) {
 
 router.post('/fetchSuggestions', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchSuggestions");
+		logger.logRouteEntry(req.session.loggedInUser.username, "POST", "/fetchSuggestions");
 		homepage_bo.sendUserSuggestions(req.session.loggedInUser.user_id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchSuggestions");
@@ -343,7 +343,7 @@ router.post('/register', function(req, res, next) {
 router.post('/publishSale', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/publishSale");
-		sell_bo.publishSale(req.session.loggedInUser.user_id, req.body.advertise_title, req.body.advertise_item, 
+		sell_bo.publishSale(req.session.loggedInUser.username, req.body.advertise_title, req.body.advertise_item, 
 				req.body.advertise_condition, req.body.advertise_is_bid, req.body.advertise_price, 
 				req.body.advertise_quantity, req.body.advertise_desc, res);
 	} else {
