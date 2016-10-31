@@ -1,7 +1,6 @@
 
 var express = require('express');
 var router = express.Router();
-var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 var schedule = require('node-schedule');
 var sjcl = require('sjcl');

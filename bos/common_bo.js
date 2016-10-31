@@ -9,10 +9,10 @@ module.exports.sendLoggedInUser = function(req, res) {
 	});
 };
 
-module.exports.sendUserNotifications = function(username, res) {
+module.exports.sendUserNotifications = function(user_id, res) {
 	logger.logEntry("common_bo", "sendUserNotifications");
 	mongoDao.fetch('NotificationsDetails', {
-		'username' : username
+		'user_id' : user_id
 	}, function(resultDoc) {
 		res.send({
 			"notifications" : resultDoc
@@ -27,10 +27,10 @@ module.exports.sendNotifications = function(res) {
 	});
 };
 
-module.exports.sendUserCartItems = function(username, res) {
+module.exports.sendUserCartItems = function(user_id, res) {
 	logger.logEntry("common_bo", "sendUserCartItems");
 	mongoDao.fetch('CartDetails', {
-		'username' : username
+		'user_id' : user_id
 	}, function(resultDoc) {
 		res.send({
 			"cart_items" : results
@@ -65,10 +65,10 @@ module.exports.destroySession = function(req, res) {
 	});
 };
 
-module.exports.sendAddresses = function(username, res) {
+module.exports.sendAddresses = function(user_id, res) {
 	logger.logEntry("common_bo", "sendAddresses");
 	mongoDao.fetch('AddressDetails', {
-		'username' : username
+		'user_id' : user_id
 	}, function(resultDoc) {
 		res.send({
 			"addresses"	:	resultDoc

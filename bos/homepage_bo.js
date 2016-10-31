@@ -7,14 +7,14 @@ module.exports.homepage = function(res) {
 	res.render("index", {});
 };
 
-module.exports.sendUserSearchResults = function(search_string, username, res) {
+module.exports.sendUserSearchResults = function(search_string, user_id, res) {
 	logger.logEntry("homepage_bo", "sendUserSearchResults");
 	mongoDao.fetch('SaleDetails', {
 		'title' : {
 			'$regex' : '^' + search_string, '$options' : 'i'
 		},
 		'seller' : {
-			"$ne" : username
+			"$ne" : user_id
 		}
 	}, function(resultDoc) {
 		res.send({
@@ -36,10 +36,10 @@ module.exports.sendSearchResults = function(search_string, res) {
 	});
 };
 
-module.exports.sendUserSuggestions = function(username, res) {
+module.exports.sendUserSuggestions = function(user_id, res) {
 	logger.logEntry("homepage_bo", "sendUserSuggestions");
 	mongoDao.fetchTop('SuggestionDetails', {
-		'user' : username
+		'user' : user_id
 	}, '_id', 4, function(resultDoc) {
 		res.send({
 			"suggestionDetails"	:	resultDoc
@@ -54,11 +54,11 @@ module.exports.sendSuggestions = function(res) {
 	});
 };
 
-module.exports.sendUserSaleListing = function(username, res) {
+module.exports.sendUserSaleListing = function(user_id, res) {
 	logger.logEntry("homepage_bo", "sendUserSaleListing");
 	mongoDao.fetch('SaleDetails', {
 		'seller' : {
-			"$ne" : username
+			"$ne" : user_id
 		}
 	}, function(resultDoc) {
 		res.send({

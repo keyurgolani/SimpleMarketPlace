@@ -2,6 +2,7 @@
 
 var mongodb = require('mongodb');
 var logger = require("../utils/logger");
+var autoIncrement = require("mongodb-autoincrement");
 var MongoClient = mongodb.MongoClient;
 var mongoUrl = 'mongodb://127.0.0.1:27017/eBay';
 var db;
@@ -56,11 +57,17 @@ module.exports = {
 	},
 	insert: function(collection, insertObject, callback) {
 		logger.logEntry("mongoDao", "insert");
-		db.collection(collection).insert(insertObject, {w:1}, function(err, resultDoc) {
+		autoIncrement.getNextSequence(db, collection, function (err, autoIndex) {
 			if(err) {
 				throw err;
 			}
-			callback(resultDoc);
+			insertObject._id = autoIndex;
+			db.collection(collection).insert(insertObject, {w:1}, function(err, resultDoc) {
+				if(err) {
+					throw err;
+				}
+				callback(resultDoc);
+			});
 		});
 	},
 	update: function(collection, queryObject, updateObject, callback) {

@@ -7,16 +7,16 @@ module.exports.cart = function(res) {
 	res.render('cart', {});
 };
 
-module.exports.checkout = function(username, res) {
+module.exports.checkout = function(user_id, res) {
 	logger.logEntry("cart_bo", "checkout");
 	var success = true;
 	mongoDao.fetch('CartDetails', {
-		'username' : username
+		'user_id' : user_id
 	}, function(resultDoc) {
 		for (var i = resultDoc.length - 1; i >= 0; i--) {
 			mongoDao.insert('TransactionDetails', {
 				'item' : resultDoc[i],
-				'buyer' : username
+				'buyer' : user_id
 			}, function(resultDoc) {
 				if(resultDoc.insertedCount === 1) {
 					logger.logUserCheckout(user_id, resultDoc[i].sale, resultDoc[i].txn_qty, resultDoc[i].transaction_price);
@@ -52,7 +52,7 @@ module.exports.checkout = function(username, res) {
 	});
 	if(success) {
 		mongoDao.remove('CartDetails', {
-			'username' : username
+			'user_id' : user_id
 		}, function(resultDoc) {
 			res.send({
 				"status_code" : 200
@@ -76,10 +76,10 @@ module.exports.sendCartAvailability = function(user_id, res) {
 	});
 };
 
-module.exports.removeFromCart = function(username, item_id, res) {
+module.exports.removeFromCart = function(user_id, item_id, res) {
 	logger.logEntry("cart_bo", "removeFromCart");
 	mongoDao.remove('CartDetails', {
-		'username' : username
+		'user_id' : user_id
 	}, function(resultDoc) {
 		console.log(resultDoc);
 		logger.logUserCartRemove(user_id, item_id);
