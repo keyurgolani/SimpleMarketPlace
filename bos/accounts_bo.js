@@ -48,7 +48,7 @@ module.exports.signin = function(username, password, req, res) {
 	});
 };
 
-module.exports.register = function(username, email, secret, firstname, lastname, phone, res) {
+module.exports.register = function(username, email, secret, firstname, lastname, phone, dob, res) {
 	logger.logEntry("accounts_bo", "register");
 	// TODO: Password Validator for Angular: /^[a-z0-9_-]{6,18}$/ -- Done
 	// TODO: Input Mask for Phone Number: https://github.com/RobinHerbots/Inputmask -- Done
@@ -61,15 +61,20 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 	logger.logUserName(username);
 	logger.logPassword(secret);
 	mongoDao.insert('UserDetails', {
-		"username"	:	username,
-		"f_name"	:	firstname,
-		"l_name"	:	lastname,
-		"email"		:	email,
-		"addresses"	:	[],
-		"secret"	:	bcrypt.hashSync(secret, salt),
-		"salt"		:	salt,
-		"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss'),
-		"contact"	:	phone
+		"username"		:	username,
+		"f_name"		:	firstname,
+		"l_name"		:	lastname,
+		"email"			:	email,
+		"addresses"		:	[],
+		"cart"			:	[],
+		"suggestions"	:	[],
+		"notifications"	:	[],
+		"cc_details"	:	[],
+		"secret"		:	bcrypt.hashSync(secret, salt),
+		"salt"			:	salt,
+		"last_login"	:	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss'),
+		"contact"		:	phone,
+		"dob"			:	dob
 	}, function(resultDoc) {
 		if(resultDoc.insertedCount === 1) {
 			success_messages.push("User " + firstname + " created successfully !");

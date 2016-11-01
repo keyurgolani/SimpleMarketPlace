@@ -29,9 +29,9 @@ eBay.controller('sell', function($scope, $http, $window) {
 	
 	$http({
 		method	:	"POST",
-		url		:	"/fetchItems"
+		url		:	"/fetchCategories"
 	}).success(function(data) {
-		$scope.items = data.result;
+		$scope.categories = data.result;
 	}).error(function(error) {
 		$scope.messages.push("Oops, something went wrong behind the scenes, please try again!");
 	});
@@ -47,7 +47,7 @@ eBay.controller('sell', function($scope, $http, $window) {
 				url		:	"/publishSale",
 				data	:	{
 					"advertise_title"		:	$scope.adv_title,
-					"advertise_item"		:	$scope.adv_item.item_id,
+					"advertise_category"	:	$scope.adv_category,
 					"advertise_condition"	:	$scope.item_condition,
 					"advertise_is_bid"		:	$scope.is_bid,
 					"advertise_price"		:	$scope.price,

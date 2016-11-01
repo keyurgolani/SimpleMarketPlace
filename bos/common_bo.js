@@ -5,7 +5,7 @@ var logger = require("../utils/logger");
 module.exports.sendLoggedInUser = function(req, res) {
 	logger.logEntry("common_bo", "sendLoggedInUser");
 	res.send({
-		"userBO"	:	req.session.loggedInUser
+		"loggedInUser"	:	req.session.loggedInUser
 	});
 };
 
@@ -25,22 +25,6 @@ module.exports.sendNotifications = function(res) {
 	res.send({
 		"notifications" : []
 	});
-};
-
-module.exports.sendUserCartItems = function(user_id, res) {
-	logger.logEntry("common_bo", "sendUserCartItems");
-	mongoDao.fetch('CartDetails', {
-		'user_id' : user_id
-	}, function(resultDoc) {
-		res.send({
-			"cart_items" : results
-		});
-	})
-	// dao.executeQuery("SELECT seller.user_name, sale.sale_id, sale.title, condi.condition_name, cart.cart_qty, sale.sale_price FROM cart_details AS cart, sale_details AS sale, user_account AS seller, item_conditions AS condi WHERE condi.condition_id = sale.condition AND cart.sale_item = sale.sale_id AND seller.user_id = sale.seller AND cart.user = ?", [user_id], function(results) {
-	// 	res.send({
-	// 		"cart_items" : results
-	// 	});
-	// });
 };
 
 module.exports.sendCartItems = function(res) {

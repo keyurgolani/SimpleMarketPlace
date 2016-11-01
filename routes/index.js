@@ -18,7 +18,7 @@ var item_bo = require('../bos/item_bo');
 
 router.get('/', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/");
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/");
 	} else {
 		logger.logRouteEntry(0, "GET", "/");
 	}
@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/account', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/account");
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/account");
 	} else {
 		logger.logRouteEntry(0, "GET", "/account");
 	}
@@ -36,7 +36,7 @@ router.get('/account', function(req, res, next) {
 
 router.get('/sell', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/sell");
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/sell");
 	} else {
 		logger.logRouteEntry(0, "GET", "/sell");
 	}
@@ -45,7 +45,7 @@ router.get('/sell', function(req, res, next) {
 
 router.get('/cart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/cart");
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/cart");
 	} else {
 		logger.logRouteEntry(0, "GET", "/cart");
 	}
@@ -58,18 +58,18 @@ router.get('/cart', function(req, res, next) {
 
 router.get('/viewItem', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/viewItem");
-		item_bo.addItemToUserSuggestion(req.session.loggedInUser.user_id, Number(req.param('itemid')));
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/viewItem");
+		item_bo.addItemToUserSuggestion(req.session.loggedInUser._id, Number(req.param('itemid')));
 	} else {
 		logger.logRouteEntry(0, "GET", "/viewItem");
 	}
-	item_bo.item(res);
+	item_bo.viewItem(res);
 	
 });
 
 router.get('/forgotPassword', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "GET", "/forgotPassword");
+		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/forgotPassword");
 	} else {
 		logger.logRouteEntry(0, "GET", "/forgotPassword");
 	}
@@ -78,8 +78,8 @@ router.get('/forgotPassword', function(req, res, next) {
 
 router.post('/placeBid', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/placeBid");
-		item_bo.placeUserBid(req.session.loggedInUser.user_id, req.body.bid_item, req.body.bid_price, req.body.bid_qty, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/placeBid");
+		item_bo.placeUserBid(req.session.loggedInUser._id, req.session.loggedInUser.username, req.body.bid_item, Number(req.body.bid_price), req.body.bid_qty, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/placeBid");
 		res.send({
@@ -90,7 +90,7 @@ router.post('/placeBid', function(req, res, next) {
 
 router.post('/emailIDAvailable', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/emailIDAvailable");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/emailIDAvailable");
 	} else {
 		logger.logRouteEntry(0, "POST", "/emailIDAvailable");
 	}
@@ -99,7 +99,7 @@ router.post('/emailIDAvailable', function(req, res, next) {
 
 router.post('/fetchBidDetails', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchBidDetails");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchBidDetails");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchBidDetails");
 	}
@@ -108,7 +108,7 @@ router.post('/fetchBidDetails', function(req, res, next) {
 
 router.post('/updateContact', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/updateContact");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/updateContact");
 	} else {
 		logger.logRouteEntry(0, "POST", "/updateContact");
 	}
@@ -117,7 +117,7 @@ router.post('/updateContact', function(req, res, next) {
 
 router.post('/updateDOB', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/updateDOB");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/updateDOB");
 	} else {
 		logger.logRouteEntry(0, "POST", "/updateDOB");
 	}
@@ -126,8 +126,8 @@ router.post('/updateDOB', function(req, res, next) {
 
 router.post('/fetchUserProfile', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchUserProfile");
-		profile_bo.sendUserProfile(req.session.loggedInUser.user_id, req.body.username, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchUserProfile");
+		profile_bo.sendUserProfile(req.session.loggedInUser._id, req.body.username, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchUserProfile");
 		profile_bo.sendUserProfile(0, req.body.username, res);
@@ -136,7 +136,7 @@ router.post('/fetchUserProfile', function(req, res, next) {
 
 router.post('/fetchSoldByUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchSoldByUser");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchSoldByUser");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchSoldByUser");
 	}
@@ -145,7 +145,7 @@ router.post('/fetchSoldByUser', function(req, res, next) {
 
 router.post('/fetchBoughtByUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchBoughtByUser");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchBoughtByUser");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchBoughtByUser");
 	}
@@ -154,7 +154,7 @@ router.post('/fetchBoughtByUser', function(req, res, next) {
 
 router.post('/fetchSaleByUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchSaleByUser");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchSaleByUser");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchSaleByUser");
 	}
@@ -163,7 +163,7 @@ router.post('/fetchSaleByUser', function(req, res, next) {
 
 router.post('/usernameAvailable', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/usernameAvailable");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/usernameAvailable");
 	} else {
 		logger.logRouteEntry(0, "POST", "/usernameAvailable");
 	}
@@ -172,20 +172,20 @@ router.post('/usernameAvailable', function(req, res, next) {
 
 router.post('/loggedInUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/loggedInUser");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/loggedInUser");
 		common_bo.sendLoggedInUser(req, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/loggedInUser");
 		res.send({
-			"userBO"	:	{}
+			"loggedInUser"	:	{}
 		});
 	}
 });
 
 router.post('/checkCartQtyAvailable', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/checkCartQtyAvailable");
-		cart_bo.sendCartAvailability(req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/checkCartQtyAvailable");
+		cart_bo.sendCartAvailability(req.session.loggedInUser._id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/checkCartQtyAvailable");
 		res.redirect('/');
@@ -194,7 +194,7 @@ router.post('/checkCartQtyAvailable', function(req, res, next) {
 
 router.post('/fetchAddresses', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchAddresses");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchAddresses");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchAddresses");
 	}
@@ -203,8 +203,8 @@ router.post('/fetchAddresses', function(req, res, next) {
 
 router.post('/checkout', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/checkout");
-		cart_bo.checkout(req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/checkout");
+		cart_bo.checkout(req.session.loggedInUser._id, req, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/checkout");
 		res.redirect('/');
@@ -213,7 +213,7 @@ router.post('/checkout', function(req, res, next) {
 
 router.post('/addAddress', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/addAddress");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/addAddress");
 	} else {
 		logger.logRouteEntry(0, "POST", "/addAddress");
 	}
@@ -222,26 +222,26 @@ router.post('/addAddress', function(req, res, next) {
 
 router.post('/fetchItemDetails', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchItemDetails");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchItemDetails");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchItemDetails");
 	}
-	item_bo.sendItemDetails(req.body.itemid, res);
+	item_bo.sendItemDetails(Number(req.body.itemid), res);
 });
 
 router.post('/fetchTransactions', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchTransactions");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchTransactions");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchTransactions");
 	}
-	item_bo.sendTotalSold(req.body.itemid, res);
+	item_bo.sendTotalSold(Number(req.body.itemid), res);
 });
 
 router.post('/fetchCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchCart");
-		common_bo.sendUserCartItems(req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchCart");
+		common_bo.sendUserCartItems(req.session.loggedInUser._id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchCart");
 		common_bo.sendCartItems(res);
@@ -250,8 +250,8 @@ router.post('/fetchCart', function(req, res, next) {
 
 router.post('/removeFromCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/removeFromCart");
-		cart_bo.removeFromCart(req.session.loggedInUser.user_id, req.body.item, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/removeFromCart");
+		cart_bo.removeFromCart(req.session.loggedInUser._id, req.body.item, req, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/removeFromCart");
 		res.redirect('/');
@@ -260,8 +260,8 @@ router.post('/removeFromCart', function(req, res, next) {
 
 router.post('/fetchNotifications', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchNotifications");
-		common_bo.sendUserNotifications(req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchNotifications");
+		common_bo.sendUserNotifications(req.session.loggedInUser._id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchNotifications");
 		common_bo.sendNotifications(res);
@@ -270,8 +270,8 @@ router.post('/fetchNotifications', function(req, res, next) {
 
 router.post('/addToCart', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/addToCart");
-		item_bo.addItemToCart(req.session.loggedInUser.user_id, req.body.itemid, req.body.qty, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/addToCart");
+		item_bo.addItemToCart(req.session.loggedInUser._id, req.body.item, req.body.qty, req, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/addToCart");
 		res.send({
@@ -282,8 +282,8 @@ router.post('/addToCart', function(req, res, next) {
 
 router.post('/fetchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.username, "POST", "/fetchSales");
-		homepage_bo.sendUserSaleListing(req.session.loggedInUser.username, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchSales");
+		homepage_bo.sendUserSaleListing(req.session.loggedInUser._id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchSales");
 		homepage_bo.sendSaleListing(res);
@@ -292,36 +292,26 @@ router.post('/fetchSales', function(req, res, next) {
 
 router.post('/searchSales', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/searchSales");
-		homepage_bo.sendUserSearchResults(req.body.searchString, req.session.loggedInUser.user_id, res);
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/searchSales");
+		homepage_bo.sendUserSearchResults(req.body.searchString, req.session.loggedInUser._id, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/searchSales");
 		homepage_bo.sendSearchResults(req.body.searchString, res);
 	}
 });
 
-router.post('/fetchSuggestions', function(req, res, next) {
+router.post('/fetchCategories', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.username, "POST", "/fetchSuggestions");
-		homepage_bo.sendUserSuggestions(req.session.loggedInUser.user_id, res);
-	} else {
-		logger.logRouteEntry(0, "POST", "/fetchSuggestions");
-		homepage_bo.sendSuggestions(res);
-	}
-});
-
-router.post('/fetchItems', function(req, res, next) {
-	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchItems");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchItems");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchItems");
 	}
-	sell_bo.sendItems(res);
+	sell_bo.sendCategories(res);
 });
 
 router.post('/fetchConditions', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/fetchConditions");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchConditions");
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchConditions");
 	}
@@ -330,19 +320,19 @@ router.post('/fetchConditions', function(req, res, next) {
 
 router.post('/register', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/register");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/register");
 	} else {
 		logger.logRouteEntry(0, "POST", "/register");
 	}
 	accounts_bo.register(sjcl.decrypt(req.body.passwordpassword, req.body.username), 
 			req.body.email, sjcl.decrypt(req.body.passwordpassword, req.body.password), 
-			req.body.fname, req.body.lname, req.body.contact, res);
+			req.body.fname, req.body.lname, req.body.contact, req.body.dob, res);
 });
 
 router.post('/publishSale', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/publishSale");
-		sell_bo.publishSale(req.session.loggedInUser.username, req.body.advertise_title, req.body.advertise_item, 
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/publishSale");
+		sell_bo.publishSale(req.session.loggedInUser._id, req.session.loggedInUser.username, req.body.advertise_title, req.body.advertise_category, 
 				req.body.advertise_condition, req.body.advertise_is_bid, req.body.advertise_price, 
 				req.body.advertise_quantity, req.body.advertise_desc, res);
 	} else {
@@ -353,19 +343,19 @@ router.post('/publishSale', function(req, res, next) {
 
 router.post('/signoutUser', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/signoutUser");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/signoutUser");
 	} else {
 		logger.logRouteEntry(0, "POST", "/signoutUser");
 	}
 	if(req.session) {
-		logger.logUserSignout(req.session.loggedInUser.user_id);
+		logger.logUserSignout(req.session.loggedInUser._id);
 		common_bo.destroySession(req, res);
 	}
 });
 
 router.post('/signin', function(req, res, next) {
 	if(req.session.loggedInUser) {
-		logger.logRouteEntry(req.session.loggedInUser.user_id, "POST", "/signin");
+		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/signin");
 	} else {
 		logger.logRouteEntry(0, "POST", "/signin");
 	}

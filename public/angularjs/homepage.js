@@ -137,21 +137,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			method : "POST",
 			url : "/loggedInUser"
 		}).success(function(data) {
-			$scope.user_fname = data.userBO.f_name;
-			$scope.user_lname = data.userBO.l_name;
-			$scope.user_name = data.userBO.user_name;
-			$scope.user_id = data.userBO.user_id;
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
-	};
-
-	$scope.fetchSuggestions = function() {
-		$http({
-			method : "POST",
-			url : "/fetchSuggestions"
-		}).success(function(data) {
-			$scope.suggestions = data.suggestionDetails;
+			$scope.loggedInUser = data.loggedInUser;
 		}).error(function(error) {
 			// TODO: Handle Error
 		});
@@ -170,7 +156,6 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	};
 	
 	$scope.fetchLoggedInUser();
-	$scope.fetchSuggestions();
 	$scope.fetchSales();
 	$scope.fetchCart();
 	$scope.fetchNotifications();

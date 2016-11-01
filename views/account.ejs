@@ -176,6 +176,19 @@
 										</abbr>
 									</div>
 								</div>
+								<div class="row">
+									<div class="col-md-11 form-group">
+										<input type="date" id="user" ng-model="dob" placeholder="Date of Birth" ng-enter="register()" class="form-control">
+									</div>
+									<div class="col-md-1 form-group true-false">
+										<abbr title="Date of Birth number is valid">
+											<div class="glyphicon glyphicon-ok available" ng-show="validDob"></div>
+										</abbr>
+										<!-- <abbr title="Date of Birth Should be a valid ">
+											<div class="glyphicon glyphicon-remove unavailable" ng-hide="validDob"></div>
+										</abbr> -->
+									</div>
+								</div>
 								<div>
 									<p class="account-info">By <strong>Registering</strong>, you agree that you've read and accepted our <span class="text-primary link-cursor-underline">User Agreement</span>, you're at least 18 years old, and you consent to our <span class="text-primary link-cursor-underline">Privacy Notice</span> and receiving marketing communications from us.</p>
 								</div>

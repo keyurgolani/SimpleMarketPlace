@@ -114,6 +114,7 @@ eBay.controller('registerController', function($scope, $http, $location) {
 					"fname"				:	$scope.fname,
 					"lname"				:	$scope.lname,
 					"contact"			:	$scope.contact,
+					"dob"				:	$scope.dob,
 					"passwordpassword"	:	$scope.$parent.randomPassword
 				}
 			}).success(function(data) {
@@ -206,6 +207,19 @@ eBay.controller('registerController', function($scope, $http, $location) {
 			} else {
 				$scope.validContact = false;
 			}
+		}
+	});
+
+	$scope.$watch('dob', function() {
+		// var contact_validator = new RegExp(/^(\d{11,12})$/);
+		if($scope.dob !== undefined && $scope.dob !== "") {
+			// if($scope.dob.match(contact_validator) !== null) {
+				$scope.validDob = true;
+			// } else {
+				// $scope.validContact = false;
+			// }
+		} else {
+			// $scope.validDob = false;
 		}
 	});
 	

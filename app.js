@@ -12,7 +12,7 @@ var app = express();
 var session = require('express-session');
 
 var dao = require('./utils/dao');
-var mongoDAO = require('./utils/mongoDao');
+var mongoDao = require('./utils/mongoDao');
 
 // Nice library on dynamic calls REST application: https://github.com/deitch/booster
 
@@ -44,17 +44,17 @@ app.use(session({
 }));
 
 app.use(function(req, res, next) {
-	mongoDAO.connect(next);
+	mongoDao.connect(next);
 });
 
 app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	dao.fetchData("count(user_id) as userCount", "user_account", {
-		"user_name"	:	req.originalUrl.substring(1)
-	}, function(results) {
-		if(results[0].userCount === 0) {
+	mongoDao.fetch('UserDetails', {
+		'username'	:	req.originalUrl.substring(1)
+	}, function(resultDoc) {
+		if(resultDoc.length === 0) {
 			var err = new Error('Not Found');
 			err.status = 404;
 			next(err);

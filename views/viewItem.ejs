@@ -25,8 +25,6 @@
 		<script src="modules/ng-focus-if/focusIf.min.js"></script>
 		<script src="modules/angular-sanitize/angular-sanitize.js"></script>
 		<script src="modules/angular-notification-icons/dist/angular-notification-icons.js"></script>
-		<script src="modules/jquery.easing/jquery.easing.js"></script>
-		<script src="modules/angular-counter/js/angular-counter.js"></script>
 		
 		<script src="ngjs/viewItem.js"></script>
 	</head>
@@ -40,40 +38,40 @@
 	                        	<div class="col-md-6 header-item-container">
 	                                <div class="row">
 	                                	<div class="col-md-12">
-	                                		<span ng-hide="user_fname">
-	                                			<div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div>
-	                                		</span>
-		                                	<span ng-show="user_fname">
-		                                		<div class="header-item usernameDisplay">Hi <span ng-mouseover="show_user_profile_menu = true"><strong>{{user_fname}}!&nbsp;</strong><span class="glyphicon glyphicon-menu-down"></span></span></div>
-		                                		<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
-		                                			<div class="row user-menu-row link" ng-click="userProfile()">
-		                                				<div class="col-md-5 profile-image-bound">
-				                							<img src="/images/products/profile.jpg" class="profile-image">
-				                						</div>
-				                						<div class="col-md-7 profile-names">
-				                							<span>{{user_fname}}&nbsp;{{user_lname}}</span>
-				                							<hr class="separator"/>
-				                							<span>{{user_name}}</span>
-				                						</div>
-		                                			</div>
-		                                			<hr class="separator"/>
-		                                			<div class="row user-menu-row" ng-click="userProfile()">
-		                                				<div class="col-md-12 link">My Account</div>
-		                                			</div>
-		                                			<hr class="separator"/>
-		                                			<div class="row user-menu-row link" ng-click="userProfile()">
-		                                				<div class="col-md-12 link">My Transactions</div>
-		                                			</div>
-		                                			<hr class="separator"/>
-		                                			<div class="row user-menu-row link" ng-click="signout()">
-		                                				<div class="col-md-12 link">Sign out</div>
-		                                			</div>
-		                                		</div>
-		                                	</span>
+	                                		<span ng-hide="loggedInUser.f_name">
+												<div class="header-item">Hi! <span ng-click="signinClicked()" class="link">Sign in</span> or <span ng-click="registerClicked()" class="link">register</span></div>
+											</span>
+											<span ng-show="loggedInUser.f_name">
+												<div class="header-item usernameDisplay">Hi <span ng-mouseover="show_user_profile_menu = true"><strong>{{loggedInUser.f_name}}!&nbsp;</strong><span class="glyphicon glyphicon-menu-down"></span></span></div>
+												<div id="user_profile_menu" ng-show="show_user_profile_menu" ng-mouseleave="show_user_profile_menu = false" class="user_profile_menu_content" ng-class="{show: show_user_profile_menu}">
+													<div class="row user-menu-row link" ng-click="userProfile()">
+														<div class="col-md-5 profile-image-bound">
+															<img src="/images/products/profile.jpg" class="profile-image">
+														</div>
+														<div class="col-md-7 profile-names">
+															<span>{{loggedInUser.f_name}}&nbsp;{{loggedInUser.l_name}}</span>
+															<hr class="separator"/>
+															<span>{{loggedInUser.username}}</span>
+														</div>
+													</div>
+													<hr class="separator"/>
+													<div class="row user-menu-row" ng-click="userProfile()">
+														<div class="col-md-12 link">My Account</div>
+													</div>
+													<hr class="separator"/>
+													<div class="row user-menu-row link" ng-click="userProfile()">
+														<div class="col-md-12 link">My Transactions</div>
+													</div>
+													<hr class="separator"/>
+													<div class="row user-menu-row link" ng-click="signout()">
+														<div class="col-md-12 link">Sign out</div>
+													</div>
+												</div>
+											</span>
 		                                    <div class="header-item">Daily Deals</div>
 		                                    <div class="header-item">Gift Cards</div>
-		                                    <span ng-hide="user_fname"><div class="header-item">Sell</div></span>
-		                                    <span ng-show="user_fname"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
+		                                    <span ng-hide="loggedInUser.f_name"><div class="header-item">Sell</div></span>
+		                                    <span ng-show="loggedInUser.f_name"><div class="header-item link" ng-click="sellAnItem()">Sell</div></span>
 		                                    <div class="header-item extreme-right">Help &amp; Content</div>
 	                                	</div>
 	                                </div>
@@ -83,23 +81,23 @@
 	                            </div>
 	                            <div class="col-md-4 pull-right right-panel">
 	                                <div class="header-item right-panel">My eBay</div>
-	                                <notification-icon count='notificationCount' animation='bounce' ng-click="show_notifications = !show_notifications" disappear-animation='fade'>
-	                                	<div class="header-item right-panel glyphicon glyphicon-bell"></div>
-	                                </notification-icon>
-                                	<div id="notifications" ng-show="show_notifications" ng-click="hideNotifications()" class="notifications-window" ng-class="{show: show_notifications}">
-                            			<div ng-repeat="notification in notifications">
-	                            			<div class="row">
-	                            				<div class="col-md-12 notification-detail">
-	                            					<div class="detail-item">{{$index + 1}}</div>
-			                                		<div class="detail-item">{{notification.notification_text}}</div>
-	                            				</div>
-	                            			</div>
-	                            			<hr class="separator"/>
-                            			</div>
-                            		</div>
-	                                <notification-icon count='cartItemCount' animation='bounce' disappear-animation='fade' ng-click="gotoCart()" class="black-link">
-	                                	<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
-	                                </notification-icon>
+	                                <notification-icon count='loggedInUser.notifications.length' animation='bounce' ng-click="show_notifications = !show_notifications" disappear-animation='fade'>
+										<div class="header-item right-panel glyphicon glyphicon-bell"></div>
+									</notification-icon>
+									<div id="notifications" ng-show="show_notifications" ng-click="hideNotifications()" class="notifications-window" ng-class="{show: show_notifications}">
+										<div ng-repeat="notification in loggedInUser.notifications">
+											<div class="row">
+												<div class="col-md-12 notification-detail">
+													<div class="detail-item">{{$index + 1}}</div>
+													<div class="detail-item">{{notification.notification}}</div>
+												</div>
+											</div>
+											<hr class="separator"/>
+										</div>
+									</div>
+									<notification-icon count='loggedInUser.cart.length' animation='bounce' disappear-animation='fade' ng-click="gotoCart()" class="black-link">
+										<div class="header-item right-panel glyphicon glyphicon-shopping-cart"></div>
+									</notification-icon>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -141,22 +139,22 @@
 	                        	<div class="col-md-5 sale-details-text-bound">
 	                        		<div class="row">
 	                        			<div class="col-md-12 title-bar">
-	                        				<span class="sale-title">{{item_title}}</span>
+	                        				<span class="sale-title">{{item.title}}</span>
 	                        			</div>
 	                        		</div>
 	                        		<hr class="separator"/>
-	                        		<div class="row" ng-show="is_bid">
+	                        		<div class="row" ng-show="item.is_bid">
 	                        			<div class="col-md-12">
 	                        				<span class="remaining-bid-time">Remaining Bid Time: {{countdownTime}}</span>
 	                        			</div>
 	                        		</div>
-	                        		<hr class="separator" ng-show="is_bid"/>
+	                        		<hr class="separator" ng-show="item.is_bid"/>
 	                        		<div class="row detail-tuple">
 	                        			<div class="col-md-4">
 	                        				<span class="details-key">eBay Item ID:</span>
 	                        			</div>
 	                        			<div class="col-md-8">
-	                        				<span class="details-value">{{item_id}}</span>
+	                        				<span class="details-value">{{item._id}}</span>
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
@@ -164,7 +162,7 @@
 	                        				<span class="details-key">Item Condition:</span>
 	                        			</div>
 	                        			<div class="col-md-8">
-	                        				<span class="details-value">{{item_condition}}</span>
+	                        				<span class="details-value">{{item.condition.condition}}</span>
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
@@ -179,37 +177,37 @@
 	                        						</div>
 	                        					</div>
 	                        					<div class="col-md-8">
-	                        						<span class="sold-qty">&nbsp;{{total_sold}} sold</span><span class="available-qty">{{available_quantity}} available /</span>
+	                        						<span class="sold-qty">&nbsp;{{total_sold}} sold</span><span class="available-qty">{{item.sale_qty}} available /</span>
 	                        					</div>
 	                        				</div>
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
-	                        			<div ng-show="is_bid" class="col-md-4">
+	                        			<div ng-show="item.is_bid" class="col-md-4">
 	                        				<span class="details-key">Current Maximum Bid:</span>
 	                        			</div>
-	                        			<div ng-hide="is_bid" class="col-md-4">
+	                        			<div ng-hide="item.is_bid" class="col-md-4">
 	                        				<span class="details-key">Item Price:</span>
 	                        			</div>
 	                        			<div class="col-md-8">
 	                        				<div class="row details-value">
 	                        					<div class="col-md-4">
 	                        						<div class="row">
-	                        							<span class="details-value">${{current_price}}</span>
+	                        							<span class="details-value">${{item.sale_price}}</span>
 	                        						</div>
 	                        					</div>
-	                        					<div class="col-md-8" ng-show="is_bid">
-	                        						<span ng-click="openBids()" class="bids-count link">[ Bids: {{number_of_bids}} so far ]</span>
+	                        					<div class="col-md-8" ng-show="item.is_bid">
+	                        						<span ng-click="openBids()" class="bids-count link">[ Bids: {{item.bids.length}} so far ]</span>
 	                        					</div>
 	                        					<div id="bid_details_window" ng-show="show_bid_details" ng-mouseleave="show_bid_details = false" class="bid-details-window" ng-class="{show: show_bid_details}">
-	                        						<span class="section-title ">All Bids on {{item_title}}</span>
-		                                			<div ng-repeat="bid in bid_details">
+	                        						<span class="section-title ">All Bids on {{item.title}}</span>
+		                                			<div ng-repeat="bid in item.bids">
 		                                				<div class="row">
 		                                					<div class="col-md-12 bid-detail">
 		                                						<div class="detail-item">{{$index + 1}}</div>
 			                                					<div class="detail-item">${{bid.bid_amount}}</div>
 			                                					<div class="detail-item"> by </div>
-			                                					<div ng-click="showUser(bid.user_name)" class="link detail-item">@{{bid.user_name}}</div>
+			                                					<div ng-click="showUser(bid.user_name)" class="link detail-item">@{{bid.bidder}}</div>
 			                                					<div class="detail-item">for</div>
 			                                					<div class="detail-item">{{bid.bid_qty}} quantities</div>
 		                                					</div>
@@ -224,21 +222,21 @@
 	                        			<div class="col-md-4">
 	                        				<span class="details-key">Seller:</span>
 	                        			</div>
-	                        			<div class="col-md-8" ng-click="showUser(item_seller_handle)">
-	                        				<span class="details-value link">{{item_seller_fname}} {{item_seller_lname }} ( @{{item_seller_handle}} )</span>
+	                        			<div class="col-md-8" ng-click="showUser(item.seller)">
+	                        				<span class="details-value link">@{{item.seller}}</span>
 	                        			</div>
 	                        		</div>
 	                        		<div class="row detail-tuple">
-	                        			<div class="col-md-6" ng-hide="is_bid">
+	                        			<div class="col-md-6" ng-hide="item.is_bid">
             								<button class="btn btn-primary form-control buy-button" ng-click="addToCart()">Add To Cart</span>
             							</div>
-            							<div class="col-md-6" ng-hide="is_bid">
+            							<div class="col-md-6" ng-hide="item.is_bid">
                 							<button class="btn btn-primary form-control buy-button" ng-click="buyAndCheckout()">Buy It Now</span>
             							</div>
-            							<div class="col-md-6" ng-show="is_bid">
-            								<input type="text" ng-model="bid_price" class="form-control buy-button" ng-enter="bid()"/>
+            							<div class="col-md-6" ng-show="item.is_bid">
+            								<input type="text" ng-model="bid_price" class="form-control buy-button" placeholder="Bid Amount" ng-enter="bid()"/>
             							</div>
-            							<div class="col-md-6" ng-show="is_bid">
+            							<div class="col-md-6" ng-show="item.is_bid">
                 							<button class="btn btn-primary form-control buy-button" ng-click="bid()">Bid</span>
             							</div>
 	                        		</div>
@@ -249,7 +247,7 @@
 	                        <hr class="separator"/>
 	                        <div class="row">
 	                        	<div class="col-md-12">
-	                        		<p ng-bind-html="item_description" class="descripion-text"></p>
+	                        		<p ng-bind-html="item.description" class="descripion-text"></p>
 	                        	</div>
 	                        </div>
 						</div>

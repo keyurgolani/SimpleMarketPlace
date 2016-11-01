@@ -85,13 +85,13 @@
 									</div>
 									<div ng-show="showMore" class="row show-more-div">
 										<div class="col-xs-12 adjust-right">
-											<select ng-model="adv_item" ng-options="item.item_name for item in items" class="form-control show-more item-select" focus-if="showMore"><option value="" disabled selected>Select an Item to Sell...</option></select>
+											<select ng-model="adv_category" ng-options="category.category for category in categories" class="form-control show-more item-select" focus-if="showMore"><option value="" disabled selected>Select an Item to Sell...</option></select>
 											<input type="text" placeholder="Qty" ng-model="adv_qty" class="form-control qty-box"/>
 										</div>
 									</div>
 									<div ng-show="showMore" class="row show-more-div">
 										<div class="col-xs-6 item-condition-container">
-											<select ng-model="item_condition" ng-options="condition.condition_name for condition in conditions" class="form-control show-more item-condition"><option value="" disabled selected>Select an Item Condition...</option></select>
+											<select ng-model="item_condition" ng-options="condition.condition for condition in conditions" class="form-control show-more item-condition"><option value="" disabled selected>Select an Item Condition...</option></select>
 										</div>
 										<div class="col-md-3 my-div">
 											<div class="is-bid">

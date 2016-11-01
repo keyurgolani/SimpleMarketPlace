@@ -1,9 +1,8 @@
 
 var mongoDao = require('../utils/mongoDao');
-var dao = require('../utils/dao');
 var logger = require("../utils/logger");
 
-module.exports.item = function(res) {
+module.exports.viewItem = function(res) {
 	logger.logEntry("item_bo", "item");
 	res.render('viewItem', {});
 };
@@ -19,206 +18,98 @@ module.exports.sendBidDetails = function(sale_id, res) {
 			"futureTime"	:	new Date(bidEnd)
 		});
 	});
-	// dao.executeQuery("SELECT bid.*, bidder.user_name FROM bid_details AS bid, user_account AS bidder WHERE bid.bidder = bidder.user_id AND sale = ? order by bid.bid_amount desc", [sale_id], function(results) {
-	// 	dao.executeQuery("select sale_time from sale_details where sale_id = ?", [sale_id], function(sale_time) {
-	// 		var saleDate = new Date(sale_time[0].sale_time);
-	// 		var bidEnd = Math.abs(saleDate.getTime() + 345600000);
-	// 		res.send({
-	// 			"results"		:	results,
-	// 			"futureTime"	:	new Date(bidEnd)
-	// 		});
-	// 	});
-	// });
 };
 
 module.exports.sendItemDetails = function(sale_id, res) {
 	logger.logEntry("item_bo", "sendItemDetails");
 	mongoDao.fetchOne('SaleDetails', {
-		'sale_id' : sale_id
+		'_id' : sale_id
 	}, function(resultDoc) {
 		var bidEnd = Math.abs(resultDoc.sale_time + 345600000);
-		if(resultDoc.active === 0) {
+		if(!resultDoc.active) {
 			res.send({
-				"results"		:	{},
+				"item"		:	{},
 				"futureTime"	:	null
 			});
 		} else {
 			res.send({
-				"results"		:	resultDoc,
-				"futureTime"	:	new Date(bidEnd)
+				"item"		:	resultDoc,
+				"futureTime"	:	bidEnd
 			});
 		}
 	});
-	// dao.executeQuery("select is_bid from sale_details where sale_id = ?", [sale_id], function(results) {
-	// 	if(results[0].is_bid) {
-	// 		dao.executeQuery("select active from sale_details where sale_id = ?", [sale_id], function(activeStatus) {
-	// 			if(activeStatus[0].active === 1) {
-	// 				dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [sale_id], function(results) {
-	// 					res.send({
-	// 						"item_id" : results[0].sale_id,
-	// 						"item_title" : results[0].title,
-	// 						"item_description" : results[0].description,
-	// 						"item_condition" : results[0].condition_name,
-	// 						"available_quantity" : results[0].sale_qty,
-	// 						"is_bid" : results[0].is_bid,
-	// 						"current_price" : results[0].sale_price,
-	// 						"item_seller_fname" : results[0].f_name,
-	// 						"item_seller_lname" : results[0].l_name,
-	// 						"item_seller_handle" : results[0].user_name,
-	// 						"item_seller_id" : results[0].user_id
-	// 					});
-	// 				});
-	// 			} else {
-	// 				res.send({
-	// 					"item_id"	:	-1
-	// 				});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		dao.executeQuery("SELECT sale.*, seller.f_name, seller.l_name, seller.user_name, seller.user_id, cond.condition_name FROM sale_details AS sale, user_account AS seller, item_conditions AS cond WHERE sale.condition = cond.condition_id AND sale.seller = seller.user_id AND sale_id = ?", [sale_id], function(results) {
-	// 			res.send({
-	// 				"item_id" : results[0].sale_id,
-	// 				"item_title" : results[0].title,
-	// 				"item_description" : results[0].description,
-	// 				"item_condition" : results[0].condition_name,
-	// 				"available_quantity" : results[0].sale_qty,
-	// 				"is_bid" : results[0].is_bid,
-	// 				"current_price" : results[0].sale_price,
-	// 				"item_seller_fname" : results[0].f_name,
-	// 				"item_seller_lname" : results[0].l_name,
-	// 				"item_seller_handle" : results[0].user_name,
-	// 				"item_seller_id" : results[0].user_id
-	// 			});
-	// 		});
-	// 	}
-	// });
 };
 
-module.exports.placeUserBid = function(user_id, item_id, bid_price, bid_qty, res) {
+module.exports.placeUserBid = function(user_id, username, item_id, bid_price, bid_qty, res) {
 	logger.logEntry("item_bo", "placeUserBid");
 	mongoDao.fetchOne('SaleDetails', {
-		'sale_id' : sale_id
+		'_id' : item_id
 	}, function(resultDoc) {
-		mongoDao.update('SaleDetails', {
-		'sale_id' : sale_id
+		if(bid_price > Number(resultDoc.sale_price)) {
+			console.log("here");
+			mongoDao.update('SaleDetails', {
+				'_id' : item_id
+			}, {
+				$push : {
+					'bids' : {
+						"bidder_id"		:	user_id,
+						"bidder"		:	username,
+						"bid_amount"	:	bid_price,
+						"bid_qty"		:	bid_qty
+					}
+				},
+				$set : {
+					'sale_price'	:	bid_price
+				}
+			}, function(resultDoc) {
+				logger.logBid(user_id, item_id, bid_price, bid_qty);
+				res.send({
+					"status_code"	:	200
+				});
+			});
+		} else {
+			res.send({
+				"status_code"	:	409
+			});
+		}
+	});
+};
+
+module.exports.addItemToCart = function(user_id, item, qty, req, res) {
+	logger.logEntry("item_bo", "addItemToCart");
+	item.sale_qty = qty;
+	req.session.loggedInUser.cart.push(item);
+	mongoDao.fetch('UserDetails', {
+		'_id'		:	user_id,
+	}, function(resultDoc) {
+		mongoDao.update('UserDetails', {
+			'_id'	:	user_id
 		}, {
-			$set : {
-				'bids' : resultDoc.bids.push({
-					"sale"			:	item_id,
-					"bidder"		:	user_id,
-					"bid_amount"	:	bid_price,
-					"bid_qty"		:	bid_qty
-				}),
-				'sale_price'	:	bid_price
+			$push : {
+				'cart' : item
 			}
 		}, function(resultDoc) {
-			logger.logBid(user_id, item_id, bid_price, bid_qty);
+			logger.logUserCartEntry(user_id, item._id, qty, item.sale_price);
 			res.send({
 				"status_code"	:	200
 			});
 		});
 	});
-	// dao.insertData("bid_details", {
-	// 	"sale"			:	item_id,
-	// 	"bidder"		:	user_id,
-	// 	"bid_amount"	:	bid_price,
-	// 	"bid_qty"		:	bid_qty
-	// }, function(rows) {
-	// 	dao.executeQuery("update sale_details set sale_price = ? where sale_id = ?", [bid_price, item_id], function() {
-	// 		logger.logBid(user_id, item_id, bid_price, bid_qty);
-	// 		res.send({
-	// 			"status_code"	:	200
-	// 		});
-	// 	});
-	// });
-};
-
-module.exports.addItemToCart = function(user_id, item_id, qty, res) {
-	logger.logEntry("item_bo", "addItemToCart");
-	mongoDao.fetch('CartDetails', {
-		'user_id'	:	user_id,
-		'item_id'	:	item_id
-	}, function(resultDoc) {
-		if(resultDoc.length === 1) {
-			mongoDao.update('CartDetails', {
-				'user_id'	:	user_id,
-				'item_id'	:	item_id
-			}, {
-				$set	:	{
-					'cart_qty'	:	Number(resultDoc[0].cart_qty) + Number(qty)
-				}
-			}, function(resultDoc) {
-				logger.logUserCartEntry(user_id, item_id, qty, resultDoc[0].sale_price);
-				res.send({
-					"status_code"	:	200
-				});
-			});
-		} else {
-			mongoDao.insert('CartDetails', {
-				"user"		:	user_id,
-				"sale_item"	:	item_id,
-				"cart_qty"	:	qty
-			}, function(resultDoc) {
-				res.send({
-					"status_code"	:	200
-				});
-			});
-		}
-	});
-	// dao.executeQuery("SELECT count(cart_item_id) as entries FROM cart_details WHERE user = ? AND sale_item = ?", [user_id, item_id], function(results) {
-	// 	if(results[0].entries > 0) {
-	// 		dao.executeQuery("UPDATE cart_details SET `cart_qty` = ? WHERE `user` = ? AND `sale_item` = ?", [Number(results[0].entries) + Number(qty), user_id, item_id], function(update_status) {
-	// 			if(update_status.affectedRows === 1) {
-	// 				dao.fetchData("sale_price", "sale_details", {
-	// 					"sale_id"	:	item_id
-	// 				}, function(result) {
-	// 					logger.logUserCartEntry(user_id, item_id, qty, result[0].sale_price);
-	// 				});
-	// 				res.send({
-	// 					"status_code"	:	200
-	// 				});
-	// 			} else {
-	// 				res.send({
-	// 					"status_code"	:	500
-	// 				});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		dao.insertData("cart_details", {
-	// 			"user"		:	user_id,
-	// 			"sale_item"	:	item_id,
-	// 			"cart_qty"	:	qty
-	// 		}, function(rows) {
-	// 			if(rows.affectedRows === 1) {
-	// 				res.send({
-	// 					"status_code"	:	200
-	// 				});
-	// 			} else {
-	// 				res.send({
-	// 					"status_code"	:	500
-	// 				});
-	// 			}
-	// 		});
-	// 	}
-	// });
 };
 
 module.exports.sendTotalSold = function(item_id, res) {
 	logger.logEntry("item_bo", "sendTotalSold");
 	mongoDao.fetch('TransactionDetails', {
-		'sale'	:	item_id
+		'item._id'	:	item_id
 	}, function(resultDoc) {
+		console.log(resultDoc);
 		res.send({
 			"total_sold" : resultDoc.length
 		});
 	});
-	// dao.executeQuery("select sum(txn_id) as totalCount from txn_details where sale = ?", [item_id], function(results) {
-	// 	res.send({
-	// 		"total_sold" : results[0].totalCount
-	// 	});
-	// });
 };
 
+// TODO: Still not done.
 module.exports.addItemToUserSuggestion = function(user_id, item_id) {
 	logger.logEntry("item_bo", "addItemToUserSuggestion");
 	logger.logItemVisit(user_id, item_id);
@@ -228,23 +119,4 @@ module.exports.addItemToUserSuggestion = function(user_id, item_id) {
 	}, function(resultDoc) {
 		// Do nothing
 	});
-	// dao.executeQuery("SELECT count(suggestion_id) as entries FROM suggestion_details WHERE user = ? AND suggestion_item = ?", [user_id, item_id], function(rows) {
-	// 	if(rows.entries !== 0) {
-	// 		dao.executeQuery("DELETE FROM suggestion_details WHERE user=? AND suggestion_item=?", [user_id, item_id], function(suggestionDetails) {
-	// 			dao.insertData("suggestion_details", {
-	// 				"user"				:	user_id,
-	// 				"suggestion_item"	:	item_id
-	// 			}, function(rows) {
-	// 				// Do nothing
-	// 			});
-	// 		});
-	// 	} else {
-	// 		dao.insertData("suggestion_details", {
-	// 			"user"				:	user_id,
-	// 			"suggestion_item"	:	item_id
-	// 		}, function(rows) {
-	// 			// Do nothing
-	// 		});
-	// 	}
-	// });
 };

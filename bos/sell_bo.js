@@ -9,78 +9,88 @@ module.exports.sell = function(res) {
 
 module.exports.sendConditions = function(res) {
 	logger.logEntry('sell_bo', 'sendConditions');
-	mongoDao.fetch('ItemConditions', {}, function(resultDoc) {
+	mongoDao.fetch('Conditions', {}, function(resultDoc) {
 		res.send({
 			'result'	:	resultDoc
 		});
 	});
 };
 
-module.exports.sendItems = function(res) {
-	logger.logEntry('sell_bo', 'sendItems');
-	mongoDao.fetch('ItemDetails', {}, function(resultDoc) {
+module.exports.sendCategories = function(res) {
+	logger.logEntry('sell_bo', 'sendCategories');
+	mongoDao.fetch('Categories', {}, function(resultDoc) {
 		res.send({
 			'result'	:	resultDoc
 		});
 	});
 };
 
-module.exports.publishSale = function(user_id, title, item, condition, is_bid, price, quantity, description, res) {
+module.exports.publishSale = function(user_id, username, title, category, condition, is_bid, price, quantity, description, res) {
 	logger.logEntry('sell_bo', 'publishSale');
 	mongoDao.insert('SaleDetails', {
-		'seller'		:	user_id,
-		'item'			:	item_name,
-		'condition'		:	condition.condition_name,
+		'seller_id'		:	user_id,
+		'seller'		:	username,
+		'category'		:	category,
+		'condition'		:	condition,
 		'sale_price'	:	price,
 		'title'			:	title,
-		'bids'			:	[],
 		'description'	:	description,
-		'is_bid'		:	(is_bid ? 1 : 0),
 		'sale_qty'		:	quantity,
-		'active'		:	1,
+		'is_bid'		:	is_bid,
+		'bids'			:	[],
+		'active'		:	true,
 		'sale_time'		:	new Date().getTime()
 	}, function(insertResult) {
-		if(resultDoc.insertedCount === 1) {
+		if(insertResult.insertedCount === 1) {
+			// TODO: Bid Functionality not refined yet.
 			if(is_bid) {
 				setTimeout(function() {
 					mongoDao.update('SaleDetails', {
-						$set : {
-							'active' : 0
-						}
-					}, {
 						'_id' : insertResult.insertedIds[0]
+					}, {
+						$set : {
+							'active' : false
+						}
 					}, function(resultDoc) {
-						console.log(resultDoc);
-						mongoDao.fetchTop('BidDetails', {
-							'sale_id' : insertResult.insertedIds[0]
-						}, 'bid_amount', 1, function(topBid) {
-							mongoDao.update('SaleDetails', {
-								'_id' : insertResult.insertedIds[0]
-							}, {
-								$inc : {
-									'sale_qty' : -topBid.bid_qty
-								}
-							}, function(resultDoc) {
-								mongoDao.insert('TransactionDetails', {
-									'sale'				:	insertResult.insertedIds[0],
-									'buyer'				:	topBid.bidder,
-									'transaction_price'	:	topBid.bid_amount,
-									'txn_qty'			:	topBid.bid_qty
-								}, function(resultDoc) {
-									if(resultDoc.insertedCount === 1) {
-										mongoDao.insert('NotificationDetails', {
-											'notification_text'	:	'Your highest bid won! You purchased ' + title,
-											'user_id'			:	topBid.bidder
-										}, function(resultDoc) {
-											// Do nothing
-										});
-									}
+						mongoDao.fetchOne('SaleDetails', {
+							'_id' : insertResult.insertedIds[0]
+						}, function(resultDoc) {
+							if(resultDoc.bids.length !== 0) {
+								resultDoc.bids.sort(function(a, b) {
+									return a.bid_price - b.bid_price;
 								});
-							});
+								// --------------------------Continue working here
+								console.log(resultDoc.bids);
+								mongoDao.update('SaleDetails', {
+									'_id' : insertResult.insertedIds[0]
+								}, {
+									$inc : {
+										'sale_qty' : -topBid.bid_qty
+									}
+								}, function(resultDoc) {
+									mongoDao.insert('TransactionDetails', {
+										'sale'				:	insertResult.insertedIds[0],
+										'buyer'				:	topBid.bidder,
+										'transaction_price'	:	topBid.bid_amount,
+										'txn_qty'			:	topBid.bid_qty
+									}, function(resultDoc) {
+										if(resultDoc.insertedCount === 1) {
+											mongoDao.insert('NotificationDetails', {
+												'notification_text'	:	'Your highest bid won! You purchased ' + title,
+												'user_id'			:	topBid.bidder
+											}, function(resultDoc) {
+												// Do nothing
+											});
+										}
+									});
+								});
+							}
 						});
 					});
-				}, 345600000);
-	//			}, 120000);
+				// }, 345600000);
+				// }, 120000);
+				// }, 60000);
+				}, 0);
 			}
 			res.send({
 				'status_code'	:	'200'
