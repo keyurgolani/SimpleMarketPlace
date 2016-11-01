@@ -141,7 +141,7 @@ eBay.controller('viewItem', function($scope, $http, $location, $window, $interva
 	};
 	
 	$scope.userProfile = function() {
-		$window.location.href = "/"+$scope.user_name;
+		$window.location.href = "/"+$scope.loggedInUser.username;
 	};
 	
 	$scope.signout = function() {

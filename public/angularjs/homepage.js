@@ -55,7 +55,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	};
 	
 	$scope.userProfile = function() {
-		$window.location.href = "/"+$scope.user_name;
+		$window.location.href = "/"+$scope.loggedInUser.username;
 	};
 	
 	$scope.gotoCart = function() {
@@ -138,6 +138,8 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 			url : "/loggedInUser"
 		}).success(function(data) {
 			$scope.loggedInUser = data.loggedInUser;
+			$scope.loggedInUser.suggestions.reverse();
+			$scope.loggedInUser.suggestions.splice(4, $scope.loggedInUser.suggestions.length - 4)
 		}).error(function(error) {
 			// TODO: Handle Error
 		});

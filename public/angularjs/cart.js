@@ -136,7 +136,7 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	};
 	
 	$scope.userProfile = function() {
-		$window.location.href = "/"+$scope.user_name;
+		$window.location.href = "/"+$scope.loggedInUser.username;
 	};
 	
 	$scope.showUser = function(eBay_handle) {

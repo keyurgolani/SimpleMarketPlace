@@ -110,13 +110,21 @@ module.exports.sendTotalSold = function(item_id, res) {
 };
 
 // TODO: Still not done.
-module.exports.addItemToUserSuggestion = function(user_id, item_id) {
+module.exports.addItemToUserSuggestion = function(user_id, item_id, req) {
 	logger.logEntry("item_bo", "addItemToUserSuggestion");
 	logger.logItemVisit(user_id, item_id);
-	mongoDao.insert('SuggestionDetails', {
-		"user"				:	user_id,
-		"suggestion_item"	:	item_id
-	}, function(resultDoc) {
-		// Do nothing
-	});
+	mongoDao.fetchOne('SaleDetails', {
+		'_id'	:	item_id
+	}, function(item) {
+		req.session.loggedInUser.suggestions.push(item);
+		mongoDao.update('UserDetails', {
+			'_id'	:	user_id
+		}, {
+			$push : {
+				'suggestions' : item
+			}
+		}, function(resultDoc) {
+			// Do nothing
+		});
+	})
 };

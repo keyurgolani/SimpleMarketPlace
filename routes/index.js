@@ -59,7 +59,7 @@ router.get('/cart', function(req, res, next) {
 router.get('/viewItem', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		logger.logRouteEntry(req.session.loggedInUser._id, "GET", "/viewItem");
-		item_bo.addItemToUserSuggestion(req.session.loggedInUser._id, Number(req.param('itemid')));
+		item_bo.addItemToUserSuggestion(req.session.loggedInUser._id, Number(req.param('itemid')), req);
 	} else {
 		logger.logRouteEntry(0, "GET", "/viewItem");
 	}
@@ -127,10 +127,10 @@ router.post('/updateDOB', function(req, res, next) {
 router.post('/fetchUserProfile', function(req, res, next) {
 	if(req.session.loggedInUser) {
 		logger.logRouteEntry(req.session.loggedInUser._id, "POST", "/fetchUserProfile");
-		profile_bo.sendUserProfile(req.session.loggedInUser._id, req.body.username, res);
+		profile_bo.sendUserProfile(req.body.username, res);
 	} else {
 		logger.logRouteEntry(0, "POST", "/fetchUserProfile");
-		profile_bo.sendUserProfile(0, req.body.username, res);
+		profile_bo.sendUserProfile(req.body.username, res);
 	}
 });
 
