@@ -11,7 +11,6 @@ var app = express();
 
 var session = require('express-session');
 
-var dao = require('./utils/dao');
 var mongoDao = require('./utils/mongoDao');
 
 // Nice library on dynamic calls REST application: https://github.com/deitch/booster

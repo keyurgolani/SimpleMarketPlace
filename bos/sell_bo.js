@@ -9,25 +9,25 @@ module.exports.sell = function(res) {
 
 module.exports.sendConditions = function(res) {
 	logger.logEntry('sell_bo', 'sendConditions');
-	mongoDao.fetch('Conditions', {}, function(resultDoc) {
+	rabbitMQ.sendMessage('conditions', {}, function(payload) {
 		res.send({
-			'result'	:	resultDoc
+			'result'	:	payload.conditions
 		});
 	});
 };
 
 module.exports.sendCategories = function(res) {
 	logger.logEntry('sell_bo', 'sendCategories');
-	mongoDao.fetch('Categories', {}, function(resultDoc) {
+	rabbitMQ.sendMessage('categories', {}, function(payload) {
 		res.send({
-			'result'	:	resultDoc
+			'result'	:	payload.categories
 		});
 	});
 };
 
 module.exports.publishSale = function(user_id, username, title, category, condition, is_bid, price, quantity, description, res) {
 	logger.logEntry('sell_bo', 'publishSale');
-	mongoDao.insert('SaleDetails', {
+	rabbitMQ.sendMessage('publishSale', {
 		'seller_id'		:	user_id,
 		'seller'		:	username,
 		'category'		:	category,
@@ -40,18 +40,13 @@ module.exports.publishSale = function(user_id, username, title, category, condit
 		'bids'			:	[],
 		'active'		:	true,
 		'sale_time'		:	new Date().getTime()
-	}, function(insertResult) {
-		if(insertResult.insertedCount === 1) {
-			// TODO: Bid Functionality not refined yet.
+	}, function(payload) {
+		if(payload.success) {
 			if(is_bid) {
 				setTimeout(function() {
-					mongoDao.update('SaleDetails', {
-						'_id' : insertResult.insertedIds[0]
-					}, {
-						$set : {
-							'active' : false
-						}
-					}, function(resultDoc) {
+					rabbitMQ.sendMessage('inactiveSale', {
+						'_id' : payload.inserted_sale
+					}, function(payload) {
 						mongoDao.fetchOne('SaleDetails', {
 							'_id' : insertResult.insertedIds[0]
 						}, function(resultDoc) {
@@ -87,18 +82,12 @@ module.exports.publishSale = function(user_id, username, title, category, condit
 							}
 						});
 					});
+					
 				// }, 345600000);
 				// }, 120000);
 				// }, 60000);
 				}, 0);
 			}
-			res.send({
-				'status_code'	:	'200'
-			});
-		} else {
-			res.send({
-				'status_code'	:	'500'
-			});
 		}
 	});
 };

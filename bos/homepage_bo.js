@@ -2,8 +2,13 @@
 var mongoDao = require('../utils/mongoDao');
 var logger = require("../utils/logger");
 
+var rabbitMQ = require('../utils/rabbitMQ');
+
 module.exports.homepage = function(res) {
 	logger.logEntry("homepage_bo", "homepage");
+	rabbitMQ.sendMessage('login', 10, function(payload) {
+		console.log(payload);
+	});
 	res.render("index", {});
 };
 
