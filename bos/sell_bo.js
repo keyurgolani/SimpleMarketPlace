@@ -44,43 +44,10 @@ module.exports.publishSale = function(user_id, username, title, category, condit
 		if(payload.success) {
 			if(is_bid) {
 				setTimeout(function() {
-					rabbitMQ.sendMessage('inactiveSale', {
-						'_id' : payload.inserted_sale
+					rabbitMQ.sendMessage('bidEndProcess', {
+						'sale_id' : payload.inserted_sale
 					}, function(payload) {
-						mongoDao.fetchOne('SaleDetails', {
-							'_id' : insertResult.insertedIds[0]
-						}, function(resultDoc) {
-							if(resultDoc.bids.length !== 0) {
-								resultDoc.bids.sort(function(a, b) {
-									return a.bid_price - b.bid_price;
-								});
-								// --------------------------Continue working here
-								console.log(resultDoc.bids);
-								mongoDao.update('SaleDetails', {
-									'_id' : insertResult.insertedIds[0]
-								}, {
-									$inc : {
-										'sale_qty' : -topBid.bid_qty
-									}
-								}, function(resultDoc) {
-									mongoDao.insert('TransactionDetails', {
-										'sale'				:	insertResult.insertedIds[0],
-										'buyer'				:	topBid.bidder,
-										'transaction_price'	:	topBid.bid_amount,
-										'txn_qty'			:	topBid.bid_qty
-									}, function(resultDoc) {
-										if(resultDoc.insertedCount === 1) {
-											mongoDao.insert('NotificationDetails', {
-												'notification_text'	:	'Your highest bid won! You purchased ' + title,
-												'user_id'			:	topBid.bidder
-											}, function(resultDoc) {
-												// Do nothing
-											});
-										}
-									});
-								});
-							}
-						});
+						// Do nothing
 					});
 					
 				// }, 345600000);

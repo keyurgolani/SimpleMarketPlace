@@ -6,50 +6,25 @@ var rabbitMQ = require('../utils/rabbitMQ');
 
 module.exports.homepage = function(res) {
 	logger.logEntry("homepage_bo", "homepage");
-	rabbitMQ.sendMessage('login', 10, function(payload) {
-		console.log(payload);
-	});
 	res.render("index", {});
 };
 
 module.exports.sendUserSearchResults = function(search_string, user_id, res) {
 	logger.logEntry("homepage_bo", "sendUserSearchResults");
-	mongoDao.fetch('SaleDetails', {
-		'$or': [{
-			'title' : {
-				'$regex' : search_string,
-				'$options' : 'i'
-			},
-			'seller_id' : {
-				"$ne" : user_id
-			}
-		},{
-			'seller' : search_string,
-			'seller_id' : {
-				"$ne" : user_id
-			}
-		}]
-	}, function(resultDoc) {
-		res.send({
-			"saleDetails"	:	resultDoc
-		});
+	rabbitMQ.sendMessage('search', {
+		'search_string' : search_string,
+		'user_id' : user_id
+	}, function(payload) {
+		res.send(payload);
 	});
 };
 
 module.exports.sendSearchResults = function(search_string, res) {
 	logger.logEntry("homepage_bo", "sendSearchResults");
-	mongoDao.fetch('SaleDetails', {
-		'$or': [{
-			'title' : {
-				'$regex' : search_string, '$options' : 'i'
-			}
-		},{
-			'seller' : search_string
-		}]
-	}, function(resultDoc) {
-		res.send({
-			"saleDetails"	:	resultDoc
-		});
+	rabbitMQ.sendMessage('search', {
+		'search_string' : search_string
+	}, function(payload) {
+		res.send(payload);
 	});
 };
 
@@ -62,22 +37,16 @@ module.exports.sendSuggestions = function(res) {
 
 module.exports.sendUserSaleListing = function(user_id, res) {
 	logger.logEntry("homepage_bo", "sendUserSaleListing");
-	mongoDao.fetch('SaleDetails', {
-		'seller_id' : {
-			"$ne" : user_id
-		}
-	}, function(resultDoc) {
-		res.send({
-			"saleDetails"	:	resultDoc
-		});
+	rabbitMQ.sendMessage('sendListing', {
+		'user_id' : user_id
+	}, function(payload) {
+		res.send(payload);
 	});
 };
 
 module.exports.sendSaleListing = function(res) {
 	logger.logEntry("homepage_bo", "sendSaleListing");
-	mongoDao.fetch('SaleDetails', {}, function(resultDoc) {
-		res.send({
-			"saleDetails"	:	resultDoc
-		});
+	rabbitMQ.sendMessage('sendListing', {}, function(payload) {
+		res.send(payload);
 	});
 };
