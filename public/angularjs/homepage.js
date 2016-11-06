@@ -61,34 +61,6 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	$scope.gotoCart = function() {
 		$window.location.href = "/cart";
 	};
-	
-	$scope.fetchNotifications = function() {
-		$http({
-			method : "POST",
-			url : "/fetchNotifications"
-		}).success(function(data) {
-			$scope.notifications = data.notifications;
-			$scope.notificationCount = data.notifications.length;
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
-	};
-	
-	$scope.fetchCart = function() {
-		$http({
-			method : "POST",
-			url : "/fetchCart"
-		}).success(function(data) {
-			$scope.cart_items = data.cart_items;
-			$scope.cartItemCount = data.cart_items.length;
-			$scope.cart_total = 0;
-			for(var i = 0; i < $scope.cart_items.length; i++) {
-				$scope.cart_total = $scope.cart_total + Number($scope.cart_items[i].sale_price) * Number($scope.cart_items[i].cart_qty);
-			}
-		}).error(function(error) {
-			// TODO: Handle Error
-		});
-	};
 
 	$scope.search = function() {
 		$scope.messages = [];
@@ -159,8 +131,6 @@ eBay.controller('homepage', function($scope, $http, $window, $location, $anchorS
 	
 	$scope.fetchLoggedInUser();
 	$scope.fetchSales();
-	$scope.fetchCart();
-	$scope.fetchNotifications();
 	
 	if($location.search().last_login) {
 		$scope.last_login = $location.search().last_login;

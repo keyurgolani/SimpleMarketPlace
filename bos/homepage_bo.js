@@ -1,5 +1,5 @@
 
-var mongoDao = require('../utils/mongoDao');
+var rabbitMQ = require('../utils/rabbitMQ');
 var logger = require("../utils/logger");
 
 var rabbitMQ = require('../utils/rabbitMQ');

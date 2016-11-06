@@ -1,5 +1,5 @@
 
-var mongoDao = require('../utils/mongoDao');
+var rabbitMQ = require('../utils/rabbitMQ');
 var logger = require("../utils/logger");
 
 module.exports.viewItem = function(res) {
@@ -70,6 +70,6 @@ module.exports.addItemToUserSuggestion = function(user_id, item_id, req) {
 		'user_id' : user_id,
 		'item_id' : item_id
 	}, function(payload) {
-		
+		req.session.loggedInUser.suggestions.push(payload.item);
 	});
 };

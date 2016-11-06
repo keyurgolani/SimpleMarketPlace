@@ -1,5 +1,5 @@
 
-var mongoDao = require('../utils/mongoDao');
+var rabbitMQ = require('../utils/rabbitMQ');
 var logger = require("../utils/logger");
 
 module.exports.cart = function(res) {
@@ -29,18 +29,18 @@ module.exports.sendCartAvailability = function(user_id, res) {
 
 module.exports.removeFromCart = function(user_id, item_id, req, res) {
 	logger.logEntry("cart_bo", "removeFromCart");
-	var cartSize = req.session.loggedInUser.cart.length;
-	for(var i = 0; i < cartSize; i++) {
-		if(req.session.loggedInUser.cart[i]._id == item_id) {
-			req.session.loggedInUser.cart.splice(i, 1);
-			cartSize--;
-			i--;
-		}
-	}
 	rabbitMQ.sendMessage('removeFromCart', {
 		'user_id' : user_id,
 		'item_id' : item_id
 	}, function(payload) {
+		var cartSize = req.session.loggedInUser.cart.length;
+		for(var i = 0; i < cartSize; i++) {
+			if(req.session.loggedInUser.cart[i]._id == item_id) {
+				req.session.loggedInUser.cart.splice(i, 1);
+				cartSize--;
+				i--;
+			}
+		}
 		logger.logUserCartRemove(user_id, item_id);
 		res.send({ });
 	});

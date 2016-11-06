@@ -1,5 +1,5 @@
 
-var mongoDao = require('../utils/mongoDao');
+var rabbitMQ = require('../utils/rabbitMQ');
 var logger = require('../utils/logger');
 
 module.exports.sell = function(res) {
@@ -55,6 +55,13 @@ module.exports.publishSale = function(user_id, username, title, category, condit
 				// }, 60000);
 				}, 0);
 			}
+			res.send({
+				'status_code' : 200
+			});
+		} else {
+			res.send({
+				'status_code' : 500
+			});
 		}
 	});
 };

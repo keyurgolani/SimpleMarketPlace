@@ -22,7 +22,7 @@ module.exports = {
 					ch.consume(q.queue, function(msg) {
 						if (msg.properties.correlationId === corr) {
 							callback(JSON.parse(msg.content.toString()));
-							setTimeout(function() {
+							var responseWait = setTimeout(function() {
 								conn.close();
 								// process.exit(0);
 							}, 500);

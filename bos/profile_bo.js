@@ -1,5 +1,5 @@
 
-var mongoDao = require('../utils/mongoDao');
+var rabbitMQ = require('../utils/rabbitMQ');
 var logger = require('../utils/logger');
 
 module.exports.sendUserSoldItems = function(user_id, res) {

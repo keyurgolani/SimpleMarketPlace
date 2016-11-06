@@ -55,9 +55,9 @@ eBay.controller('sell', function($scope, $http, $window) {
 					"advertise_desc"		:	$scope.adv_desc
 				}
 			}).success(function(data) {
-				if(data.status_code === "200") {
+				if(data.status_code === 200) {
 						$scope.adv_title = "";
-						$scope.adv_item.item_id = "";
+						$scope.adv_category = "";
 						$scope.item_condition = "";
 						$scope.is_bid = false;
 						$scope.price = "";
