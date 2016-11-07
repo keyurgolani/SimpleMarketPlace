@@ -13,6 +13,10 @@ var session = require('express-session');
 
 var mongoDao = require('./utils/mongoDao');
 
+var passport = require('passport');
+
+require('./utils/passport')(passport);
+
 // Nice library on dynamic calls REST application: https://github.com/deitch/booster
 
 // view engine setup
@@ -46,7 +50,15 @@ app.use(function(req, res, next) {
 	mongoDao.connect(next);
 });
 
+app.use(passport.initialize());
+
+app.use(function(req, res, next) {
+	req.passport = passport;
+	next();
+});
+
 app.use('/', routes);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -35,6 +35,8 @@
     "ng-focus-if": "^1.0.7",
     "node-schedule": "^1.1.1",
     "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "request": "^2.75.0",
     "respond.js": "^1.4.2",
     "serve-favicon": "^2.3.0",

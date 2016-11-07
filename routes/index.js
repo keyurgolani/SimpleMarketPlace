@@ -359,7 +359,20 @@ router.post('/signin', function(req, res, next) {
 	} else {
 		logger.logRouteEntry(0, "POST", "/signin");
 	}
-	accounts_bo.signin(sjcl.decrypt(req.body.passwordpassword, req.body.userID), sjcl.decrypt(req.body.passwordpassword, req.body.password), req, res);
+	accounts_bo.signin(req.body.userID, req.body.password, req, res);
+	// accounts_bo.signin(sjcl.decrypt(req.body.passwordpassword, req.body.userID), sjcl.decrypt(req.body.passwordpassword, req.body.password), req, res);
+});
+
+router.get('/loginFailure', function(req, res, next) {
+	res.send({
+		'valid' : false
+	});
+});
+
+router.get('/loginSuccess', function(req, res, next) {
+	res.send({
+		'valid' : true
+	});
 });
 
 module.exports = router;

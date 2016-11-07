@@ -64,10 +64,10 @@
 							</div>
 							<div class="account-form">
 								<div class="form-group">
-									<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" ng-encrypt focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
+									<input type="text" class="form-control" ng-model="userID" id="email" placeholder="Email or Username" focus-if="isSignin && !isSignup && !isForgot" ng-enter="signin()">
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-encrypt ng-enter="signin()">
+									<input type="password" class="form-control" id="pwd" ng-model="password" placeholder="Password" ng-enter="signin()">
 								</div>
 								<button class="btn btn-primary form-control account-button" ng-click="signin()">Sign in</button>
 								<div class="row checkbox">

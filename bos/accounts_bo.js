@@ -2,6 +2,7 @@
 var logger = require('../utils/logger');
 var rabbitMQ = require('../utils/rabbitMQ');
 var bcrypt = require("bcrypt");
+var passport = require('passport');
 
 module.exports.accounts = function(res) {
 	logger.logEntry('accounts_bo', 'accounts');
@@ -10,32 +11,65 @@ module.exports.accounts = function(res) {
 
 module.exports.signin = function(username, password, req, res) {
 	logger.logEntry('accounts_bo', 'signin');
-	rabbitMQ.sendMessage('authenticate', {
-		'username' : username,
-		'password' : password
-	}, function(isValid) {
-		if(isValid.valid) {
-			logger.logUserSignin(isValid.userid);
-			rabbitMQ.sendMessage('getUser', {
-				'userid' : isValid.userid
-			}, function(userDetails) {
-				req.session.loggedInUser = userDetails;
-				rabbitMQ.sendMessage('updateLastLoggedIn', {
-					'userid' : userDetails._id
-				}, function(payload) {
-					if(payload.success) {
-						res.send({
-							'valid' : true
-						});
-					} else {
-						res.send({
-							'valid' : false
-						});
-					}
-				});
+	passport.authenticate('login', function(err, userDetails) {
+	    if(err || !userDetails) {
+	    	return res.send({
+				'valid' : false
 			});
-		}
-	});
+	    }
+
+	    req.logIn(userDetails, {
+	    	session:false
+	    }, function(err) {
+	    	if(err) {
+	    		return res.send({
+	    			'valid' : false
+	    		});
+	    	}
+	    	req.session.loggedInUser = userDetails;
+	    	rabbitMQ.sendMessage('updateLastLoggedIn', {
+	    		'userid' : userDetails._id
+	    	}, function(payload) {
+	    		if(payload.success) {
+	    			return res.send({
+			    		'valid' : true,
+			    		'last_login' : userDetails.last_login
+			    	});
+	    		} else {
+	    			return res.send({
+	    				'valid' : false
+	    			});
+	    		}
+	    	});
+	    });
+	})(req, res);
+	//Regular login Logic without Passport.js
+	// rabbitMQ.sendMessage('authenticate', {
+	// 	'username' : username,
+	// 	'password' : password
+	// }, function(isValid) {
+	// 	if(isValid.valid) {
+	// 		logger.logUserSignin(isValid.userid);
+	// 		rabbitMQ.sendMessage('getUser', {
+	// 			'userid' : isValid.userid
+	// 		}, function(userDetails) {
+	// 			req.session.loggedInUser = userDetails;
+	// 			rabbitMQ.sendMessage('updateLastLoggedIn', {
+	// 				'userid' : userDetails._id
+	// 			}, function(payload) {
+	// 				if(payload.success) {
+	// 					res.send({
+	// 						'valid' : true
+	// 					});
+	// 				} else {
+	// 					res.send({
+	// 						'valid' : false
+	// 					});
+	// 				}
+	// 			});
+	// 		});
+	// 	}
+	// });
 };
 
 module.exports.register = function(username, email, secret, firstname, lastname, phone, dob, res) {

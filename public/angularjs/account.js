@@ -73,8 +73,7 @@ eBay.controller('signinController', function($scope, $http, $window, $location) 
 				url		:	"/signin",
 				data	:	{
 					"userID"			:	$scope.userID,
-					"password"			:	$scope.password,
-					"passwordpassword"	:	$scope.$parent.randomPassword
+					"password"			:	$scope.password
 				}
 			}).success(function(data) {
 				if(Boolean(data.valid)) {
