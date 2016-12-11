@@ -36,6 +36,7 @@
     "respond.js": "^1.4.2",
     "serve-favicon": "^2.3.0",
     "sjcl": "^1.0.6",
+    "soap": "^0.18.0",
     "winston": "^2.2.0"
   }
 }

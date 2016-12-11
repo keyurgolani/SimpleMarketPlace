@@ -2,6 +2,11 @@
 var dao = require('../utils/dao');
 var bcrypt = require("bcrypt");
 var logger = require("../utils/logger");
+var soap = require("soap");
+var option = {
+	ignoredNamespaces : true
+};
+var baseURL = "http://localhost:8080/WebServices/services/"
 
 module.exports.accounts = function(res) {
 	logger.logEntry("accounts_bo", "accounts");
@@ -10,31 +15,39 @@ module.exports.accounts = function(res) {
 
 module.exports.signin = function(username, password, req, res) {
 	logger.logEntry("accounts_bo", "signin");
-	dao.executeQuery("SELECT user_id, secret, salt FROM user_account WHERE user_name = ? OR email = ?", [username, username], function(secret_elements) {
-		if(bcrypt.hashSync(password, secret_elements[0].salt) === secret_elements[0].secret) {
-			dao.fetchData("*", "user_account", {
-				"user_id"	:	secret_elements[0].user_id
-			}, function(user_details) {
-				logger.logUserSignin(secret_elements[0].user_id);
-				req.session.loggedInUser = user_details[0];
-				dao.updateData("user_account", {
-					"last_login"	:	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
-				}, {
-					"user_id"		:	secret_elements[0].user_id
-				}, function(update_status) {
-					if(update_status.affectedRows === 1) {
-						res.send({
-							"valid"			:	true,
-							"last_login"	:	user_details[0].last_login
-						});
-					}
-				});
-			});
-		} else {
-			res.send({
-				"valid"	:	false
-			});
-		}
+	url = baseURL + "AccountServices?wsdl";
+	soap.createClient(url, option, function(err, client) {
+		client.authenticate({
+			username : username,
+			password : password
+		}, function(error, result) {
+			if(error) {
+				throw error;
+			} else {
+				if(result.authenticateReturn) {
+					client.fetchUser({
+						username : username
+					}, function(error, fetchResult) {
+						if(fetchResult.fetchUserReturn) {
+							logger.logUserSignin(fetchResult.fetchUserReturn.user_id);
+							req.session.loggedInUser = JSON.parse(fetchResult.fetchUserReturn);
+							client.updateLastLogin({
+								user_id : JSON.parse(fetchResult.fetchUserReturn).user_id
+							}, function(error, updateResult) {
+								res.send({
+									"valid"			:	true,
+									"last_login"	:	JSON.parse(fetchResult.fetchUserReturn).last_login
+								});
+							});
+						}
+					});
+				} else {
+					res.send({
+						"valid"	:	false
+					});
+				}
+			}
+		});
 	});
 };
 
@@ -47,45 +60,26 @@ module.exports.register = function(username, email, secret, firstname, lastname,
 	var status_code = 200;
 	var error_messages = [];
 	var success_messages = [];
-	var salt = bcrypt.genSaltSync(10);
 	logger.logUserName(username);
 	logger.logPassword(secret);
-	var insertParameters = {
-			"user_name"	:	username,
-			"f_name"	:	firstname,
-			"l_name"	:	lastname,
+	url = baseURL + "AccountServices?wsdl";
+	soap.createClient(url, option, function(err, client) {
+		client.addUser({
+			"username"	:	username,
+			"firstname"	:	firstname,
+			"lastname"	:	lastname,
 			"email"		:	email,
-			"secret"	:	bcrypt.hashSync(secret, salt),
-			"salt"		:	salt,
+			"secret"	:	secret,
 			"last_login":	require('fecha').format(Date.now(),'YYYY-MM-DD HH:mm:ss')
-		};
-	dao.insertData("user_account", insertParameters, function(rows) {
-		if(rows.affectedRows === 1) {
-			dao.insertData("user_profile", {
-				"contact"	:	phone,
-				"user"		:	rows.insertId
-			}, function(rows) {
-				if(rows.affectedRows === 1) {
-					success_messages.push("User " + firstname + " created successfully !");
-					res.send({
-						"status_code"	:	200,
-						"messages"		:	success_messages
-					});
-				} else {
-					error_messages.push("Internal error. Please try again..!!");
-					res.send({
-						"status_code"	:	400,
-						"messages"		:	error_messages
-					});
-				}
-			});
-		} else {
-			error_messages.push("Internal error. Please try again..!!");
-			res.send({
-				"status_code"	:	400,
-				"messages"		:	error_messages
-			});
-		}
+		}, function(error, result) {
+			if(result) {
+				success_messages.push("User " + firstname + " created successfully !");
+				res.send({
+					"status_code"	:	200,
+					"messages"		:	success_messages
+				});
+			}
+		});
 	});
 };
 
