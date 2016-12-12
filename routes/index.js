@@ -370,7 +370,8 @@ router.post('/signin', function(req, res, next) {
 	} else {
 		logger.logRouteEntry(0, "POST", "/signin");
 	}
-	accounts_bo.signin(sjcl.decrypt(req.body.passwordpassword, req.body.userID), sjcl.decrypt(req.body.passwordpassword, req.body.password), req, res);
+//	accounts_bo.signin(sjcl.decrypt(req.body.passwordpassword, req.body.userID), sjcl.decrypt(req.body.passwordpassword, req.body.password), req, res);
+	accounts_bo.signin(req.body.userID, req.body.password, req, res);
 });
 
 module.exports = router;
