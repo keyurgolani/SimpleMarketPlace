@@ -11,7 +11,7 @@ eBay.controller('account', function($scope, $http, $location, $window, Random) {
 	$scope.randomPassword = Random.randomString(25);
 	$scope.message = "";
 	$scope.show_more = true;
-	
+
 	$scope.changeToSignin = function() {
 		if($location.search().redir) {
 			$location.url("/account?view=signin&redir="+$location.search().redir);
@@ -23,7 +23,7 @@ eBay.controller('account', function($scope, $http, $location, $window, Random) {
 		$scope.isForgot = false;
 		$scope.messages = [];
 	};
-	
+
 	$scope.changeToRegister = function() {
 		if($location.search().redir) {
 			$location.url("/account?view=register&redir="+$location.search().redir);
@@ -35,7 +35,7 @@ eBay.controller('account', function($scope, $http, $location, $window, Random) {
 		$scope.isForgot = false;
 		$scope.messages = [];
 	};
-	
+
 	$scope.changeToForgot = function() {
 		if($location.search().redir) {
 			$location.url("/account?view=forgot&redir="+$location.search().redir);
@@ -47,11 +47,11 @@ eBay.controller('account', function($scope, $http, $location, $window, Random) {
 		$scope.isForgot = true;
 		$scope.messages = [];
 	};
-	
+
 	$scope.homepage = function() {
 		$window.location.href = "/";
 	};
-	
+
 	if($location.search().view === "register") {
 		$scope.changeToRegister();
 	} else if($location.search().view === "signin") {
@@ -61,7 +61,7 @@ eBay.controller('account', function($scope, $http, $location, $window, Random) {
 	} else {
 		$scope.changeToSignin();
 	}
-	
+
 });
 
 eBay.controller('signinController', function($scope, $http, $window, $location) {
@@ -76,10 +76,10 @@ eBay.controller('signinController', function($scope, $http, $window, $location) 
 					"password"			:	$scope.password,
 					"passwordpassword"	:	$scope.$parent.randomPassword
 				}
-			}).success(function(data) {
-				if(Boolean(data.valid)) {
+			}).then(function(data) {
+				if(Boolean(data.data.valid)) {
 					if($location.search().redir === undefined) {
-						$window.location.href = "/?last_login="+data.last_login;
+						$window.location.href = "/?last_login="+data.data.last_login;
 					} else {
 						var redir = $location.search().redir.split("-");
 						if(redir.length > 1) {
@@ -91,7 +91,7 @@ eBay.controller('signinController', function($scope, $http, $window, $location) 
 				} else {
 					$scope.$parent.messages.push("Oops, that's not a match!");
 				}
-			}).error(function(error) {
+			}, function(error) {
 				$scope.$parent.messages.push("Oops, something went wrong behind the scenes, please try again!");
 			});
 		} else {
@@ -116,8 +116,8 @@ eBay.controller('registerController', function($scope, $http, $location) {
 					"contact"			:	$scope.contact,
 					"passwordpassword"	:	$scope.$parent.randomPassword
 				}
-			}).success(function(data) {
-				if(data.status_code === 200) {
+			}).then(function(data) {
+				if(data.data.status_code === 200) {
 					if($location.search().redir) {
 						$location.url("/account?view=signin&redir="+$location.search().redir);
 					} else {
@@ -126,26 +126,26 @@ eBay.controller('registerController', function($scope, $http, $location) {
 					$scope.$parent.isSignin = true;
 					$scope.$parent.isSignup = false;
 					$scope.$parent.isForgot = false;
-					$scope.$parent.messages = data.messages;
+					$scope.$parent.messages = data.data.messages;
 				} else {
 					if($location.search().redir) {
 						$location.url("/account?view=register&redir="+$location.search().redir);
 					} else {
 						$location.url("/account?view=register");
 					}
-					$scope.$parent.messages = data.messages;
+					$scope.$parent.messages = data.data.messages;
 					$scope.$parent.isSignin = false;
 					$scope.$parent.isSignup = true;
 					$scope.$parent.isForgot = false;
 				}
-			}).error(function(error) {
+			}, function(error) {
 				$scope.$parent.messages.push("Oops, something went wrong behind the scenes, please try again!");
 			});
 		} else {
 			$scope.$parent.messages.push("Please enter valid values of all the fields!");
 		}
 	};
-	
+
 	$scope.$watch('email', function() {
 		if($scope.email !== undefined && $scope.email !== "") {
 			$http({
@@ -154,18 +154,19 @@ eBay.controller('registerController', function($scope, $http, $location) {
 				data	:	{
 					"email"	:	$scope.email
 				}
-			}).success(function(data) {
-				if(Boolean(data.available)) {
+			}).then(function(data) {
+				if(Boolean(data.data.available)) {
+					console.log('True');
 					$scope.emailAvailable = true;
 				} else {
 					$scope.emailAvailable = false;
 				}
-			}).error(function(error) {
+			}, function(error) {
 				// Do Nothing
 			});
 		}
 	});
-	
+
 	$scope.$watch('username', function() {
 		if($scope.username !== undefined && $scope.username !== "") {
 			$http({
@@ -175,18 +176,18 @@ eBay.controller('registerController', function($scope, $http, $location) {
 					"username"			:	$scope.username,
 					"passwordpassword"	:	$scope.$parent.randomPassword
 				}
-			}).success(function(data) {
-				if(Boolean(data.available)) {
+			}).then(function(data) {
+				if(Boolean(data.data.available)) {
 					$scope.userAvailable = true;
 				} else {
 					$scope.userAvailable = false;
 				}
-			}).error(function(error) {
+			}, function(error) {
 				// Do Nothing
 			});
 		}
 	});
-	
+
 	$scope.$watch('password', function() {
 		var password_validator = new RegExp(/^[A-Za-z0-9_-]{6,18}$/);
 		if($scope.password !== undefined && $scope.password !== "") {
@@ -197,7 +198,7 @@ eBay.controller('registerController', function($scope, $http, $location) {
 			}
 		}
 	});
-	
+
 	$scope.$watch('contact', function() {
 		var contact_validator = new RegExp(/^(\d{11,12})$/);
 		if($scope.contact !== undefined && $scope.contact !== "") {
@@ -208,7 +209,7 @@ eBay.controller('registerController', function($scope, $http, $location) {
 			}
 		}
 	});
-	
+
 	$scope.$watchCollection('[fname, lname]', function() {
 		var firstname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
 		var lastname_validator = new RegExp("^[a-zA-Z ,.'-]+$");
@@ -220,7 +221,7 @@ eBay.controller('registerController', function($scope, $http, $location) {
 			}
 		}
 	});
-	
+
 });
 
 eBay.controller('forgotController', function($scope, $http) {
@@ -234,7 +235,7 @@ eBay.directive('ngEncrypt', function(){
         require: 'ngModel',
         link: function(scope, elem, attrs, ngModel) {
             ngModel.$parsers.push(function(value){
-                return sjcl.encrypt(scope.randomPassword, value); 
+                return sjcl.encrypt(scope.randomPassword, value);
             });
         }
     };
